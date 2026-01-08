@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:to_do/add_card.dart';
+import 'package:to_do/task_history.dart';
 
 class home_page extends StatefulWidget {
   const home_page({super.key});
@@ -15,6 +17,12 @@ class _home_pageState extends State<home_page> {
     {'title': '88', 'cc': '90'},
     {'title': 'tt', 'cc': 'tt'},
     {'title': '22', 'cc': 'pp'},
+    {'title': '88', 'cc': '90'},
+    {'title': '88', 'cc': '90'},
+    {'title': '88', 'cc': '90'},
+    {'title': '88', 'cc': '90'},
+    {'title': '88', 'cc': '90'},
+    {'title': '88', 'cc': '90'},
     {'title': '88', 'cc': '90'},
     {'title': '88', 'cc': '90'},
   ];
@@ -40,7 +48,9 @@ class _home_pageState extends State<home_page> {
       floatingActionButton: Padding(
         padding: const EdgeInsets.only(bottom: 10, right: 0),
         child: FloatingActionButton(
-          onPressed: () {},
+          onPressed: () {
+            _showCardDialog(context);
+          },
           child: Icon(Icons.add),
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadiusGeometry.circular(70),
@@ -141,7 +151,9 @@ class _home_pageState extends State<home_page> {
                   style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
                 ),
                 InkWell(
-                  onTap: () {},
+                  onTap: () {
+                    _showCardDialogTasks(context);
+                  },
                   child: Text(
                     'more...',
                     style: TextStyle(
@@ -157,16 +169,9 @@ class _home_pageState extends State<home_page> {
             SizedBox(height: 10),
 
             Expanded(
-              child: ListView(
-                physics: const NeverScrollableScrollPhysics(),
-                children: listTodayTasks
-                    .map(
-                      (value) => Padding(
-                        padding: const EdgeInsets.only(bottom: 8),
-                        child: ListTile(tileColor: Colors.grey,),
-                      ),
-                    )
-                    .toList(),
+              child: task_history(
+                Scrollables: false,
+                listTodayTasks: listTodayTasks,
               ),
             ),
           ],
@@ -174,4 +179,48 @@ class _home_pageState extends State<home_page> {
       ),
     );
   }
+
+  void _showCardDialogTasks(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(15.0),
+          ),
+          title: const Text("Completed Tasks"),
+
+          content: SizedBox(
+            width: double.maxFinite,
+            height: 400,
+            child: task_history(
+              Scrollables: true,
+              listTodayTasks:
+                  listTodayTasks,
+            ),
+          ),
+
+          actions: <Widget>[
+            TextButton(
+              child: const Text('Close'),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  void _showCardDialog(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return add_card();
+      },
+    );
+  }
+
+
 }
