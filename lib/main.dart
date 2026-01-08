@@ -27,8 +27,8 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       title: 'UI_Project',
       theme: ThemeData(),
-      // home: home_page(),
-      home: login_page(),
+      home: home_page(),
+      // home: login_page(),
     );
   }
 }
