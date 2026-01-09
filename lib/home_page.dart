@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:to_do/add_card.dart';
 import 'package:to_do/task_history.dart';
+import 'package:to_do/todays_task.dart';
 
 class home_page extends StatefulWidget {
   const home_page({super.key});
@@ -10,22 +11,7 @@ class home_page extends StatefulWidget {
 }
 
 class _home_pageState extends State<home_page> {
-  var listTodayTasks = [
-    {'title': 'tt', 'cc': 'tt'},
-    {'title': '22', 'cc': 'pp'},
-    {'title': '88', 'cc': '90'},
-    {'title': '88', 'cc': '90'},
-    {'title': 'tt', 'cc': 'tt'},
-    {'title': '22', 'cc': 'pp'},
-    {'title': '88', 'cc': '90'},
-    {'title': '88', 'cc': '90'},
-    {'title': '88', 'cc': '90'},
-    {'title': '88', 'cc': '90'},
-    {'title': '88', 'cc': '90'},
-    {'title': '88', 'cc': '90'},
-    {'title': '88', 'cc': '90'},
-    {'title': '88', 'cc': '90'},
-  ];
+  List<Map<String, String>> listTodayTasks=[];
 
   @override
   Widget build(BuildContext context) {
@@ -93,24 +79,7 @@ class _home_pageState extends State<home_page> {
             Container(
               color: Colors.grey,
               height: 120,
-              child: ListView(
-                scrollDirection: Axis.horizontal,
-                children: listTodayTasks
-                    .map(
-                      (value) => Padding(
-                        padding: const EdgeInsets.only(
-                          right: 10,
-                          top: 10,
-                          bottom: 10,
-                        ),
-                        child: SizedBox(
-                          width: 100,
-                          child: Container(color: Colors.white),
-                        ),
-                      ),
-                    )
-                    .toList(),
-              ),
+              child: todays_task(listTodayTasks: listTodayTasks,Empty: "Not Tasks Yet"),
             ),
             SizedBox(height: 20),
             Text(
@@ -121,24 +90,7 @@ class _home_pageState extends State<home_page> {
             Container(
               color: Colors.grey,
               height: 120,
-              child: ListView(
-                scrollDirection: Axis.horizontal,
-                children: listTodayTasks
-                    .map(
-                      (value) => Padding(
-                        padding: const EdgeInsets.only(
-                          right: 10,
-                          top: 10,
-                          bottom: 10,
-                        ),
-                        child: SizedBox(
-                          width: 100,
-                          child: Container(color: Colors.white),
-                        ),
-                      ),
-                    )
-                    .toList(),
-              ),
+              child: todays_task(listTodayTasks: listTodayTasks,Empty: "Assign now",button: true,CallbackAction: (){_showCardDialog(context);},)
             ),
 
             SizedBox(height: 20),
@@ -152,10 +104,10 @@ class _home_pageState extends State<home_page> {
                 ),
                 InkWell(
                   onTap: () {
-                    _showCardDialogTasks(context);
+                    _showCardDialog_Tasks(context);
                   },
                   child: Text(
-                    'more...',
+                    'Show all...',
                     style: TextStyle(
                       fontSize: 12,
                       color: Colors.blue,
@@ -180,38 +132,40 @@ class _home_pageState extends State<home_page> {
     );
   }
 
-  void _showCardDialogTasks(BuildContext context) {
+
+
+
+
+
+
+
+  void _showCardDialog_Tasks(BuildContext context) {
     showDialog(
       context: context,
       builder: (BuildContext context) {
-        return AlertDialog(
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(15.0),
+        return Scaffold(
+          appBar: AppBar(
+            title: Text("Completed Tasks",
+              style: TextStyle(fontWeight: FontWeight.w800),),
           ),
-          title: const Text("Completed Tasks"),
-
-          content: SizedBox(
-            width: double.maxFinite,
-            height: 400,
-            child: task_history(
-              Scrollables: true,
-              listTodayTasks:
-                  listTodayTasks,
-            ),
+        body: Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: task_history(
+            Scrollables: true,
+            listTodayTasks: listTodayTasks,
           ),
-
-          actions: <Widget>[
-            TextButton(
-              child: const Text('Close'),
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-            ),
-          ],
+        ),
         );
       },
     );
   }
+
+
+
+
+
+
+
 
   void _showCardDialog(BuildContext context) {
     showDialog(
