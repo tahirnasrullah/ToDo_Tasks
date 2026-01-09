@@ -7,11 +7,11 @@ import 'package:to_do/services/database.dart';
 class AuthMethords {
   final FirebaseAuth auth = FirebaseAuth.instance;
 
-  getCurrentUser() async {
+  Future<User?>? getCurrentUser() async {
     return await auth.currentUser;
   }
 
-  signInWithGoogle(BuildContext context) async {
+  Future<void> signInWithGoogle(BuildContext context) async {
     final FirebaseAuth firebaseAuth = FirebaseAuth.instance;
     final GoogleSignIn googleSignIn = GoogleSignIn();
 

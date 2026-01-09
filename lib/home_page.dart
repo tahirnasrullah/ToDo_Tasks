@@ -1,6 +1,9 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:to_do/add_card.dart';
+import 'package:to_do/services/List.dart';
 import 'package:to_do/task_history.dart';
+import 'package:to_do/todays_task.dart';
 
 class home_page extends StatefulWidget {
   const home_page({super.key});
@@ -10,22 +13,15 @@ class home_page extends StatefulWidget {
 }
 
 class _home_pageState extends State<home_page> {
-  var listTodayTasks = [
-    {'title': 'tt', 'cc': 'tt'},
-    {'title': '22', 'cc': 'pp'},
-    {'title': '88', 'cc': '90'},
-    {'title': '88', 'cc': '90'},
-    {'title': 'tt', 'cc': 'tt'},
-    {'title': '22', 'cc': 'pp'},
-    {'title': '88', 'cc': '90'},
-    {'title': '88', 'cc': '90'},
-    {'title': '88', 'cc': '90'},
-    {'title': '88', 'cc': '90'},
-    {'title': '88', 'cc': '90'},
-    {'title': '88', 'cc': '90'},
-    {'title': '88', 'cc': '90'},
-    {'title': '88', 'cc': '90'},
-  ];
+  List<ToDoDailyTasks_history> listTodayTasks = [];
+
+  bool _isLoading = true;
+
+  @override
+  void initState() {
+    super.initState();
+    getTasks();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -80,134 +76,104 @@ class _home_pageState extends State<home_page> {
           ),
         ],
       ),
-      body: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 16),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              "Today's Tasks",
-              style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-            ),
-            SizedBox(height: 10),
-            Container(
-              color: Colors.grey,
-              height: 120,
-              child: ListView(
-                scrollDirection: Axis.horizontal,
-                children: listTodayTasks
-                    .map(
-                      (value) => Padding(
-                        padding: const EdgeInsets.only(
-                          right: 10,
-                          top: 10,
-                          bottom: 10,
-                        ),
-                        child: SizedBox(
-                          width: 100,
-                          child: Container(color: Colors.white),
-                        ),
+      body: _isLoading
+          ? const Center(child: CircularProgressIndicator())
+          : Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 16),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    "Today's Tasks",
+                    style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                  ),
+                  SizedBox(height: 10),
+                  Expanded(
+                    flex: 1,
+                    child: Container(
+                      child: todays_task(
+                        list: listTodayTasks,
+                        EmptyText: "Not Yet",
                       ),
-                    )
-                    .toList(),
-              ),
-            ),
-            SizedBox(height: 20),
-            Text(
-              "Assigned to Others",
-              style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-            ),
-            SizedBox(height: 10),
-            Container(
-              color: Colors.grey,
-              height: 120,
-              child: ListView(
-                scrollDirection: Axis.horizontal,
-                children: listTodayTasks
-                    .map(
-                      (value) => Padding(
-                        padding: const EdgeInsets.only(
-                          right: 10,
-                          top: 10,
-                          bottom: 10,
-                        ),
-                        child: SizedBox(
-                          width: 100,
-                          child: Container(color: Colors.white),
-                        ),
-                      ),
-                    )
-                    .toList(),
-              ),
-            ),
-
-            SizedBox(height: 20),
-
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Text(
-                  "Completed Tasks",
-                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-                ),
-                InkWell(
-                  onTap: () {
-                    _showCardDialogTasks(context);
-                  },
-                  child: Text(
-                    'more...',
-                    style: TextStyle(
-                      fontSize: 12,
-                      color: Colors.blue,
-                      fontStyle: FontStyle.italic,
                     ),
                   ),
-                ),
-              ],
-            ),
+                  SizedBox(height: 20),
+                  Text(
+                    "Assigned to Others",
+                    style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                  ),
+                  SizedBox(height: 10),
+                  Expanded(
+                    flex: 1,
+                    child: Container(
+                      child: todays_task(
+                        list: listTodayTasks,
+                        EmptyText: "Assign now",
+                        button: true,
+                        CallbackAction: () {
+                          _showCardDialog(context);
+                        },
+                      ),
+                    ),
+                  ),
 
-            SizedBox(height: 10),
+                  SizedBox(height: 20),
 
-            Expanded(
-              child: task_history(
-                Scrollables: false,
-                listTodayTasks: listTodayTasks,
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(
+                        "Completed Tasks",
+                        style: TextStyle(
+                          fontSize: 20,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      InkWell(
+                        onTap: () {
+                          _showCardDialog_Tasks(context);
+                        },
+                        child: Text(
+                          'Show all...',
+                          style: TextStyle(
+                            fontSize: 12,
+                            color: Colors.blue,
+                            fontStyle: FontStyle.italic,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+
+                  SizedBox(height: 10),
+
+                  Expanded(
+                    child: task_history(
+                      Scrollables: false,
+                      list: listTodayTasks,
+                    ),
+                  ),
+                ],
               ),
             ),
-          ],
-        ),
-      ),
     );
   }
 
-  void _showCardDialogTasks(BuildContext context) {
+  void _showCardDialog_Tasks(BuildContext context) {
     showDialog(
       context: context,
       builder: (BuildContext context) {
-        return AlertDialog(
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(15.0),
-          ),
-          title: const Text("Completed Tasks"),
-
-          content: SizedBox(
-            width: double.maxFinite,
-            height: 400,
-            child: task_history(
-              Scrollables: true,
-              listTodayTasks:
-                  listTodayTasks,
+        return Scaffold(
+          appBar: AppBar(
+            title: Text(
+              "Completed Tasks",
+              style: TextStyle(fontWeight: FontWeight.w800),
             ),
           ),
-
-          actions: <Widget>[
-            TextButton(
-              child: const Text('Close'),
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-            ),
-          ],
+          body: Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: task_history(Scrollables: true, list: listTodayTasks),
+          ),
         );
       },
     );
@@ -217,10 +183,26 @@ class _home_pageState extends State<home_page> {
     showDialog(
       context: context,
       builder: (BuildContext context) {
-        return add_card();
+        return Add_card(
+          onTaskAdded:getTasks
+        );
       },
     );
   }
 
+  Future<void> getTasks() async {
+    QuerySnapshot querySnapshot = await FirebaseFirestore.instance
+        .collection("ToDoDailyTasks")
+        .get();
 
+    List<ToDoDailyTasks_history> tasks = [];
+    for (var docSnapshot in querySnapshot.docs) {
+      var data = docSnapshot.data() as Map<String, dynamic>;
+      tasks.add(ToDoDailyTasks_history.fromMap(data));
+    }
+    setState(() {
+      listTodayTasks = tasks;
+      _isLoading = false;
+    });
+  }
 }
