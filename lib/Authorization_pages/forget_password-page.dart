@@ -3,14 +3,14 @@ import 'package:flutter/material.dart';
 import 'package:to_do/Authorization_pages/signup_page.dart';
 import '../authorization_elements/Text_Field_Form.dart';
 
-class Forget_password_page extends StatefulWidget {
-  const Forget_password_page({super.key});
+class ForgetPasswordPage extends StatefulWidget {
+  const ForgetPasswordPage({super.key});
 
   @override
-  State<Forget_password_page> createState() => _Forget_password_pageState();
+  State<ForgetPasswordPage> createState() => _ForgetPasswordPageState();
 }
 
-class _Forget_password_pageState extends State<Forget_password_page> {
+class _ForgetPasswordPageState extends State<ForgetPasswordPage> {
   @override
   Widget build(BuildContext context) {
     TextEditingController _email_controller = TextEditingController();
@@ -114,7 +114,7 @@ class _Forget_password_pageState extends State<Forget_password_page> {
                             Navigator.pushReplacement(
                               context,
                               MaterialPageRoute(
-                                builder: (context) => signup_page(),
+                                builder: (context) => SignupPage(),
                               ),
                             );
                           },

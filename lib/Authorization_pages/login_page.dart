@@ -6,21 +6,21 @@ import 'package:to_do/authorization_elements/Or_login_with.dart';
 import '../authorization_elements/Text_Field_Form.dart';
 import 'package:to_do/Authorization_pages/signup_page.dart';
 
-class login_page extends StatefulWidget {
-  const login_page({super.key});
+class LoginPage extends StatefulWidget {
+  const LoginPage({super.key});
 
   @override
-  State<login_page> createState() => _login_pageState();
+  State<LoginPage> createState() => _LoginPageState();
 }
 
-class _login_pageState extends State<login_page> {
-  TextEditingController Email_controller = TextEditingController();
-  TextEditingController Password_controller = TextEditingController();
+class _LoginPageState extends State<LoginPage> {
+  TextEditingController emailController = TextEditingController();
+  TextEditingController passwordController = TextEditingController();
   final _formKey = GlobalKey<FormState>();
 
   String email = "", password = "";
 
-  userLogin() async {
+  Future<void> userLogin() async {
     try {
       await FirebaseAuth.instance.signInWithEmailAndPassword(
         email: email,
@@ -28,7 +28,7 @@ class _login_pageState extends State<login_page> {
       );
       Navigator.push(
         context,
-        MaterialPageRoute(builder: (context) => home_page()),
+        MaterialPageRoute(builder: (context) => HomePage()),
       );
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
@@ -82,13 +82,13 @@ class _login_pageState extends State<login_page> {
                       ),
                       SizedBox(height: 15),
                       Text_Field_Form(
-                        controller: Email_controller,
+                        controller: emailController,
                         errorText: 'Require Your E-mail',
                         labelText: 'E-mail',
                       ),
                       SizedBox(height: 10),
                       Text_Field_Form(
-                        controller: Password_controller,
+                        controller: passwordController,
                         errorText: 'Require Your Password',
                         labelText: 'Password',
                         isPassword: true,
@@ -101,8 +101,8 @@ class _login_pageState extends State<login_page> {
                         onPressed: () {
                           if (_formKey.currentState!.validate()) {
                             setState(() {
-                              email = Email_controller.text;
-                              password = Password_controller.text;
+                              email = emailController.text;
+                              password = passwordController.text;
                             });
                           }
                           userLogin();
@@ -124,7 +124,7 @@ class _login_pageState extends State<login_page> {
                           Navigator.push(
                             context,
                             MaterialPageRoute(
-                              builder: (context) => Forget_password_page(),
+                              builder: (context) => ForgetPasswordPage(),
                             ),
                           );
                         },
@@ -137,7 +137,7 @@ class _login_pageState extends State<login_page> {
                       Or_login_with(
                         "Don't have an account? ",
                         "Sign Up",
-                        signup_page(),
+                        SignupPage(),
                         context,
                       ),
                     ],

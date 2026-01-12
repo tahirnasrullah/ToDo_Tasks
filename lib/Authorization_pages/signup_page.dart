@@ -4,27 +4,28 @@ import 'package:to_do/authorization_elements/Or_login_with.dart';
 import 'package:to_do/home_page.dart';
 import '../authorization_elements/Text_Field_Form.dart';
 
+import '../services/database.dart';
 import 'login_page.dart';
 
-class signup_page extends StatefulWidget {
-  const signup_page({super.key});
+class SignupPage extends StatefulWidget {
+  const SignupPage({super.key});
 
   @override
-  State<signup_page> createState() => _signup_pageState();
+  State<SignupPage> createState() => _SignupPageState();
 }
 
-class _signup_pageState extends State<signup_page> {
-  TextEditingController UserName_controller = TextEditingController();
-  TextEditingController Email_controller = TextEditingController();
-  TextEditingController Password_controller = TextEditingController();
+class _SignupPageState extends State<SignupPage> {
+  TextEditingController userNameController = TextEditingController();
+  TextEditingController emailController = TextEditingController();
+  TextEditingController passwordController = TextEditingController();
   final _formKey = GlobalKey<FormState>();
 
   String email = "", username = "", password = "";
 
   Future<void> registration() async {
-    if (password != "" && UserName_controller != "" && Email_controller != "") {
+    if (password != "" && userNameController != "" && emailController != "") {
       try {
-        UserCredential userCredential = await FirebaseAuth.instance
+        UserCredential _ = await FirebaseAuth.instance
             .createUserWithEmailAndPassword(email: email, password: password);
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
@@ -36,8 +37,19 @@ class _signup_pageState extends State<signup_page> {
         );
         Navigator.push(
           context,
-          MaterialPageRoute(builder: (context) => home_page()),
+          MaterialPageRoute(builder: (context) => HomePage()),
         );
+        await FirebaseAuth.instance.currentUser!.updateDisplayName(username);
+
+        Map<String, dynamic> userInfoMap = {
+          "email": email,
+          "username": username,
+          "uid": FirebaseAuth.instance.currentUser!.uid,
+        };
+
+
+        await UserDetailDatabase().addUser(FirebaseAuth.instance.currentUser!.uid, userInfoMap);
+
       } on FirebaseAuthException catch (e) {
         String message = "";
         if (e.code == "weak-password") {
@@ -81,23 +93,23 @@ class _signup_pageState extends State<signup_page> {
                       ),
                       SizedBox(height: 15),
                       Text_Field_Form(
-                        controller: UserName_controller,
+                        controller: userNameController,
                         errorText: 'Require Your Username',
                         labelText: 'Username',
                       ),
 
                       SizedBox(height: 10),
                       Text_Field_Form(
-                        controller: Email_controller,
+                        controller: emailController,
                         errorText: 'Require Your E-mail',
                         labelText: 'E-mail',
                       ),
                       SizedBox(height: 10),
                       Text_Field_Form(
-                        controller: Password_controller,
+                        controller: passwordController,
                         errorText: 'Require Your Password',
                         labelText: 'Password',
-                        isPassword: true
+                        isPassword: true,
                       ),
                       SizedBox(height: 10),
                       ElevatedButton(
@@ -107,9 +119,9 @@ class _signup_pageState extends State<signup_page> {
                         onPressed: () {
                           if (_formKey.currentState!.validate()) {
                             setState(() {
-                              email = Email_controller.text;
-                              username = UserName_controller.text;
-                              password = Password_controller.text;
+                              email = emailController.text;
+                              username = userNameController.text;
+                              password = passwordController.text;
                             });
                           }
                           registration();
@@ -129,7 +141,7 @@ class _signup_pageState extends State<signup_page> {
                       Or_login_with(
                         "Already have an account? ",
                         "Login",
-                        login_page(),
+                        LoginPage(),
                         context,
                       ),
                     ],
