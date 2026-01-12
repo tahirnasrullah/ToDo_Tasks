@@ -1,19 +1,22 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:to_do/add_card.dart';
-import 'package:to_do/services/List.dart';
+import 'package:to_do/services/database.dart';
+import 'package:to_do/services/list.dart';
 import 'package:to_do/task_history.dart';
 import 'package:to_do/todays_task.dart';
 
-class home_page extends StatefulWidget {
-  const home_page({super.key});
+class HomePage extends StatefulWidget {
+  const HomePage({super.key});
 
   @override
-  State<home_page> createState() => _home_pageState();
+  State<HomePage> createState() => _HomePageState();
 }
 
-class _home_pageState extends State<home_page> {
-  List<ToDoDailyTasks_history> listTodayTasks = [];
+class _HomePageState extends State<HomePage> {
+  List<ToDoDailyTasksHistory> listTodayTasks = [];
+  List<UserDetailDatabase> listTodayCurrentUser = [];
+  String currentUser = "";
 
   bool _isLoading = true;
 
@@ -47,11 +50,11 @@ class _home_pageState extends State<home_page> {
           onPressed: () {
             _showCardDialog(context);
           },
-          child: Icon(Icons.add),
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadiusGeometry.circular(70),
           ),
           backgroundColor: Colors.grey.shade200,
+          child: Icon(Icons.add),
         ),
       ),
       appBar: AppBar(
@@ -76,6 +79,7 @@ class _home_pageState extends State<home_page> {
           ),
         ],
       ),
+      resizeToAvoidBottomInset: false,
       body: _isLoading
           ? const Center(child: CircularProgressIndicator())
           : Padding(
@@ -90,11 +94,9 @@ class _home_pageState extends State<home_page> {
                   SizedBox(height: 10),
                   Expanded(
                     flex: 1,
-                    child: Container(
-                      child: todays_task(
-                        list: listTodayTasks,
-                        EmptyText: "Not Yet",
-                      ),
+                    child: TodaysTask(
+                      list: listTodayTasks,
+                      emptyText: "Not Yet",
                     ),
                   ),
                   SizedBox(height: 20),
@@ -105,15 +107,13 @@ class _home_pageState extends State<home_page> {
                   SizedBox(height: 10),
                   Expanded(
                     flex: 1,
-                    child: Container(
-                      child: todays_task(
-                        list: listTodayTasks,
-                        EmptyText: "Assign now",
-                        button: true,
-                        CallbackAction: () {
-                          _showCardDialog(context);
-                        },
-                      ),
+                    child: TodaysTask(
+                      list: listTodayTasks,
+                      emptyText: "Assign now",
+                      button: true,
+                      callbackAction: () {
+                        _showCardDialog(context);
+                      },
                     ),
                   ),
 
@@ -131,7 +131,7 @@ class _home_pageState extends State<home_page> {
                       ),
                       InkWell(
                         onTap: () {
-                          _showCardDialog_Tasks(context);
+                          showCardDialogTasks(context);
                         },
                         child: Text(
                           'Show all...',
@@ -148,9 +148,11 @@ class _home_pageState extends State<home_page> {
                   SizedBox(height: 10),
 
                   Expanded(
-                    child: task_history(
-                      Scrollables: false,
+                    flex: 1,
+                    child: TaskHistory(
+                      scrollableCondition: false,
                       list: listTodayTasks,
+                      delnote: delnote,
                     ),
                   ),
                 ],
@@ -159,7 +161,7 @@ class _home_pageState extends State<home_page> {
     );
   }
 
-  void _showCardDialog_Tasks(BuildContext context) {
+  void showCardDialogTasks(BuildContext context) {
     showDialog(
       context: context,
       builder: (BuildContext context) {
@@ -172,7 +174,12 @@ class _home_pageState extends State<home_page> {
           ),
           body: Padding(
             padding: const EdgeInsets.all(8.0),
-            child: task_history(Scrollables: true, list: listTodayTasks),
+            child: TaskHistory(
+              scrollableCondition: true,
+              list: listTodayTasks,
+              delnote: delnote,
+              delAble: true,
+            ),
           ),
         );
       },
@@ -183,11 +190,25 @@ class _home_pageState extends State<home_page> {
     showDialog(
       context: context,
       builder: (BuildContext context) {
-        return Add_card(
-          onTaskAdded:getTasks
-        );
+        return AddCard(onTaskAdded: getTasks);
       },
     );
+  }
+
+  delnote(ToDoDailyTasksHistory task) async {
+    await FirebaseFirestore.instance
+        .collection("ToDoDailyTasks")
+        .doc(task.uid)
+        .delete();
+    setState(() {
+      listTodayTasks.remove(task);
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text("Task Deleted")));
+      setState(() {
+        _isLoading = false;
+      });
+    });
   }
 
   Future<void> getTasks() async {
@@ -195,10 +216,10 @@ class _home_pageState extends State<home_page> {
         .collection("ToDoDailyTasks")
         .get();
 
-    List<ToDoDailyTasks_history> tasks = [];
+    List<ToDoDailyTasksHistory> tasks = [];
     for (var docSnapshot in querySnapshot.docs) {
       var data = docSnapshot.data() as Map<String, dynamic>;
-      tasks.add(ToDoDailyTasks_history.fromMap(data));
+      tasks.add(ToDoDailyTasksHistory.fromMap(data));
     }
     setState(() {
       listTodayTasks = tasks;

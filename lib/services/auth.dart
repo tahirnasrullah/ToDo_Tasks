@@ -26,20 +26,18 @@ class AuthMethords {
     UserCredential result = await firebaseAuth.signInWithCredential(credential);
     User? userDetails = result.user;
 
-    if (result != null) {
-      Map<String, dynamic> userInfoMap = {
-        "email": userDetails!.email,
-        "name": userDetails!.displayName,
-        "imgUrl": userDetails!.photoURL,
-        "id": userDetails!.uid,
-      };
-      await DatabaseMethods().addUser(userDetails.uid, userInfoMap).then(
-              (value) {
-        Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(builder: (context) => home_page()),
-        );}
-      );
+    Map<String, dynamic> userInfoMap = {
+      "email": userDetails!.email,
+      "name": userDetails.displayName,
+      "imgUrl": userDetails.photoURL,
+      "uid": userDetails.uid,
+    };
+    await UserDetailDatabase().addUser(userDetails.uid, userInfoMap).then(
+            (value) {
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(builder: (context) => HomePage()),
+      );}
+    );
     }
-  }
 }

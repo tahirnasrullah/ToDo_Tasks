@@ -1,47 +1,45 @@
 import 'package:flutter/material.dart';
-import 'package:to_do/services/List.dart';
+import 'package:to_do/services/list.dart';
 
-class todays_task extends StatefulWidget {
-  final List<ToDoDailyTasks_history> list;
-  final String EmptyText;
+class TodaysTask extends StatefulWidget {
+  final List<ToDoDailyTasksHistory> list;
+  final String emptyText;
   final bool button;
-  final CallbackAction;
-  final String text_key_to ;
-  final String text_key_title ;
-  final String text_key_desc ;
+  final VoidCallback? callbackAction;
+  final String textKeyTo;
+  final String textKeyTitle;
+  final String textKeyDesc;
 
-
-
-  const todays_task({
+  const TodaysTask({
     super.key,
     required this.list,
-    required this.EmptyText,
+    required this.emptyText,
     this.button = false,
-    this.CallbackAction,
-    this.text_key_to= "to",
-    this.text_key_title= "title",
-    this.text_key_desc= "desc",
+    this.callbackAction,
+    this.textKeyTo = "to",
+    this.textKeyTitle = "title",
+    this.textKeyDesc = "desc",
   });
 
   @override
-  State<todays_task> createState() => _todays_taskState();
+  State<TodaysTask> createState() => _TodaysTaskState();
 }
 
-class _todays_taskState extends State<todays_task> {
+class _TodaysTaskState extends State<TodaysTask> {
   @override
   Widget build(BuildContext context) {
     return widget.list.isEmpty
         ? Center(
             child: widget.button
-                ? TextButton(
-                    onPressed: widget.CallbackAction,
-                    child: Text(widget.EmptyText),
+                ? InkWell(
+                    onTap: widget.callbackAction,
+                    child: Text(widget.emptyText,style: TextStyle(decoration: TextDecoration.underline,color: Colors.blue),),
                   )
-                : Text(widget.EmptyText),
+                : Text(widget.emptyText),
           )
-        : Container(
-          height: 120,
-          child: ListView(
+        : SizedBox(
+            height: 120,
+            child: ListView(
               scrollDirection: Axis.horizontal,
               children: widget.list
                   .map(
@@ -56,35 +54,36 @@ class _todays_taskState extends State<todays_task> {
                         child: SizedBox(
                           width: 200,
                           child: Padding(
-                            padding: const EdgeInsets.all(5.0),
-                            child: Column(
-                              mainAxisAlignment: MainAxisAlignment.start,
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(
-                                  "To: ${value.to}",
-                                  style: TextStyle(
-                                    fontWeight: FontWeight.w800,
+                            padding: const EdgeInsets.all(8.0),
+                            child: Expanded(
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    "To: ${value.to}",
+                                    style: TextStyle(
+                                      fontWeight: FontWeight.w800,
+                                    ),
+                                    maxLines: 1,
+                                    overflow: TextOverflow.ellipsis,
                                   ),
-                                  maxLines: 1,
-                                  overflow: TextOverflow.ellipsis,
-                                ),
-                                SizedBox(height: 5),
-                                Text(
-                                  "For: ${value.title}",
-                                  style: TextStyle(
-                                    fontWeight: FontWeight.bold,
+                                  SizedBox(height: 5),
+                                  Text(
+                                    "For: ${value.title}",
+                                    style: TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                    maxLines: 1,
+                                    overflow: TextOverflow.ellipsis,
                                   ),
-                                  maxLines: 1,
-                                  overflow: TextOverflow.ellipsis,
-                                ),
-                                SizedBox(height: 5),
-                                Text(
-                                  value.desc,
-                                  maxLines: 2,
-                                  overflow: TextOverflow.ellipsis,
-                                ),
-                              ],
+                                  SizedBox(height: 5),
+                                  Text(
+                                    value.desc,
+                                    maxLines: 3,
+                                    overflow: TextOverflow.ellipsis,
+                                  ),
+                                ],),
                             ),
                           ),
                         ),
@@ -93,6 +92,6 @@ class _todays_taskState extends State<todays_task> {
                   )
                   .toList(),
             ),
-        );
+          );
   }
 }

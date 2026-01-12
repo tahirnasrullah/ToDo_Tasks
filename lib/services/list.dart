@@ -1,26 +1,30 @@
-class ToDoDailyTasks_history {
+class ToDoDailyTasksHistory {
   final String to;
   final String from;
   final String title;
   final String desc;
+  final String? uid;
 
-  ToDoDailyTasks_history({
+
+  ToDoDailyTasksHistory({
     required this.to,
     required this.from,
+    required this.uid,
     required this.title,
     required this.desc,
   });
 
   Map<String, dynamic> toMap() {
-    return {'to': to, 'from': from,'title': title, 'desc': desc};
+    return {'to': to, 'from': from,'title': title, 'desc': desc, 'uid': uid};
   }
 
-  factory ToDoDailyTasks_history.fromMap(Map<String, dynamic> map) {
-    return ToDoDailyTasks_history(
+  factory ToDoDailyTasksHistory.fromMap(Map<String, dynamic> map) {
+    return ToDoDailyTasksHistory(
       to: map['to'] ?? '',
       from: map['from'] ?? '',
       title: map['title'] ?? '',
       desc: map['desc'] ?? '',
+      uid: map['uid'] ?? '',
     );
   }
 }
