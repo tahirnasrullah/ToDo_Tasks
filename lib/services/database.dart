@@ -7,4 +7,15 @@ class UserDetailDatabase {
         .doc(userId)
         .set(userInfoMap);
   }
+
+  Stream<String?> getProfileUser(String userId, String Field) {
+    return FirebaseFirestore.instance
+        .collection("User")
+        .doc(userId)
+        .snapshots()
+        .map((doc) {
+      if (!doc.exists) return null;
+      return doc[userId][Field];
+    });
+  }
 }

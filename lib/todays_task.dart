@@ -31,9 +31,9 @@ class _TodaysTaskState extends State<TodaysTask> {
     return widget.list.isEmpty
         ? Center(
             child: widget.button
-                ? TextButton(
-                    onPressed: widget.callbackAction,
-                    child: Text(widget.emptyText),
+                ? InkWell(
+                    onTap: widget.callbackAction,
+                    child: Text(widget.emptyText,style: TextStyle(decoration: TextDecoration.underline,color: Colors.blue),),
                   )
                 : Text(widget.emptyText),
           )

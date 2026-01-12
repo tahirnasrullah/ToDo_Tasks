@@ -7,7 +7,7 @@ import 'package:to_do/services/list.dart';
 import 'package:to_do/authorization_elements/Text_Field_Form.dart';
 
 class AddCard extends StatefulWidget {
-  // 1. Define the callback parameter to accept the function.
+
   final VoidCallback? onTaskAdded;
 
   const AddCard({super.key, this.onTaskAdded});
@@ -103,14 +103,11 @@ class _AddCardState extends State<AddCard> {
         // Save to Firestore
         await FirebaseFirestore.instance
             .collection("ToDoDailyTasks")
-            .doc(FirebaseAuth.instance.currentUser!.uid) // Consider a more robust ID
+            .doc(FirebaseAuth.instance.currentUser!.uid)
             .set(task.toMap());
 
-        // 2. Call the callback function after a successful save.
-        // The ?.call() safely invokes it only if it's not null.
         widget.onTaskAdded?.call();
 
-        // Close the dialog only after everything is done
         if (mounted) {
           Navigator.pop(context);
         }
@@ -122,7 +119,7 @@ class _AddCardState extends State<AddCard> {
           ).showSnackBar(SnackBar(content: Text("Failed to save task: $e")));
         }
       } finally {
-        // Ensure the saving flag is reset even if an error occurs
+
         if (mounted) {
           setState(() {
             _isSaving = false;

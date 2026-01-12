@@ -152,6 +152,7 @@ class _HomePageState extends State<HomePage> {
                     child: TaskHistory(
                       scrollableCondition: false,
                       list: listTodayTasks,
+                      delnote: delnote,
                     ),
                   ),
                 ],
@@ -173,7 +174,12 @@ class _HomePageState extends State<HomePage> {
           ),
           body: Padding(
             padding: const EdgeInsets.all(8.0),
-            child: TaskHistory(scrollableCondition: true, list: listTodayTasks),
+            child: TaskHistory(
+              scrollableCondition: true,
+              list: listTodayTasks,
+              delnote: delnote,
+              delAble: true,
+            ),
           ),
         );
       },
@@ -184,11 +190,25 @@ class _HomePageState extends State<HomePage> {
     showDialog(
       context: context,
       builder: (BuildContext context) {
-        return AddCard(
-          onTaskAdded:getTasks
-        );
+        return AddCard(onTaskAdded: getTasks);
       },
     );
+  }
+
+  delnote(ToDoDailyTasksHistory task) async {
+    await FirebaseFirestore.instance
+        .collection("ToDoDailyTasks")
+        .doc(task.uid)
+        .delete();
+    setState(() {
+      listTodayTasks.remove(task);
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text("Task Deleted")));
+      setState(() {
+        _isLoading = false;
+      });
+    });
   }
 
   Future<void> getTasks() async {
