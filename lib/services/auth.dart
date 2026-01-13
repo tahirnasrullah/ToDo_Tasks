@@ -1,7 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
-import 'package:to_do/bottomNavigation.dart';
+import 'package:to_do/Pages/bottomNavigation.dart';
 import 'package:to_do/services/database.dart';
 
 class AuthMethords {
