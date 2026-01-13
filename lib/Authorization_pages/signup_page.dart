@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:to_do/authorization_elements/Or_login_with.dart';
 import '../authorization_elements/Text_Field_Form.dart';
 
-import '../bottomNavigation.dart';
+import '../Pages/bottomNavigation.dart';
 import '../services/database.dart';
 import 'login_page.dart';
 

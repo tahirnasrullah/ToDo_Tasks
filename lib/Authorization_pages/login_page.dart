@@ -1,7 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:to_do/Authorization_pages/forget_password-page.dart';
-import 'package:to_do/bottomNavigation.dart';
+import 'package:to_do/Pages/bottomNavigation.dart';
 import 'package:to_do/authorization_elements/Or_login_with.dart';
 import '../authorization_elements/Text_Field_Form.dart';
 import 'package:to_do/Authorization_pages/signup_page.dart';
