@@ -6,29 +6,40 @@ import 'package:flutter/material.dart';
 import 'package:to_do/services/list.dart';
 import 'package:to_do/authorization_elements/Text_Field_Form.dart';
 
+import '../../services/database.dart';
+
+
 class AddCard extends StatefulWidget {
 
   final VoidCallback? onTaskAdded;
 
-  const AddCard({super.key, this.onTaskAdded});
+
+
+
+  AddCard({super.key, this.onTaskAdded});
 
   @override
   State<AddCard> createState() => _AddCardState();
 }
 
 class _AddCardState extends State<AddCard> {
-  final formKey = GlobalKey<FormState>();
 
-  // Define your TextEditingControllers here
-  final TextEditingController toAssignController = TextEditingController();
+  final TaskService taskService = TaskService();
+
+  final formKey = GlobalKey<FormState>();
   final TextEditingController titleController = TextEditingController();
   final TextEditingController descriptionController = TextEditingController();
+  String? selectedAssignee;
+  final UserDetailDatabase userDb = UserDetailDatabase();
 
-  // A flag to prevent multiple submissions
+
+
   bool _isSaving = false;
 
   @override
   Widget build(BuildContext context) {
+
+
     return BackdropFilter(
       filter: ImageFilter.blur(sigmaX: 5, sigmaY: 5),
       child: SingleChildScrollView(
@@ -39,12 +50,46 @@ class _AddCardState extends State<AddCard> {
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
-                // Your Text_Field_Form widgets go here...
-                Text_Field_Form(
-                  controller: toAssignController,
-                  labelText: "To:",
-                  errorText: "Required",
+                StreamBuilder<List<String>>(
+                  stream: userDb.getDropdownValues('username'),
+                  builder: (context, snapshot) {
+
+                    if (snapshot.connectionState == ConnectionState.waiting) {
+                      return const CircularProgressIndicator();
+                    }
+
+                    if (!snapshot.hasData || snapshot.data!.isEmpty) {
+                      return const Text("No users available");
+                    }
+
+                    final users = snapshot.data!;
+
+                    return DropdownButtonFormField<String>(
+                      initialValue: selectedAssignee,
+                      decoration: InputDecoration(
+                        labelText: "To:",
+                        border: OutlineInputBorder(borderRadius: BorderRadius.circular(20)),
+                      ),
+                      items: users.map((user) {
+                        return DropdownMenuItem<String>(
+                          value: user,
+                          child: Text(user),
+                        );
+                      }).toList(),
+                      onChanged: (value) {
+                        setState(() {
+                          selectedAssignee = value;
+                        });
+                      },
+                      validator: (value) =>
+                      value == null ? "Required" : null,
+                    );
+                  },
                 ),
+
+
+
+
                 const SizedBox(height: 10),
                 Text_Field_Form(
                   controller: titleController,
@@ -67,7 +112,7 @@ class _AddCardState extends State<AddCard> {
               child: const Text("Cancel"),
             ),
             ElevatedButton(
-              // Show a loading indicator on the button while saving
+
               onPressed: _isSaving ? null : _saveTask,
               child: _isSaving
                   ? const SizedBox(
@@ -84,7 +129,7 @@ class _AddCardState extends State<AddCard> {
   }
 
   Future<void> _saveTask() async {
-    // Check if the form is valid
+
     if (formKey.currentState?.validate() ?? false) {
       setState(() {
         _isSaving = true;
@@ -92,7 +137,8 @@ class _AddCardState extends State<AddCard> {
 
       // Prepare data
       ToDoDailyTasksHistory task = ToDoDailyTasksHistory(
-        to: toAssignController.text,
+        docId: '',
+        to: selectedAssignee! ,
         from: FirebaseAuth.instance.currentUser!.displayName! ,
         title: titleController.text,
         desc: descriptionController.text,
@@ -111,7 +157,7 @@ class _AddCardState extends State<AddCard> {
           Navigator.pop(context);
         }
       } catch (e) {
-        // Handle any errors
+
         if (mounted) {
           ScaffoldMessenger.of(
             context,
@@ -130,8 +176,7 @@ class _AddCardState extends State<AddCard> {
 
   @override
   void dispose() {
-    // Clean up controllers
-    toAssignController.dispose();
+
     titleController.dispose();
     descriptionController.dispose();
     super.dispose();

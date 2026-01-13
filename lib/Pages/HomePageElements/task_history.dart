@@ -1,19 +1,18 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
 import 'package:to_do/services/list.dart';
+
+import '../../services/database.dart';
 
 class TaskHistory extends StatefulWidget {
   final List<ToDoDailyTasksHistory> list;
   final bool scrollableCondition;
-  final Function(ToDoDailyTasksHistory) delnote;
   final bool delAble;
 
   const TaskHistory({
     super.key,
     required this.list,
     this.scrollableCondition = true,
-    required this.delnote,
     this.delAble = false,
   });
 
@@ -24,6 +23,9 @@ class TaskHistory extends StatefulWidget {
 class _TaskHistoryState extends State<TaskHistory> {
   @override
   Widget build(BuildContext context) {
+
+    final TaskService taskService = TaskService();
+
     return widget.list.isEmpty
         ? Center(child: Text("Not Yet"))
         : ListView(
@@ -52,9 +54,8 @@ class _TaskHistoryState extends State<TaskHistory> {
                       ),
                       trailing: widget.delAble && task.uid == FirebaseAuth.instance.currentUser!.uid
                           ? IconButton(
-                              onPressed: () {
-                                widget.delnote(task);
-                                setState(() {});
+                              onPressed: () async{
+                                await taskService.delnote(task, context);
                               },
                               icon: Icon(Icons.delete),
                             )
