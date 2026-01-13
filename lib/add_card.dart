@@ -103,8 +103,7 @@ class _AddCardState extends State<AddCard> {
         // Save to Firestore
         await FirebaseFirestore.instance
             .collection("ToDoDailyTasks")
-            .doc(FirebaseAuth.instance.currentUser!.uid)
-            .set(task.toMap());
+            .add(task.toMap());
 
         widget.onTaskAdded?.call();
 

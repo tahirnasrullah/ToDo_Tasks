@@ -1,10 +1,9 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:to_do/add_card.dart';
-import 'package:to_do/services/database.dart';
-import 'package:to_do/services/list.dart';
 import 'package:to_do/task_history.dart';
 import 'package:to_do/todays_task.dart';
+import 'package:to_do/services/list.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -14,62 +13,39 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  List<ToDoDailyTasksHistory> listTodayTasks = [];
-  List<UserDetailDatabase> listTodayCurrentUser = [];
-  String currentUser = "";
 
-  bool _isLoading = true;
-
-  @override
-  void initState() {
-    super.initState();
-    getTasks();
+  /// 🔥 Firestore Stream
+  Stream<List<ToDoDailyTasksHistory>> taskStream() {
+    return FirebaseFirestore.instance
+        .collection("ToDoDailyTasks")
+        .snapshots()
+        .map((querySnapshot) {
+      return querySnapshot.docs.map((doc) {
+        return ToDoDailyTasksHistory.fromMap(
+          doc.data(),
+        );
+      }).toList();
+    });
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      bottomNavigationBar: BottomNavigationBar(
-        type: BottomNavigationBarType.fixed,
-        useLegacyColorScheme: false,
-        backgroundColor: Colors.grey,
-        selectedItemColor: Colors.black,
-        unselectedItemColor: Colors.white,
-        iconSize: 20,
+      resizeToAvoidBottomInset: false,
 
-        items: [
-          BottomNavigationBarItem(icon: Icon(Icons.home), label: ""),
-          BottomNavigationBarItem(icon: Icon(Icons.chat), label: ""),
-          BottomNavigationBarItem(icon: Icon(Icons.search), label: ""),
-          BottomNavigationBarItem(icon: Icon(Icons.settings), label: ""),
-        ],
-      ),
-      floatingActionButton: Padding(
-        padding: const EdgeInsets.only(bottom: 10, right: 0),
-        child: FloatingActionButton(
-          onPressed: () {
-            _showCardDialog(context);
-          },
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadiusGeometry.circular(70),
-          ),
-          backgroundColor: Colors.grey.shade200,
-          child: Icon(Icons.add),
-        ),
-      ),
       appBar: AppBar(
         titleSpacing: 0,
         automaticallyImplyLeading: false,
-        title: Padding(
-          padding: const EdgeInsets.only(left: 10),
+        title: const Padding(
+          padding: EdgeInsets.only(left: 10),
           child: Text(
             'Todo DailyTasks',
             style: TextStyle(fontWeight: FontWeight.w800),
           ),
         ),
-        actions: [
+        actions: const [
           Padding(
-            padding: const EdgeInsets.only(right: 10, bottom: 10),
+            padding: EdgeInsets.only(right: 10, bottom: 10),
             child: CircleAvatar(
               radius: 30,
               backgroundImage: NetworkImage(
@@ -79,95 +55,136 @@ class _HomePageState extends State<HomePage> {
           ),
         ],
       ),
-      resizeToAvoidBottomInset: false,
-      body: _isLoading
-          ? const Center(child: CircularProgressIndicator())
-          : Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    "Today's Tasks",
-                    style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+
+
+      floatingActionButton: FloatingActionButton(
+        backgroundColor: Colors.grey.shade200,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(70),
+        ),
+        child: const Icon(Icons.add),
+        onPressed: () {
+          _showCardDialog(context);
+        },
+      ),
+
+      /// 🔥 REAL-TIME BODY
+      body: StreamBuilder<List<ToDoDailyTasksHistory>>(
+        stream: taskStream(),
+        builder: (context, snapshot) {
+
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return const Center(child: CircularProgressIndicator());
+          }
+
+          if (snapshot.hasError) {
+            return const Center(child: Text("Something went wrong"));
+          }
+
+          final listTodayTasks = snapshot.data ?? [];
+
+          return Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+
+                const Text(
+                  "Today's Tasks",
+                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                ),
+                const SizedBox(height: 10),
+
+                Expanded(
+                  child: TodaysTask(
+                    list: listTodayTasks,
+                    emptyText: "Not Yet",
                   ),
-                  SizedBox(height: 10),
-                  Expanded(
-                    flex: 1,
-                    child: TodaysTask(
-                      list: listTodayTasks,
-                      emptyText: "Not Yet",
+                ),
+
+                const SizedBox(height: 20),
+
+                const Text(
+                  "Assigned to Others",
+                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                ),
+                const SizedBox(height: 10),
+
+                Expanded(
+                  child: TodaysTask(
+                    list: listTodayTasks,
+                    emptyText: "Assign now",
+                    button: true,
+                    callbackAction: () {
+                      _showCardDialog(context);
+                    },
+                  ),
+                ),
+
+                const SizedBox(height: 20),
+
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    const Text(
+                      "Completed Tasks",
+                      style: TextStyle(
+                        fontSize: 20,
+                        fontWeight: FontWeight.bold,
+                      ),
                     ),
-                  ),
-                  SizedBox(height: 20),
-                  Text(
-                    "Assigned to Others",
-                    style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-                  ),
-                  SizedBox(height: 10),
-                  Expanded(
-                    flex: 1,
-                    child: TodaysTask(
-                      list: listTodayTasks,
-                      emptyText: "Assign now",
-                      button: true,
-                      callbackAction: () {
-                        _showCardDialog(context);
+                    InkWell(
+                      onTap: () {
+                        showCardDialogTasks(context, listTodayTasks);
                       },
-                    ),
-                  ),
-
-                  SizedBox(height: 20),
-
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text(
-                        "Completed Tasks",
+                      child: const Text(
+                        'Show all...',
                         style: TextStyle(
-                          fontSize: 20,
-                          fontWeight: FontWeight.bold,
+                          fontSize: 12,
+                          color: Colors.blue,
+                          fontStyle: FontStyle.italic,
                         ),
                       ),
-                      InkWell(
-                        onTap: () {
-                          showCardDialogTasks(context);
-                        },
-                        child: Text(
-                          'Show all...',
-                          style: TextStyle(
-                            fontSize: 12,
-                            color: Colors.blue,
-                            fontStyle: FontStyle.italic,
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-
-                  SizedBox(height: 10),
-
-                  Expanded(
-                    flex: 1,
-                    child: TaskHistory(
-                      scrollableCondition: false,
-                      list: listTodayTasks,
-                      delnote: delnote,
                     ),
+                  ],
+                ),
+
+                const SizedBox(height: 10),
+
+                Expanded(
+                  child: TaskHistory(
+                    scrollableCondition: false,
+                    list: listTodayTasks,
+                    delnote: delnote,
                   ),
-                ],
-              ),
+                ),
+              ],
             ),
+          );
+        },
+      ),
     );
   }
 
-  void showCardDialogTasks(BuildContext context) {
+  /// 🔥 SHOW ADD TASK
+  void _showCardDialog(BuildContext context) {
     showDialog(
       context: context,
-      builder: (BuildContext context) {
+      builder: (context) => const AddCard(),
+    );
+  }
+
+  /// 🔥 SHOW COMPLETED TASKS
+  void showCardDialogTasks(
+      BuildContext context,
+      List<ToDoDailyTasksHistory> list,
+      ) {
+    showDialog(
+      context: context,
+      builder: (context) {
         return Scaffold(
           appBar: AppBar(
-            title: Text(
+            title: const Text(
               "Completed Tasks",
               style: TextStyle(fontWeight: FontWeight.w800),
             ),
@@ -176,7 +193,7 @@ class _HomePageState extends State<HomePage> {
             padding: const EdgeInsets.all(8.0),
             child: TaskHistory(
               scrollableCondition: true,
-              list: listTodayTasks,
+              list: list,
               delnote: delnote,
               delAble: true,
             ),
@@ -186,44 +203,16 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  void _showCardDialog(BuildContext context) {
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return AddCard(onTaskAdded: getTasks);
-      },
-    );
-  }
-
-  delnote(ToDoDailyTasksHistory task) async {
+  /// 🔥 DELETE TASK
+  Future<void> delnote(ToDoDailyTasksHistory task) async {
     await FirebaseFirestore.instance
         .collection("ToDoDailyTasks")
         .doc(task.uid)
         .delete();
-    setState(() {
-      listTodayTasks.remove(task);
-      ScaffoldMessenger.of(
-        context,
-      ).showSnackBar(SnackBar(content: Text("Task Deleted")));
-      setState(() {
-        _isLoading = false;
-      });
-    });
-  }
 
-  Future<void> getTasks() async {
-    QuerySnapshot querySnapshot = await FirebaseFirestore.instance
-        .collection("ToDoDailyTasks")
-        .get();
-
-    List<ToDoDailyTasksHistory> tasks = [];
-    for (var docSnapshot in querySnapshot.docs) {
-      var data = docSnapshot.data() as Map<String, dynamic>;
-      tasks.add(ToDoDailyTasksHistory.fromMap(data));
-    }
-    setState(() {
-      listTodayTasks = tasks;
-      _isLoading = false;
-    });
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(content: Text("Task Deleted")),
+    );
   }
 }
+

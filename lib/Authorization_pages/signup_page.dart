@@ -1,9 +1,9 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:to_do/authorization_elements/Or_login_with.dart';
-import 'package:to_do/home_page.dart';
 import '../authorization_elements/Text_Field_Form.dart';
 
+import '../bottomNavigation.dart';
 import '../services/database.dart';
 import 'login_page.dart';
 
@@ -37,7 +37,7 @@ class _SignupPageState extends State<SignupPage> {
         );
         Navigator.push(
           context,
-          MaterialPageRoute(builder: (context) => HomePage()),
+          MaterialPageRoute(builder: (context) => BottomNav()),
         );
         await FirebaseAuth.instance.currentUser!.updateDisplayName(username);
 
