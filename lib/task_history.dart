@@ -50,7 +50,7 @@ class _TaskHistoryState extends State<TaskHistory> {
                           Text("For: ${task.title}"),
                         ],
                       ),
-                      trailing: widget.delAble
+                      trailing: widget.delAble && task.uid == FirebaseAuth.instance.currentUser!.uid
                           ? IconButton(
                               onPressed: () {
                                 widget.delnote(task);
