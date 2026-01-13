@@ -1,31 +1,28 @@
 import 'package:flutter/material.dart';
 import 'package:to_do/services/list.dart';
 
-class TodaysTask extends StatefulWidget {
+class TodayTask extends StatefulWidget {
+
   final List<ToDoDailyTasksHistory> list;
   final String emptyText;
   final bool button;
   final VoidCallback? callbackAction;
-  final String textKeyTo;
-  final String textKeyTitle;
-  final String textKeyDesc;
 
-  const TodaysTask({
+
+  const TodayTask({
     super.key,
     required this.list,
     required this.emptyText,
     this.button = false,
     this.callbackAction,
-    this.textKeyTo = "to",
-    this.textKeyTitle = "title",
-    this.textKeyDesc = "desc",
   });
 
+
   @override
-  State<TodaysTask> createState() => _TodaysTaskState();
+  State<TodayTask> createState() => _TodayTaskState();
 }
 
-class _TodaysTaskState extends State<TodaysTask> {
+class _TodayTaskState extends State<TodayTask> {
   @override
   Widget build(BuildContext context) {
     return widget.list.isEmpty
