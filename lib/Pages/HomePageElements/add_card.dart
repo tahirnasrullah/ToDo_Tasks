@@ -1,6 +1,4 @@
 import 'dart:ui';
-
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:to_do/services/list.dart';
@@ -8,38 +6,27 @@ import 'package:to_do/authorization_elements/Text_Field_Form.dart';
 
 import '../../services/database.dart';
 
-
 class AddCard extends StatefulWidget {
-
-  final VoidCallback? onTaskAdded;
-
-
-
-
-  AddCard({super.key, this.onTaskAdded});
+  AddCard({super.key});
 
   @override
   State<AddCard> createState() => _AddCardState();
 }
 
 class _AddCardState extends State<AddCard> {
-
   final TaskService taskService = TaskService();
 
   final formKey = GlobalKey<FormState>();
   final TextEditingController titleController = TextEditingController();
   final TextEditingController descriptionController = TextEditingController();
   String? selectedAssignee;
+
   final UserDetailDatabase userDb = UserDetailDatabase();
-
-
 
   bool _isSaving = false;
 
   @override
   Widget build(BuildContext context) {
-
-
     return BackdropFilter(
       filter: ImageFilter.blur(sigmaX: 5, sigmaY: 5),
       child: SingleChildScrollView(
@@ -53,9 +40,8 @@ class _AddCardState extends State<AddCard> {
                 StreamBuilder<List<String>>(
                   stream: userDb.getDropdownValues('username'),
                   builder: (context, snapshot) {
-
                     if (snapshot.connectionState == ConnectionState.waiting) {
-                      return const CircularProgressIndicator();
+                      return Text('Loading...');
                     }
 
                     if (!snapshot.hasData || snapshot.data!.isEmpty) {
@@ -68,7 +54,9 @@ class _AddCardState extends State<AddCard> {
                       initialValue: selectedAssignee,
                       decoration: InputDecoration(
                         labelText: "To:",
-                        border: OutlineInputBorder(borderRadius: BorderRadius.circular(20)),
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(20),
+                        ),
                       ),
                       items: users.map((user) {
                         return DropdownMenuItem<String>(
@@ -81,14 +69,10 @@ class _AddCardState extends State<AddCard> {
                           selectedAssignee = value;
                         });
                       },
-                      validator: (value) =>
-                      value == null ? "Required" : null,
+                      validator: (value) => value == null ? "Required" : null,
                     );
                   },
                 ),
-
-
-
 
                 const SizedBox(height: 10),
                 Text_Field_Form(
@@ -112,7 +96,6 @@ class _AddCardState extends State<AddCard> {
               child: const Text("Cancel"),
             ),
             ElevatedButton(
-
               onPressed: _isSaving ? null : _saveTask,
               child: _isSaving
                   ? const SizedBox(
@@ -129,7 +112,6 @@ class _AddCardState extends State<AddCard> {
   }
 
   Future<void> _saveTask() async {
-
     if (formKey.currentState?.validate() ?? false) {
       setState(() {
         _isSaving = true;
@@ -138,8 +120,8 @@ class _AddCardState extends State<AddCard> {
       // Prepare data
       ToDoDailyTasksHistory task = ToDoDailyTasksHistory(
         docId: '',
-        to: selectedAssignee! ,
-        from: FirebaseAuth.instance.currentUser!.displayName! ,
+        to: selectedAssignee!,
+        from: FirebaseAuth.instance.currentUser!.displayName!,
         title: titleController.text,
         desc: descriptionController.text,
         uid: FirebaseAuth.instance.currentUser!.uid,
@@ -147,24 +129,17 @@ class _AddCardState extends State<AddCard> {
 
       try {
         // Save to Firestore
-        await FirebaseFirestore.instance
-            .collection("ToDoDailyTasks")
-            .add(task.toMap());
-
-        widget.onTaskAdded?.call();
-
+        taskService.addTask(task, context);
         if (mounted) {
           Navigator.pop(context);
         }
       } catch (e) {
-
         if (mounted) {
           ScaffoldMessenger.of(
             context,
           ).showSnackBar(SnackBar(content: Text("Failed to save task: $e")));
         }
       } finally {
-
         if (mounted) {
           setState(() {
             _isSaving = false;
@@ -176,7 +151,6 @@ class _AddCardState extends State<AddCard> {
 
   @override
   void dispose() {
-
     titleController.dispose();
     descriptionController.dispose();
     super.dispose();

@@ -35,7 +35,7 @@ class _BottomNavState extends State<BottomNav> {
         currentIndex: _currentIndex,
         onTap: (index) {
           setState(() {
-            _currentIndex = index; // ✅ PAGE CHANGES
+            _currentIndex = index;
           });
         },
 

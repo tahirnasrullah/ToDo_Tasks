@@ -23,7 +23,6 @@ class TaskHistory extends StatefulWidget {
 class _TaskHistoryState extends State<TaskHistory> {
   @override
   Widget build(BuildContext context) {
-
     final TaskService taskService = TaskService();
 
     return widget.list.isEmpty
@@ -43,8 +42,8 @@ class _TaskHistoryState extends State<TaskHistory> {
                       leading:
                           task.from ==
                               FirebaseAuth.instance.currentUser!.displayName
-                          ?  Text("Me")
-                          :Text(task.from),
+                          ? Text("Me")
+                          : Text(task.from),
                       title: Row(
                         children: [
                           Text("To: ${task.to}"),
@@ -52,9 +51,11 @@ class _TaskHistoryState extends State<TaskHistory> {
                           Text("For: ${task.title}"),
                         ],
                       ),
-                      trailing: widget.delAble && task.uid == FirebaseAuth.instance.currentUser!.uid
+                      trailing:
+                          widget.delAble &&
+                              task.uid == FirebaseAuth.instance.currentUser!.uid
                           ? IconButton(
-                              onPressed: () async{
+                              onPressed: () async {
                                 await taskService.delnote(task, context);
                               },
                               icon: Icon(Icons.delete),
