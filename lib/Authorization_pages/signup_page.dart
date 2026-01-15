@@ -2,7 +2,6 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:to_do/authorization_elements/Or_login_with.dart';
 import '../authorization_elements/Text_Field_Form.dart';
-
 import '../Pages/bottomNavigation.dart';
 import '../services/database.dart';
 import 'login_page.dart';
@@ -19,57 +18,14 @@ class _SignupPageState extends State<SignupPage> {
   TextEditingController emailController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
   final _formKey = GlobalKey<FormState>();
+  UserDetailDatabase userDb = UserDetailDatabase();
 
   String email = "", username = "", password = "";
-
-  Future<void> registration() async {
-    if (password != "" && userNameController != "" && emailController != "") {
-      try {
-        UserCredential _ = await FirebaseAuth.instance
-            .createUserWithEmailAndPassword(email: email, password: password);
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text(
-              'Registered Successfully',
-              style: TextStyle(fontSize: 16),
-            ),
-          ),
-        );
-        Navigator.push(
-          context,
-          MaterialPageRoute(builder: (context) => BottomNav()),
-        );
-        await FirebaseAuth.instance.currentUser!.updateDisplayName(username);
-
-        Map<String, dynamic> userInfoMap = {
-          "email": email,
-          "username": username,
-          "uid": FirebaseAuth.instance.currentUser!.uid,
-        };
-
-
-        await UserDetailDatabase().addUser(FirebaseAuth.instance.currentUser!.uid, userInfoMap);
-
-      } on FirebaseAuthException catch (e) {
-        String message = "";
-        if (e.code == "weak-password") {
-          message = "Password Provided is too weak";
-        } else if (e.code == "email-already-in-use") {
-          message = "E-mail already in use";
-        }
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            backgroundColor: Colors.orange,
-            content: Text(message, style: TextStyle(fontSize: 12)),
-          ),
-        );
-      }
-    }
-  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       body: SingleChildScrollView(
         child: Column(
           children: [
@@ -154,5 +110,53 @@ class _SignupPageState extends State<SignupPage> {
         ),
       ),
     );
+  }
+
+  Future<void> registration() async {
+    if (password != "" && userNameController != "" && emailController != "") {
+      try {
+        UserCredential _ = await FirebaseAuth.instance
+            .createUserWithEmailAndPassword(email: email, password: password);
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(
+              'Registered Successfully',
+              style: TextStyle(fontSize: 16),
+            ),
+          ),
+        );
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(builder: (context) => BottomNav()),
+        );
+        await FirebaseAuth.instance.currentUser!.updateDisplayName(username);
+
+        Map<String, dynamic> userInfoMap = {
+          "email": email,
+          "username": username,
+          "imgUrl":
+              "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRnVvDx9Kezwg0D77WzdAUzjOEHf1WEqQ3-fA&s",
+          "uid": FirebaseAuth.instance.currentUser!.uid,
+        };
+
+        await userDb.addUser(
+          FirebaseAuth.instance.currentUser!.uid,
+          userInfoMap,
+        );
+      } on FirebaseAuthException catch (e) {
+        String message = "";
+        if (e.code == "weak-password") {
+          message = "Password Provided is too weak";
+        } else if (e.code == "email-already-in-use") {
+          message = "E-mail already in use";
+        }
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            backgroundColor: Colors.orange,
+            content: Text(message, style: TextStyle(fontSize: 12)),
+          ),
+        );
+      }
+    }
   }
 }

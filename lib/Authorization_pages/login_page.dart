@@ -20,13 +20,119 @@ class _LoginPageState extends State<LoginPage> {
 
   String email = "", password = "";
 
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      resizeToAvoidBottomInset: false,
+
+      body:  SingleChildScrollView(
+        child: Column(
+            children: [
+              Container(height: 150, color: Colors.grey),
+              Center(
+                child: SizedBox(
+                  width: 300,
+                  child: Form(
+                    key: _formKey,
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: [
+                        SizedBox(height: 40),
+                        Text(
+                          'Login Page',
+                          style: TextStyle(
+                            fontSize: 32,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                        SizedBox(height: 15),
+                        Text_Field_Form(
+                          controller: emailController,
+                          errorText: 'Require Your E-mail',
+                          labelText: 'E-mail',
+                        ),
+                        SizedBox(height: 10),
+                        Text_Field_Form(
+                          controller: passwordController,
+                          errorText: 'Require Your Password',
+                          labelText: 'Password',
+                          isPassword: true,
+                        ),
+                        SizedBox(height: 10),
+                        ElevatedButton(
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: Colors.grey,
+                          ),
+                          onPressed: () {
+                            if (_formKey.currentState!.validate()) {
+                              setState(() {
+                                email = emailController.text;
+                                password = passwordController.text;
+                              });
+                            }
+                            userLogin();
+                          },
+                          child: Padding(
+                            padding: const EdgeInsets.symmetric(horizontal: 20),
+                            child: Text(
+                              'Login',
+                              style: TextStyle(
+                                fontWeight: FontWeight.w800,
+                                color: Colors.white,
+                              ),
+                            ),
+                          ),
+                        ),
+                        SizedBox(height: 15),
+                        InkWell(
+                          onTap: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => ForgetPasswordPage(),
+                              ),
+                            );
+                          },
+                          child: Text(
+                            'Forget Password?',
+                            style: TextStyle(color: Colors.black),
+                          ),
+                        ),
+                        SizedBox(height: 60),
+                        Or_login_with(
+                          "Don't have an account? ",
+                          "Sign Up",
+                          SignupPage(),
+                          context,
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              ),
+              SizedBox(height: 60),
+            ],
+          ),
+      ),
+
+    );
+  }
+
+
+
+
+
+
+
   Future<void> userLogin() async {
     try {
       await FirebaseAuth.instance.signInWithEmailAndPassword(
         email: email,
         password: password,
       );
-      Navigator.push(
+      Navigator.pushReplacement(
         context,
         MaterialPageRoute(builder: (context) => BottomNav()),
       );
@@ -56,99 +162,8 @@ class _LoginPageState extends State<LoginPage> {
     }
   }
 
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      body: SingleChildScrollView(
-        child: Column(
-          children: [
-            Container(height: 150, color: Colors.grey),
-            Center(
-              child: SizedBox(
-                width: 300,
-                child: Form(
-                  key: _formKey,
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    children: [
-                      SizedBox(height: 40),
-                      Text(
-                        'Login Page',
-                        style: TextStyle(
-                          fontSize: 32,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                      SizedBox(height: 15),
-                      Text_Field_Form(
-                        controller: emailController,
-                        errorText: 'Require Your E-mail',
-                        labelText: 'E-mail',
-                      ),
-                      SizedBox(height: 10),
-                      Text_Field_Form(
-                        controller: passwordController,
-                        errorText: 'Require Your Password',
-                        labelText: 'Password',
-                        isPassword: true,
-                      ),
-                      SizedBox(height: 10),
-                      ElevatedButton(
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: Colors.grey,
-                        ),
-                        onPressed: () {
-                          if (_formKey.currentState!.validate()) {
-                            setState(() {
-                              email = emailController.text;
-                              password = passwordController.text;
-                            });
-                          }
-                          userLogin();
-                        },
-                        child: Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 20),
-                          child: Text(
-                            'Login',
-                            style: TextStyle(
-                              fontWeight: FontWeight.w800,
-                              color: Colors.white,
-                            ),
-                          ),
-                        ),
-                      ),
-                      SizedBox(height: 15),
-                      InkWell(
-                        onTap: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => ForgetPasswordPage(),
-                            ),
-                          );
-                        },
-                        child: Text(
-                          'Forget Password?',
-                          style: TextStyle(color: Colors.black),
-                        ),
-                      ),
-                      SizedBox(height: 60),
-                      Or_login_with(
-                        "Don't have an account? ",
-                        "Sign Up",
-                        SignupPage(),
-                        context,
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-            ),
-            SizedBox(height: 60),
-          ],
-        ),
-      ),
-    );
-  }
+
+
+
+
 }

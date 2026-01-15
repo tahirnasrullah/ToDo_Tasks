@@ -1,6 +1,9 @@
+import 'dart:developer';
+
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:to_do/Authorization_pages/signup_page.dart';
+import 'package:to_do/services/database.dart';
 import '../authorization_elements/Text_Field_Form.dart';
 
 class ForgetPasswordPage extends StatefulWidget {
@@ -13,27 +16,35 @@ class ForgetPasswordPage extends StatefulWidget {
 class _ForgetPasswordPageState extends State<ForgetPasswordPage> {
   @override
   Widget build(BuildContext context) {
-    TextEditingController _email_controller = TextEditingController();
-    final _formKey = GlobalKey<FormState>();
+    TextEditingController emailController = TextEditingController();
+    final formKey = GlobalKey<FormState>();
+    final UserDetailDatabase database = UserDetailDatabase();
 
-    String email = "";
-    resetPassword() async {
-      try {
-        await FirebaseAuth.instance.sendPasswordResetEmail(email: email);
-        SnackBar(
-          content: Text(
-            'Password Reset Email has been sent !',
-            style: TextStyle(fontSize: 16),
-          ),
-        );
-      } on FirebaseAuthException catch (e) {
-        if (e.code == "user-not-found") {
-          SnackBar(
-            content: Text('E-mail not Found', style: TextStyle(fontSize: 16)),
-          );
-        }
-      }
-    }
+    // Future<void> resetPassword() async {
+    //   try {
+    //     await FirebaseAuth.instance.sendPasswordResetEmail(
+    //       email: emailController.text.trim(),
+    //     );
+    //
+    //     ScaffoldMessenger.of(context).showSnackBar(
+    //       SnackBar(
+    //         content: Text(
+    //           'If this email exists, a reset link has been sent.',
+    //           style: TextStyle(fontSize: 16),
+    //         ),
+    //       ),
+    //     );
+    //     Navigator.pop(context);
+    //   } on FirebaseAuthException catch (e) {
+    //     if (e.code == "user-not-found") {
+    //       ScaffoldMessenger.of(context).showSnackBar(
+    //         SnackBar(
+    //           content: Text('E-mail not Found', style: TextStyle(fontSize: 16)),
+    //         ),
+    //       );
+    //     }
+    //   }
+    // }
 
     return Scaffold(
       body: Stack(
@@ -43,7 +54,7 @@ class _ForgetPasswordPageState extends State<ForgetPasswordPage> {
             child: SizedBox(
               width: 300,
               child: Form(
-                key: _formKey,
+                key: formKey,
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.center,
                   mainAxisAlignment: MainAxisAlignment.start,
@@ -59,7 +70,7 @@ class _ForgetPasswordPageState extends State<ForgetPasswordPage> {
                     ),
                     SizedBox(height: 15),
                     Text_Field_Form(
-                      controller: _email_controller,
+                      controller: emailController,
                       errorText: 'Require Your E-mail',
                       labelText: 'E-mail',
                       labelColor: Colors.white,
@@ -74,13 +85,48 @@ class _ForgetPasswordPageState extends State<ForgetPasswordPage> {
                       style: ElevatedButton.styleFrom(
                         backgroundColor: Colors.grey,
                       ),
-                      onPressed: () {
-                        if (_formKey.currentState!.validate()) {
-                          setState(() {
-                            email = _email_controller.text;
-                          });
+                      // onPressed: () {
+                      //   if (formKey.currentState!.validate()) {
+                      //     resetPassword();
+                      //   }
+                      // },
+                      onPressed: () async {
+                        if (!formKey.currentState!.validate()) return;
+
+                        final email = emailController.text;
+
+                        bool exists = await database.doesEmailExist(email);
+                        log('data==========: $exists');
+
+                        if (!exists) {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            const SnackBar(
+                              content: Text("Email not registered"),
+                            ),
+                          );
+                          return;
                         }
-                        resetPassword();
+
+                        try {
+                          await FirebaseAuth.instance.sendPasswordResetEmail(email: email);
+
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            const SnackBar(
+                              content: Text("Password reset link sent"),
+                            ),
+                          );
+
+                        } on FirebaseAuthException catch (e) {
+                          String message = "Something went wrong";
+
+                          if (e.code == 'invalid-email') {
+                            message = "Invalid email format";
+                          }
+
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBar(content: Text(message)),
+                          );
+                        }
                       },
                       child: Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 20),
@@ -93,6 +139,7 @@ class _ForgetPasswordPageState extends State<ForgetPasswordPage> {
                         ),
                       ),
                     ),
+
                     SizedBox(height: 15),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,

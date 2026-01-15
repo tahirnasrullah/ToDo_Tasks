@@ -37,7 +37,7 @@ class _HomePageState extends State<HomePage> {
             child: CircleAvatar(
               radius: 30,
               backgroundImage: NetworkImage(
-                'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRnVvDx9Kezwg0D77WzdAUzjOEHf1WEqQ3-fA&s',
+                "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRnVvDx9Kezwg0D77WzdAUzjOEHf1WEqQ3-fA&s",
               ),
             ),
           ),
@@ -93,8 +93,9 @@ class _HomePageState extends State<HomePage> {
                   child: TodayTask(
                     list: listTodayTasks,
                     emptyText: "Assign now",
-                    button: true,
-                    callbackAction: () {
+                    emptyButton: true,
+                    cardButton: true,
+                    callbackActionEmptyButton: () {
                       _showCardDialog(context);
                     },
                   ),
