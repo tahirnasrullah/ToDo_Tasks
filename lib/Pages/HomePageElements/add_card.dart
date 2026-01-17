@@ -194,7 +194,18 @@ class _AddCardState extends State<AddCard> {
       filter: ImageFilter.blur(sigmaX: 5, sigmaY: 5),
       child: SingleChildScrollView(
         child: AlertDialog(
-          title: const Text("Add New Task"),
+          title: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              const Text("Add New Task"),
+              IconButton(
+                onPressed: () {
+                  Navigator.pop(context);
+                },
+                icon: Icon(Icons.close),
+              ),
+            ],
+          ),
           content: Form(
             key: formKey,
             child: Column(
@@ -242,9 +253,11 @@ class _AddCardState extends State<AddCard> {
                         child: InkWell(
                           onTap: pickStartDateTime,
                           child: InputDecorator(
-                            decoration:  InputDecoration(
+                            decoration: InputDecoration(
                               labelText: "Start Date & Time",
-                              border: OutlineInputBorder(borderRadius: BorderRadius.circular(20)),
+                              border: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(20),
+                              ),
                             ),
                             child: Text(
                               startDateTime == null
@@ -261,7 +274,9 @@ class _AddCardState extends State<AddCard> {
                           child: InputDecorator(
                             decoration: InputDecoration(
                               labelText: "End Date & Time",
-                              border: OutlineInputBorder(borderRadius: BorderRadius.circular(20)),
+                              border: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(20),
+                              ),
                             ),
                             child: Text(
                               endDateTime == null
@@ -297,19 +312,21 @@ class _AddCardState extends State<AddCard> {
             ),
           ),
           actions: [
-            TextButton(
-              onPressed: () => Navigator.pop(context),
-              child: const Text("Cancel"),
-            ),
-            ElevatedButton(
-              onPressed: _isSaving ? null : saveTask,
-              child: _isSaving
-                  ? const SizedBox(
-                height: 20,
-                width: 20,
-                child: CircularProgressIndicator(strokeWidth: 2),
-              )
-                  : const Text("Save"),
+            Row(
+              children: [
+                Expanded(
+                  child: ElevatedButton(
+                    onPressed: _isSaving ? null : saveTask,
+                    child: _isSaving
+                        ? const SizedBox(
+                            height: 20,
+                            width: 20,
+                            child: CircularProgressIndicator(strokeWidth: 2),
+                          )
+                        : const Text("Save"),
+                  ),
+                ),
+              ],
             ),
           ],
         ),
@@ -446,8 +463,7 @@ class _AddCardState extends State<AddCard> {
   }
 
   void showError(String msg) {
-    ScaffoldMessenger.of(context)
-        .showSnackBar(SnackBar(content: Text(msg)));
+    ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(msg)));
   }
 
   @override
@@ -457,4 +473,3 @@ class _AddCardState extends State<AddCard> {
     super.dispose();
   }
 }
-
