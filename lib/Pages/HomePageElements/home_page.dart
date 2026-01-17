@@ -114,12 +114,16 @@ class _HomePageState extends State<HomePage> {
                           emptyText: "Not Yet",
                           emptyButton: false,
                           editing: false,
+                          toMe: true,
+                          fromMe: false,
                         )
                       : TodayTask(
                           list: listTodayTasks,
                           emptyText: "No tasks today",
                           emptyButton: false,
                           editing: false,
+                          toMe: false,
+                          fromMe: true,
                         ),
                 ),
 
@@ -164,6 +168,8 @@ class _HomePageState extends State<HomePage> {
                           emptyText: "Assign now",
                           emptyButton: true,
                           editing: true,
+                          toMe: false,
+                          fromMe: true,
                           callbackActionEmptyButton: () {
                             _showCardDialog(context);
                           },
@@ -173,6 +179,8 @@ class _HomePageState extends State<HomePage> {
                           emptyText: "Assign now",
                           emptyButton: true,
                           editing: true,
+                          toMe: false,
+                          fromMe: true,
                           callbackActionEmptyButton: () {
                             _showCardDialog(context);
                           },

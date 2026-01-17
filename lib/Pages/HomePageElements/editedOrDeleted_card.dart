@@ -267,7 +267,18 @@ class _EditTaskCardState extends State<EditTaskCard> {
       filter: ImageFilter.blur(sigmaX: 5, sigmaY: 5),
       child: SingleChildScrollView(
         child: AlertDialog(
-          title: const Text("Edit Task"),
+          title: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              const Text("Edit Task"),
+              IconButton(
+                onPressed: () {
+                  Navigator.pop(context);
+                },
+                icon: Icon(Icons.close),
+              ),
+            ],
+          ),
           content: Form(
             key: formKey,
             child: Column(
@@ -363,26 +374,24 @@ class _EditTaskCardState extends State<EditTaskCard> {
             Row(
               mainAxisAlignment: MainAxisAlignment.end,
               children: [
-                OutlinedButton(
-                  onPressed: confirmDelete,
-                  child: const Text("Delete"),
+                Expanded(
+                  child: OutlinedButton(
+                    onPressed: confirmDelete,
+                    child: const Text("Delete"),
+                  ),
                 ),
 
                 SizedBox(width: 5),
-                ElevatedButton(
-                  onPressed: _isSaving ? null : updateTask,
-                  child: _isSaving
-                      ? const SizedBox(
-                          height: 20,
-                          width: 20,
-                          child: CircularProgressIndicator(strokeWidth: 2),
-                        )
-                      : const Text("Update"),
-                ),
                 Expanded(
-                  child: TextButton(
-                    onPressed: () => Navigator.pop(context),
-                    child: const Text("Cancel"),
+                  child: ElevatedButton(
+                    onPressed: _isSaving ? null : updateTask,
+                    child: _isSaving
+                        ? const SizedBox(
+                            height: 20,
+                            width: 20,
+                            child: CircularProgressIndicator(strokeWidth: 2),
+                          )
+                        : const Text("Update"),
                   ),
                 ),
               ],
