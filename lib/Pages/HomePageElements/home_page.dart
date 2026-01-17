@@ -15,6 +15,10 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   final TaskService taskService = TaskService();
+  late bool _assigningToYou = false;
+  late bool _accepted = false;
+  late String showAssignTo = 'to only you';
+  late String showAccepted = 'only accepted task';
 
   @override
   Widget build(BuildContext context) {
@@ -71,34 +75,108 @@ class _HomePageState extends State<HomePage> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                const Text(
-                  "Today's Tasks",
-                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    const Text(
+                      "Today's Tasks",
+                      style: TextStyle(
+                        fontSize: 20,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    InkWell(
+                      child: Text(
+                        showAssignTo,
+                        style: TextStyle(
+                          fontSize: 12,
+                          color: Colors.blue,
+                          fontStyle: FontStyle.italic,
+                        ),
+                      ),
+                      onTap: () {
+                        setState(() {
+                          _assigningToYou = !_assigningToYou;
+                          showAssignTo == 'to only you'
+                              ? showAssignTo = 'to others'
+                              : showAssignTo = 'to only you';
+                        });
+                      },
+                    ),
+                  ],
                 ),
                 const SizedBox(height: 10),
 
                 Expanded(
-                  child: TodayTask(list: listTodayTasks, emptyText: "Not Yet"),
+                  child: _assigningToYou
+                      ? TodayTask(
+                          list: listTodayTasks,
+                          emptyText: "Not Yet",
+                          emptyButton: false,
+                          editing: false,
+                        )
+                      : TodayTask(
+                          list: listTodayTasks,
+                          emptyText: "No tasks today",
+                          emptyButton: false,
+                          editing: false,
+                        ),
                 ),
 
                 const SizedBox(height: 20),
 
-                const Text(
-                  "Assigned to Others",
-                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    const Text(
+                      "Assigned to Others",
+                      style: TextStyle(
+                        fontSize: 20,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    InkWell(
+                      child: Text(
+                        showAccepted,
+                        style: TextStyle(
+                          fontSize: 12,
+                          color: Colors.blue,
+                          fontStyle: FontStyle.italic,
+                        ),
+                      ),
+                      onTap: () {
+                        setState(() {
+                          _accepted = !_accepted;
+                          showAccepted == 'only accepted task'
+                              ? showAccepted = 'none accepted task'
+                              : showAccepted = 'only accepted task';
+                        });
+                      },
+                    ),
+                  ],
                 ),
                 const SizedBox(height: 10),
 
                 Expanded(
-                  child: TodayTask(
-                    list: listTodayTasks,
-                    emptyText: "Assign now",
-                    emptyButton: true,
-                    cardButton: true,
-                    callbackActionEmptyButton: () {
-                      _showCardDialog(context);
-                    },
-                  ),
+                  child: _accepted
+                      ? TodayTask(
+                          list: listTodayTasks,
+                          emptyText: "Assign now",
+                          emptyButton: true,
+                          editing: true,
+                          callbackActionEmptyButton: () {
+                            _showCardDialog(context);
+                          },
+                        )
+                      : TodayTask(
+                          list: listTodayTasks,
+                          emptyText: "Assign now",
+                          emptyButton: true,
+                          editing: true,
+                          callbackActionEmptyButton: () {
+                            _showCardDialog(context);
+                          },
+                        ),
                 ),
 
                 const SizedBox(height: 20),
@@ -188,5 +266,4 @@ class _HomePageState extends State<HomePage> {
       },
     );
   }
-
 }
