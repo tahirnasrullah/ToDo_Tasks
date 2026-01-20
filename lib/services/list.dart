@@ -9,6 +9,9 @@ class ToDoDailyTasksHistory {
   final String title;
   final String desc;
   final String uid;
+  final bool isCompleted;
+  final bool isAccepted;
+  final bool isDeclined;
 
   ToDoDailyTasksHistory({
     this.docId = '',
@@ -19,6 +22,9 @@ class ToDoDailyTasksHistory {
     required this.title,
     required this.desc,
     required this.uid,
+    required this.isCompleted ,
+    required this.isAccepted ,
+    required this.isDeclined,
   });
 
   Map<String, dynamic> toMap() {
@@ -30,6 +36,9 @@ class ToDoDailyTasksHistory {
       'title': title,
       'desc': desc,
       'uid': uid,
+      'isCompleted': isCompleted,
+      'isAccepted': isAccepted,
+      'isDeclined': isDeclined,
     };
   }
 
@@ -44,12 +53,13 @@ class ToDoDailyTasksHistory {
       title: data['title'] ?? '',
       desc: data['desc'] ?? '',
       uid: data['uid'] ?? '',
+      isCompleted: data['isCompleted'] ?? false,
+      isAccepted: data['isAccepted'] ?? false,
+      isDeclined: data['isDeclined'] ?? false,
       startDateTime:
-      (data['startDateTime'] as Timestamp?)?.toDate() ??
-          DateTime.now(),
+          (data['startDateTime'] as Timestamp?)?.toDate() ?? DateTime.now(),
       endDateTime:
-      (data['endDateTime'] as Timestamp?)?.toDate() ??
-          DateTime.now(),
+          (data['endDateTime'] as Timestamp?)?.toDate() ?? DateTime.now(),
     );
   }
 
@@ -60,12 +70,13 @@ class ToDoDailyTasksHistory {
       title: map['title'],
       desc: map['desc'],
       uid: map['uid'],
+      isCompleted: map['isCompleted'],
+      isAccepted: map['isAccepted'],
+      isDeclined: map['isDeclined'],
       startDateTime:
-      (map['startDateTime'] as Timestamp?)?.toDate() ??
-          DateTime.now(),
+          (map['startDateTime'] as Timestamp?)?.toDate() ?? DateTime.now(),
       endDateTime:
-      (map['endDateTime'] as Timestamp?)?.toDate() ??
-          DateTime.now(),
+          (map['endDateTime'] as Timestamp?)?.toDate() ?? DateTime.now(),
     );
   }
 }

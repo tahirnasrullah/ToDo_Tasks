@@ -116,6 +116,7 @@ class _HomePageState extends State<HomePage> {
                           editing: false,
                           toMe: true,
                           fromMe: false,
+                          taskStatus: TaskStatus.all,
                         )
                       : TodayTask(
                           list: listTodayTasks,
@@ -124,6 +125,7 @@ class _HomePageState extends State<HomePage> {
                           editing: false,
                           toMe: false,
                           fromMe: true,
+                          taskStatus: TaskStatus.all,
                         ),
                 ),
 
@@ -151,9 +153,9 @@ class _HomePageState extends State<HomePage> {
                       onTap: () {
                         setState(() {
                           _accepted = !_accepted;
-                          showAccepted == 'only accepted task'
-                              ? showAccepted = 'none accepted task'
-                              : showAccepted = 'only accepted task';
+                          showAccepted == 'only accepted tasks'
+                              ? showAccepted = 'all tasks'
+                              : showAccepted = 'only accepted tasks';
                         });
                       },
                     ),
@@ -170,6 +172,7 @@ class _HomePageState extends State<HomePage> {
                           editing: true,
                           toMe: false,
                           fromMe: true,
+                          taskStatus: TaskStatus.all,
                           callbackActionEmptyButton: () {
                             _showCardDialog(context);
                           },
@@ -181,6 +184,7 @@ class _HomePageState extends State<HomePage> {
                           editing: true,
                           toMe: false,
                           fromMe: true,
+                          taskStatus: TaskStatus.accepted,
                           callbackActionEmptyButton: () {
                             _showCardDialog(context);
                           },
