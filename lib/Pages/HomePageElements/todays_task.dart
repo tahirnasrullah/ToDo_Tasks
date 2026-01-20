@@ -12,6 +12,7 @@ class TodayTask extends StatefulWidget {
   final bool editing;
   final bool toMe;
   final bool fromMe;
+  final TaskStatus taskStatus;
 
   const TodayTask({
     super.key,
@@ -22,6 +23,7 @@ class TodayTask extends StatefulWidget {
     this.editing = false,
     required this.toMe,
     required this.fromMe,
+    required this.taskStatus,
   });
 
   @override
@@ -55,6 +57,7 @@ class _TodayTaskState extends State<TodayTask> {
                     editing: widget.editing,
                     toMe: widget.toMe,
                     fromMe: widget.fromMe,
+                    taskStatus: widget.taskStatus,
                   ),
                 )
                 .toList(),
@@ -63,10 +66,11 @@ class _TodayTaskState extends State<TodayTask> {
 }
 
 class Listing extends StatefulWidget {
-  final dynamic value;
+  final ToDoDailyTasksHistory value;
   final bool editing;
   final bool toMe;
   final bool fromMe;
+  final TaskStatus taskStatus;
 
   const Listing({
     super.key,
@@ -74,6 +78,7 @@ class Listing extends StatefulWidget {
     required this.editing,
     required this.toMe,
     required this.fromMe,
+    required this.taskStatus,
   });
 
   @override
@@ -84,7 +89,6 @@ class _ListingState extends State<Listing> {
   final TextEditingController titleController = TextEditingController();
   final TextEditingController descriptionController = TextEditingController();
   String? selectedAssignee;
-
 
   bool shouldShowTask(ToDoDailyTasksHistory task) {
     final currentUser = FirebaseAuth.instance.currentUser!.displayName;
@@ -98,9 +102,20 @@ class _ListingState extends State<Listing> {
     if (widget.fromMe && !isFromMe) return false;
     if (!widget.fromMe && isFromMe) return false;
 
-    return true;
-  }
+    switch (widget.taskStatus) {
+      case TaskStatus.accepted:
+        return task.isAccepted && !task.isDeclined;
 
+      case TaskStatus.declined:
+        return task.isDeclined;
+
+      case TaskStatus.pending:
+        return !task.isAccepted && !task.isDeclined;
+
+      case TaskStatus.all:
+        return true;
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -116,7 +131,7 @@ class _ListingState extends State<Listing> {
     );
   }
 
-  void _showCardDialog(context, dynamic value) {
+  void _showCardDialog(context, ToDoDailyTasksHistory value) {
     showDialog(
       context: context,
       builder: (value) {
@@ -151,13 +166,9 @@ class _ListingState extends State<Listing> {
         descriptionController.text = task.desc;
         selectedAssignee = task.to;
         return EditTaskCard(task: task);
-        // return EditedOrDeletedCard(
-        //   task: task,
-        //   titleController: titleController,
-        //   descriptionController: descriptionController,
-        //   selectedAssignee: selectedAssignee,
-        // );
       },
     );
   }
 }
+
+enum TaskStatus { all, accepted, declined, pending }

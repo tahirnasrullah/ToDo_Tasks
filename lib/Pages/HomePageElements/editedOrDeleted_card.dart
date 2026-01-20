@@ -256,7 +256,6 @@ class _EditTaskCardState extends State<EditTaskCard> {
     titleController = TextEditingController(text: widget.task.title);
     descriptionController = TextEditingController(text: widget.task.desc);
 
-    selectedAssignees = [widget.task.to];
     startDateTime = widget.task.startDateTime;
     endDateTime = widget.task.endDateTime;
   }
@@ -284,32 +283,15 @@ class _EditTaskCardState extends State<EditTaskCard> {
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
-                /// ASSIGN USERS
-                StreamBuilder<List<String>>(
-                  stream: userDb.getDropdownValues('username'),
-                  builder: (context, snapshot) {
-                    if (!snapshot.hasData) {
-                      return const CircularProgressIndicator();
-                    }
-
-                    final users = snapshot.data!;
-
-                    return InkWell(
-                      onTap: () => openUserSelector(users),
-                      child: InputDecorator(
-                        decoration: InputDecoration(
-                          labelText: "Assign To",
-                          border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(20),
-                          ),
-                          errorText: selectedAssignees.isEmpty
-                              ? "Select at least one user"
-                              : null,
-                        ),
-                        child: Text(selectedAssignees.join(", ")),
-                      ),
-                    );
-                  },
+                Container(
+                  height: 50,
+                  width: double.infinity,
+                  decoration: BoxDecoration(
+                    border: Border.all(color: Colors.black),
+                    borderRadius: BorderRadius.circular(20),
+                    color: Colors.white,
+                  ),
+                  child: Center(child: Text(widget.task.to)),
                 ),
 
                 const SizedBox(height: 12),
@@ -474,13 +456,16 @@ class _EditTaskCardState extends State<EditTaskCard> {
     try {
       final updatedTask = ToDoDailyTasksHistory(
         docId: widget.task.docId,
-        to: selectedAssignees.first,
+        to: widget.task.to,
         from: FirebaseAuth.instance.currentUser!.displayName!,
         startDateTime: startDateTime!,
         endDateTime: endDateTime!,
         title: titleController.text,
         desc: descriptionController.text,
         uid: widget.task.uid,
+        isCompleted: widget.task.isCompleted,
+        isAccepted: widget.task.isAccepted,
+        isDeclined: widget.task.isDeclined,
       );
 
       await taskService.updateTask(updatedTask, context);

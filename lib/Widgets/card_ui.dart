@@ -3,6 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:to_do/Widgets/task_countdown.dart';
 
+import '../services/database.dart';
+import '../services/list.dart';
+
 class cardUi extends StatefulWidget {
   final dynamic value;
   final GestureTapCallback callbackAction;
@@ -30,18 +33,37 @@ class _cardUiState extends State<cardUi> {
                 mainAxisAlignment: MainAxisAlignment.start,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  widget.value.to ==
-                          FirebaseAuth.instance.currentUser!.displayName
-                      ? Text(
-                          "To: Me",
-                          style: TextStyle(fontWeight: FontWeight.w800),
-                        )
-                      : Text(
-                          "To: ${widget.value.to}",
-                          style: TextStyle(fontWeight: FontWeight.w800),
-                          maxLines: 1,
-                          overflow: TextOverflow.ellipsis,
-                        ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      widget.value.to ==
+                              FirebaseAuth.instance.currentUser!.displayName
+                          ? Text(
+                              "To: Me",
+                              style: TextStyle(fontWeight: FontWeight.w800),
+                            )
+                          : Text(
+                              "To: ${widget.value.to}",
+                              style: TextStyle(fontWeight: FontWeight.w800),
+                              maxLines: 1,
+                              overflow: TextOverflow.ellipsis,
+                            ),
+                      ?widget.value.isAccepted == true
+                          ? Text(
+                              "Task accepted",
+                              style: TextStyle(
+                                color: Colors.green,
+                                fontSize: 10,
+                              ),
+                            )
+                          : widget.value.isDeclined == true
+                          ? Text(
+                              "Task declined",
+                              style: TextStyle(color: Colors.red, fontSize: 10),
+                            )
+                          : null,
+                    ],
+                  ),
                   SizedBox(height: 5),
                   Text(
                     "Title: ${widget.value.title}",
@@ -86,6 +108,8 @@ class cardAlertDialog extends StatefulWidget {
 }
 
 class _cardAlertDialogState extends State<cardAlertDialog> {
+  TaskService taskService = TaskService();
+
   String formatTaskDate(DateTime date) {
     return DateFormat('dd MMM yyyy • hh:mm a').format(date);
   }
@@ -109,15 +133,65 @@ class _cardAlertDialogState extends State<cardAlertDialog> {
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          widget.value.from == FirebaseAuth.instance.currentUser!.displayName
-              ? Text("From: Me")
-              : Text("From: ${widget.value.from}"),
+          Container(
+            decoration: BoxDecoration(
+              border: Border.all(color: Colors.grey),
+              borderRadius: BorderRadius.circular(10),
+              color: Colors.grey[200],
+            ),
+            height: 40,
+
+            child: Center(
+              child:
+                  widget.value.from ==
+                      FirebaseAuth.instance.currentUser!.displayName
+                  ? Text("From: You")
+                  : Text("From: ${widget.value.from}"),
+            ),
+          ),
           SizedBox(height: 5),
-          widget.value.to == FirebaseAuth.instance.currentUser!.displayName
-              ? Text("To: Me")
-              : Text("To: ${widget.value.to}"),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              widget.value.to == FirebaseAuth.instance.currentUser!.displayName
+                  ? Text("To: You")
+                  : Text("To: ${widget.value.to}"),
+              Container(
+                decoration: BoxDecoration(
+                  border: Border.all(color: Colors.grey),
+                  borderRadius: BorderRadius.circular(10),
+                  color: Colors.white,
+                ),
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                  child: widget.value.isAccepted == true
+                      ? Text(
+                          "Task accepted",
+                          style: TextStyle(color: Colors.green, fontSize: 10),
+                        )
+                      : widget.value.isDeclined == true
+                      ? Text(
+                          "Task declined",
+                          style: TextStyle(color: Colors.red, fontSize: 10),
+                        )
+                      : widget.value.isCompleted == true
+                      ? Text(
+                          "Task completed",
+                          style: TextStyle(color: Colors.green, fontSize: 10),
+                        )
+                      : Text(
+                          "Task pending",
+                          style: TextStyle(color: Colors.grey, fontSize: 10),
+                        ),
+                ),
+              ),
+            ],
+          ),
           SizedBox(height: 5),
-          Text("Title: ${widget.value.title}"),
+          Text(
+            widget.value.title,
+            style: TextStyle(fontWeight: FontWeight.w800),
+          ),
           SizedBox(height: 5),
           Text(widget.value.desc),
           SizedBox(height: 5),
@@ -152,44 +226,101 @@ class _cardAlertDialogState extends State<cardAlertDialog> {
               widget.value.to == FirebaseAuth.instance.currentUser!.displayName
                   ? Column(
                       children: [
-                        Row(
-                          children: [
-                            Expanded(
-                              child: ElevatedButton(
-                                onPressed: () {},
-                                style: ElevatedButton.styleFrom(
-                                  backgroundColor: Colors.black,
-                                ),
-                                child: Text(
-                                  "Accept",
-                                  style: TextStyle(color: Colors.white),
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
+                        widget.value.isAccepted == false &&
+                                widget.value.isCompleted == false
+                            ? Row(
+                                children: [
+                                  Expanded(
+                                    child: ElevatedButton(
+                                      onPressed: () {
+                                        updateStatus(
+                                          widget.value.isCompleted,
+                                          true,
+                                          widget.value.isDeclined,
+                                        );
+                                      },
+                                      style: ElevatedButton.styleFrom(
+                                        backgroundColor: Colors.black,
+                                      ),
+                                      child: Text(
+                                        "Accept",
+                                        style: TextStyle(color: Colors.white),
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              )
+                            : SizedBox.shrink(),
+                        widget.value.isAccepted == true ||
+                                widget.value.isCompleted == true
+                            ? SizedBox.shrink()
+                            : SizedBox(height: 5),
                         Row(
                           mainAxisAlignment: MainAxisAlignment.start,
                           children: [
-                            Expanded(
-                              child: ElevatedButton(
-                                onPressed: () {},
-                                child: Text("Decline"),
-                              ),
-                            ),
+                            widget.value.isAccepted == false &&
+                                    widget.value.isCompleted == false &&
+                                    widget.value.isDeclined == false
+                                ? Expanded(
+                                    child: ElevatedButton(
+                                      onPressed: () {
+                                        updateStatus(
+                                          widget.value.isCompleted,
+                                          widget.value.isAccepted,
+                                          true,
+                                        );
+                                      },
+                                      child: Text("Decline"),
+                                    ),
+                                  )
+                                : SizedBox.shrink(),
                             SizedBox(width: 5),
-                            Expanded(
-                              child: OutlinedButton(
-                                onPressed: () {},
-                                child: Text('Complete'),
-                              ),
-                            ),
+                            widget.value.isCompleted == false
+                                ? Expanded(
+                                    child: OutlinedButton(
+                                      onPressed: () {
+                                        updateStatus(
+                                          true,
+                                          widget.value.isAccepted,
+                                          widget.value.isDeclined,
+                                        );
+                                      },
+                                      child: Text('Completed'),
+                                    ),
+                                  )
+                                : SizedBox.shrink(),
                           ],
                         ),
                       ],
                     )
-                  : Container(),
+                  : SizedBox.shrink(),
             ],
     );
+  }
+
+  Future<void> updateStatus(
+    bool isCompleted,
+    bool isAccepted,
+    bool isDeclined,
+  ) async {
+    final updatedTask = ToDoDailyTasksHistory(
+      docId: widget.value.docId,
+      to: widget.value.to,
+      from: widget.value.from,
+      startDateTime: widget.value.startDateTime,
+      endDateTime: widget.value.endDateTime,
+      title: widget.value.title,
+      desc: widget.value.desc,
+      uid: widget.value.uid,
+      isCompleted: isCompleted,
+      isAccepted: isAccepted,
+      isDeclined: isDeclined,
+    );
+
+    await taskService.updateTask(updatedTask, context);
+    Navigator.pop(context);
+    ScaffoldMessenger.of(
+      context,
+    ).showSnackBar(SnackBar(content: Text("Status updated successfully")));
   }
 }

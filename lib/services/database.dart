@@ -34,19 +34,12 @@ class UserDetailDatabase {
   }
 }
 
-
-
-
-
-
-
-
-
 class TaskService {
   Future<void> addTask(ToDoDailyTasksHistory task, BuildContext context) async {
     await FirebaseFirestore.instance
         .collection("ToDoDailyTasks")
         .add(task.toMap());
+
     ScaffoldMessenger.of(
       context,
     ).showSnackBar(const SnackBar(content: Text("Task Saved")));
@@ -61,7 +54,6 @@ class TaskService {
     ScaffoldMessenger.of(
       context,
     ).showSnackBar(const SnackBar(content: Text("Task Deleted")));
-    Navigator.pop(context);
   }
 
   Stream<List<ToDoDailyTasksHistory>> taskStream() {

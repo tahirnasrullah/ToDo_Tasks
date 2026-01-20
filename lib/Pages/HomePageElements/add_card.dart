@@ -159,6 +159,7 @@
 
 import 'dart:ui';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:to_do/services/list.dart';
@@ -414,7 +415,12 @@ class _AddCardState extends State<AddCard> {
 
     try {
       for (final assignee in selectedAssignees) {
+        final docRef = FirebaseFirestore.instance
+            .collection("ToDoDailyTasks")
+            .doc();
+
         final task = ToDoDailyTasksHistory(
+          docId: docRef.id,
           to: assignee,
           from: FirebaseAuth.instance.currentUser!.displayName!,
           startDateTime: startDateTime!,
@@ -422,9 +428,12 @@ class _AddCardState extends State<AddCard> {
           title: titleController.text,
           desc: descriptionController.text,
           uid: FirebaseAuth.instance.currentUser!.uid,
+          isCompleted: false,
+          isAccepted: false,
+          isDeclined: false,
         );
 
-        await taskService.addTask(task, context);
+        await docRef.set(task.toMap());
       }
 
       if (mounted) Navigator.pop(context);
