@@ -9,11 +9,12 @@ class TaskHistory extends StatefulWidget {
   final bool scrollableCondition;
   final bool delAble;
 
+
   const TaskHistory({
     super.key,
     required this.list,
     this.scrollableCondition = true,
-    this.delAble = false,
+    this.delAble=false,
   });
 
   @override
@@ -25,6 +26,7 @@ class _TaskHistoryState extends State<TaskHistory> {
   Widget build(BuildContext context) {
     final TaskService taskService = TaskService();
 
+
     return widget.list.isEmpty
         ? Center(child: Text("Not Yet"))
         : ListView(
@@ -33,20 +35,24 @@ class _TaskHistoryState extends State<TaskHistory> {
                 : NeverScrollableScrollPhysics(),
             children: widget.list
                 .map(
-                  (task) => Padding(
+                  (task) =>
+                  task.isCompleted == true && task.isAccepted==true
+                  ? Padding(
                     padding: const EdgeInsets.only(bottom: 8),
                     child: ListTile(
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(10),
                       ),
                       leading:
-                          task.from ==
-                              FirebaseAuth.instance.currentUser!.displayName
-                          ? Text("Me")
+                          task.uid ==
+                              FirebaseAuth.instance.currentUser!.uid
+                          ? Text("You")
                           : Text(task.from),
                       title: Row(
                         children: [
-                          Text("To: ${task.to}"),
+                          task.to==FirebaseAuth.instance.currentUser!.displayName
+                              ? Text("To: You")
+                              : Text("To: ${task.to}"),
                           SizedBox(width: 10),
                           Text("For: ${task.title}"),
                         ],
@@ -68,7 +74,7 @@ class _TaskHistoryState extends State<TaskHistory> {
                       ),
                       tileColor: Colors.grey,
                     ),
-                  ),
+                  ):SizedBox.shrink(),
                 )
                 .toList(),
           );

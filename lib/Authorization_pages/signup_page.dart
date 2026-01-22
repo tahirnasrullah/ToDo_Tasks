@@ -112,6 +112,9 @@ class _SignupPageState extends State<SignupPage> {
     );
   }
 
+
+
+
   Future<void> registration() async {
     if (password != "" && userNameController != "" && emailController != "") {
       try {

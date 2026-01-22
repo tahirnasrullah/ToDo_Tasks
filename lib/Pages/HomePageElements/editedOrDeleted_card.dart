@@ -441,11 +441,6 @@ class _EditTaskCardState extends State<EditTaskCard> {
   Future<void> updateTask() async {
     if (!formKey.currentState!.validate()) return;
 
-    if (selectedAssignees.isEmpty) {
-      showError("Select at least one user");
-      return;
-    }
-
     if (endDateTime!.isBefore(startDateTime!)) {
       showError("End time must be after start time");
       return;
@@ -464,12 +459,14 @@ class _EditTaskCardState extends State<EditTaskCard> {
         desc: descriptionController.text,
         uid: widget.task.uid,
         isCompleted: widget.task.isCompleted,
-        isAccepted: widget.task.isAccepted,
+        isAccepted: false,
         isDeclined: widget.task.isDeclined,
       );
 
       await taskService.updateTask(updatedTask, context);
-      if (mounted) Navigator.pop(context);
+      if (mounted)
+        Navigator.pop(context);
+      Navigator.pop(context);
     } catch (e) {
       showError("Update failed");
     } finally {
