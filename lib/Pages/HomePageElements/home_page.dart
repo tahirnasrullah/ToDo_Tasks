@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:to_do/Pages/HomePageElements/add_card.dart';
 import 'package:to_do/Pages/HomePageElements/task_history.dart';
@@ -5,6 +6,7 @@ import 'package:to_do/Pages/HomePageElements/todays_task.dart';
 import 'package:to_do/services/list.dart';
 
 import '../../services/database.dart';
+import '../../services/notification_services.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -19,6 +21,19 @@ class _HomePageState extends State<HomePage> {
   late bool _accepted = false;
   late String showAssignTo = 'to only you';
   late String showAccepted = 'only accepted task';
+  NotificationServices notificationServices = NotificationServices();
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    notificationServices.requestNotificationPermission();
+    notificationServices.getToken().then((value) {
+      print('device token');
+      print(value);
+    });
+
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -35,14 +50,16 @@ class _HomePageState extends State<HomePage> {
             style: TextStyle(fontWeight: FontWeight.w800),
           ),
         ),
-        actions: const [
+        actions: [
           Padding(
-            padding: EdgeInsets.only(right: 10, bottom: 10),
+            padding: const EdgeInsets.only(right: 10, bottom: 10),
             child: CircleAvatar(
               radius: 30,
-              backgroundImage: NetworkImage(
-                "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRnVvDx9Kezwg0D77WzdAUzjOEHf1WEqQ3-fA&s",
-              ),
+              backgroundImage:FirebaseAuth.instance.currentUser!.photoURL == null
+              ?null: NetworkImage(FirebaseAuth.instance.currentUser!.photoURL!),
+              child: FirebaseAuth.instance.currentUser!.photoURL == null
+              ?Text(FirebaseAuth.instance.currentUser!.displayName!)
+              :null,
             ),
           ),
         ],
@@ -79,7 +96,7 @@ class _HomePageState extends State<HomePage> {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     const Text(
-                      "Today's Tasks",
+                      "Current Tasks",
                       style: TextStyle(
                         fontSize: 20,
                         fontWeight: FontWeight.bold,

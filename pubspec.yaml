@@ -44,6 +44,9 @@ dependencies:
   google_sign_in: ^6.2.1
   cloud_firestore: ^6.1.1
   the_apple_sign_in: ^1.1.1
+  app_settings: ^5.1.1
+  firebase_messaging: ^16.1.1
+
 
 dev_dependencies:
   flutter_test:

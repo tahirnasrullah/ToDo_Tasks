@@ -39,7 +39,7 @@ class _cardUiState extends State<cardUi> {
                       widget.value.to ==
                               FirebaseAuth.instance.currentUser!.displayName
                           ? Text(
-                              "To: Me",
+                              "To: You",
                               style: TextStyle(fontWeight: FontWeight.w800),
                             )
                           : Text(
@@ -48,7 +48,15 @@ class _cardUiState extends State<cardUi> {
                               maxLines: 1,
                               overflow: TextOverflow.ellipsis,
                             ),
-                      ?widget.value.isAccepted == true
+                      widget.value.isCompleted == true
+                          ? Text(
+                              "Task completed",
+                              style: TextStyle(
+                                color: Colors.green,
+                                fontSize: 10,
+                              ),
+                            )
+                          : widget.value.isAccepted == true
                           ? Text(
                               "Task accepted",
                               style: TextStyle(
@@ -61,7 +69,13 @@ class _cardUiState extends State<cardUi> {
                               "Task declined",
                               style: TextStyle(color: Colors.red, fontSize: 10),
                             )
-                          : null,
+                          : Text(
+                              "Task pending",
+                              style: TextStyle(
+                                color: Colors.grey,
+                                fontSize: 10,
+                              ),
+                            ),
                     ],
                   ),
                   SizedBox(height: 5),
@@ -142,9 +156,7 @@ class _cardAlertDialogState extends State<cardAlertDialog> {
             height: 40,
 
             child: Center(
-              child:
-                  widget.value.from ==
-                      FirebaseAuth.instance.currentUser!.displayName
+              child: widget.value.uid == FirebaseAuth.instance.currentUser!.uid
                   ? Text("From: You")
                   : Text("From: ${widget.value.from}"),
             ),
@@ -164,7 +176,12 @@ class _cardAlertDialogState extends State<cardAlertDialog> {
                 ),
                 child: Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                  child: widget.value.isAccepted == true
+                  child: widget.value.isCompleted == true
+                      ? Text(
+                          "Task completed",
+                          style: TextStyle(color: Colors.green, fontSize: 10),
+                        )
+                      : widget.value.isAccepted == true
                       ? Text(
                           "Task accepted",
                           style: TextStyle(color: Colors.green, fontSize: 10),

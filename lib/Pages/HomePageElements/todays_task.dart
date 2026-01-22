@@ -65,6 +65,7 @@ class _TodayTaskState extends State<TodayTask> {
   }
 }
 
+
 class Listing extends StatefulWidget {
   final ToDoDailyTasksHistory value;
   final bool editing;
