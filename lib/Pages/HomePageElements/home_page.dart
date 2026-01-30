@@ -43,6 +43,7 @@ class _HomePageState extends State<HomePage> {
       appBar: AppBar(
         titleSpacing: 0,
         automaticallyImplyLeading: false,
+        backgroundColor: Colors.transparent,
         title: const Padding(
           padding: EdgeInsets.only(left: 10),
           child: Text(

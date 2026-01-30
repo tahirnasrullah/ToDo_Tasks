@@ -25,6 +25,11 @@ class _cardUiState extends State<cardUi> {
         onTap: widget.callbackAction,
         child: Card(
           elevation: 10,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(10),
+            side: BorderSide(color: Colors.black),
+          ),
+          color: Colors.grey.shade300,
           child: SizedBox(
             width: 220,
             child: Padding(

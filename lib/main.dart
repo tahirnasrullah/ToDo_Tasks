@@ -1,5 +1,3 @@
-// import 'package:to_do/Authorization_pages/login_page.dart';
-
 import 'package:to_do/Authorization_pages/signup_page.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
