@@ -1,6 +1,7 @@
 import 'dart:developer';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'list.dart';
 
@@ -79,4 +80,15 @@ class TaskService {
       context,
     ).showSnackBar(const SnackBar(content: Text("Save Successfully")));
   }
+
+  Stream<int> assignedTaskCount() {
+
+    return FirebaseFirestore.instance
+        .collection('ToDoDailyTasks')
+        .where('to', isEqualTo: FirebaseAuth.instance.currentUser!.displayName)
+        .where('isCompleted', isEqualTo: false)
+        .snapshots()
+        .map((snapshot) => snapshot.docs.length);
+  }
+
 }
