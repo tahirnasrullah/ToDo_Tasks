@@ -42,12 +42,13 @@ class _TaskHistoryState extends State<TaskHistory> {
                     child: ListTile(
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(10),
+                        side: BorderSide(color: Colors.black),
                       ),
                       leading:
                           task.uid ==
                               FirebaseAuth.instance.currentUser!.uid
-                          ? Text("You")
-                          : Text(task.from),
+                          ? Text("You", style: TextStyle(fontWeight: FontWeight.w800,fontSize: 15))
+                          : Text(task.from, style: TextStyle(fontWeight: FontWeight.w800,fontSize: 15)),
                       title: Row(
                         children: [
                           task.to==FirebaseAuth.instance.currentUser!.displayName
@@ -72,7 +73,7 @@ class _TaskHistoryState extends State<TaskHistory> {
                         maxLines: 1,
                         overflow: TextOverflow.ellipsis,
                       ),
-                      tileColor: Colors.grey,
+                      tileColor: Colors.grey.shade300,
                     ),
                   ):SizedBox.shrink(),
                 )

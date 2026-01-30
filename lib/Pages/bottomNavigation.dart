@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:to_do/Pages/HomePageElements/home_page.dart';
 
+import 'NewHomePage/new_home_page.dart';
+
 class BottomNav extends StatefulWidget {
   const BottomNav({super.key});
 

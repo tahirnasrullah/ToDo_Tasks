@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:to_do/Pages/HomePageElements/add_card.dart';
 import 'package:to_do/Pages/HomePageElements/task_history.dart';
 import 'package:to_do/Pages/HomePageElements/todays_task.dart';
+import 'package:to_do/Pages/NewHomePage/new_home_page.dart';
 import 'package:to_do/services/list.dart';
 
 import '../../services/database.dart';
@@ -43,11 +44,15 @@ class _HomePageState extends State<HomePage> {
       appBar: AppBar(
         titleSpacing: 0,
         automaticallyImplyLeading: false,
-        title: const Padding(
-          padding: EdgeInsets.only(left: 10),
-          child: Text(
-            'Todo DailyTasks',
-            style: TextStyle(fontWeight: FontWeight.w800),
+        backgroundColor: Colors.transparent,
+        title: Padding(
+          padding: const EdgeInsets.only(left: 10),
+          child: InkWell(
+            onTap: (){Navigator.push(context, MaterialPageRoute(builder: (context)=>NewHomePage()));},
+            child: const Text(
+              'Todo DailyTasks',
+              style: TextStyle(fontWeight: FontWeight.w800),
+            ),
           ),
         ),
         actions: [

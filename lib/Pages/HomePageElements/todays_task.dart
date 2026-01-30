@@ -65,7 +65,6 @@ class _TodayTaskState extends State<TodayTask> {
   }
 }
 
-
 class Listing extends StatefulWidget {
   final ToDoDailyTasksHistory value;
   final bool editing;
@@ -96,6 +95,13 @@ class _ListingState extends State<Listing> {
 
     final isToMe = task.to == currentUser;
     final isFromMe = task.from == currentUser;
+    final noDirectionSelected = !widget.toMe && !widget.fromMe;
+
+    if (!noDirectionSelected) {
+      if (widget.toMe && !isToMe) return false;
+      if (widget.fromMe && !isFromMe) return false;
+    }
+
 
     if (widget.toMe && !isToMe) return false;
     if (!widget.toMe && isToMe) return false;
@@ -103,19 +109,29 @@ class _ListingState extends State<Listing> {
     if (widget.fromMe && !isFromMe) return false;
     if (!widget.fromMe && isFromMe) return false;
 
+
     switch (widget.taskStatus) {
-      case TaskStatus.accepted:
-        return task.isAccepted && !task.isDeclined;
+      case TaskStatus.completed:
+        return task.isCompleted;
+
+      case TaskStatus.accepted: // In-Progress
+        return task.isAccepted &&
+            !task.isCompleted &&
+            !task.isDeclined;
 
       case TaskStatus.declined:
         return task.isDeclined;
 
       case TaskStatus.pending:
-        return !task.isAccepted && !task.isDeclined;
+        return !task.isAccepted &&
+            !task.isCompleted &&
+            !task.isDeclined;
 
       case TaskStatus.all:
         return true;
     }
+
+
   }
 
   @override
@@ -124,7 +140,7 @@ class _ListingState extends State<Listing> {
       return const SizedBox.shrink();
     }
 
-    return cardUi(
+    return CardUi(
       value: widget.value,
       callbackAction: () {
         _showCardDialog(context, widget.value);
@@ -172,4 +188,4 @@ class _ListingState extends State<Listing> {
   }
 }
 
-enum TaskStatus { all, accepted, declined, pending }
+enum TaskStatus { all, accepted, declined, pending, completed }

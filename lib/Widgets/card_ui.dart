@@ -6,17 +6,18 @@ import 'package:to_do/Widgets/task_countdown.dart';
 import '../services/database.dart';
 import '../services/list.dart';
 
-class cardUi extends StatefulWidget {
+class CardUi extends StatefulWidget {
   final dynamic value;
   final GestureTapCallback callbackAction;
 
-  const cardUi({super.key, required this.value, required this.callbackAction});
+  const CardUi({super.key, required this.value, required this.callbackAction});
 
   @override
-  State<cardUi> createState() => _cardUiState();
+  State<CardUi> createState() => _CardUiState();
 }
 
-class _cardUiState extends State<cardUi> {
+class _CardUiState extends State<CardUi> {
+
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -25,6 +26,14 @@ class _cardUiState extends State<cardUi> {
         onTap: widget.callbackAction,
         child: Card(
           elevation: 10,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(10),
+            side: BorderSide(color: Colors.black),
+          ),
+          color: (widget.value.hashCode) % 2 == 0
+              ? Colors.blue
+              : Colors.red,
+
           child: SizedBox(
             width: 220,
             child: Padding(
@@ -40,11 +49,11 @@ class _cardUiState extends State<cardUi> {
                               FirebaseAuth.instance.currentUser!.displayName
                           ? Text(
                               "To: You",
-                              style: TextStyle(fontWeight: FontWeight.w800),
+                              style: TextStyle(fontWeight: FontWeight.w800,color: Colors.white),
                             )
                           : Text(
                               "To: ${widget.value.to}",
-                              style: TextStyle(fontWeight: FontWeight.w800),
+                              style: TextStyle(fontWeight: FontWeight.w800,color: Colors.white),
                               maxLines: 1,
                               overflow: TextOverflow.ellipsis,
                             ),
@@ -81,7 +90,7 @@ class _cardUiState extends State<cardUi> {
                   SizedBox(height: 5),
                   Text(
                     "Title: ${widget.value.title}",
-                    style: TextStyle(fontWeight: FontWeight.bold),
+                    style: TextStyle(fontWeight: FontWeight.bold,color: Colors.white),
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
                   ),
@@ -91,10 +100,12 @@ class _cardUiState extends State<cardUi> {
                       widget.value.desc,
                       maxLines: 2,
                       overflow: TextOverflow.ellipsis,
+                      style: TextStyle(color: Colors.white),
                     ),
                   ),
                   SizedBox(height: 5),
-                  TaskCountdown(endTime: widget.value.endDateTime),
+                  Container(color: Colors.white,width: double.infinity,
+                      child: TaskCountdown(endTime: widget.value.endDateTime)),
                 ],
               ),
             ),
