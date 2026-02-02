@@ -125,7 +125,7 @@ class _SignupPageState extends State<SignupPage> {
             content: Text(
               'Registered Successfully',
               style: TextStyle(fontSize: 16),
-            ),
+            ),behavior: SnackBarBehavior.floating,
           ),
         );
         Navigator.pushReplacement(
@@ -157,6 +157,7 @@ class _SignupPageState extends State<SignupPage> {
           SnackBar(
             backgroundColor: Colors.orange,
             content: Text(message, style: TextStyle(fontSize: 12)),
+            behavior: SnackBarBehavior.floating,
           ),
         );
       }

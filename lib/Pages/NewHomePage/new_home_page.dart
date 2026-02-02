@@ -1,4 +1,3 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:to_do/Pages/HomePageElements/todays_task.dart';
@@ -23,26 +22,6 @@ class _NewHomePageState extends State<NewHomePage> {
     final TaskService taskService = TaskService();
 
     return Scaffold(
-      appBar: AppBar(
-        titleSpacing: 0,
-        automaticallyImplyLeading: false,
-        leading: IconButton(onPressed: () {Navigator.pop(context);}, icon: Icon(Icons.menu_rounded)),
-        actions: [
-          Padding(
-            padding: const EdgeInsets.only(right: 10, top: 10),
-            child: CircleAvatar(
-              radius: 30,
-              backgroundImage:
-                  FirebaseAuth.instance.currentUser!.photoURL == null
-                  ? null
-                  : NetworkImage(FirebaseAuth.instance.currentUser!.photoURL!),
-              child: FirebaseAuth.instance.currentUser!.photoURL == null
-                  ? Text(FirebaseAuth.instance.currentUser!.displayName!)
-                  : null,
-            ),
-          ),
-        ],
-      ),
       body: Padding(
         padding: const EdgeInsets.only(left: 16.0, right: 16.0,bottom: 30),
         child: Column(
@@ -52,10 +31,11 @@ class _NewHomePageState extends State<NewHomePage> {
             SizedBox(height: 30),
             Greegings(),
             SizedBox(height: 30),
-            SearchField(searchController: searchController),
+            InkWell(child: SearchField(searchController: searchController)),
             SizedBox(height: 30),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceAround,
+              crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 TaskStatusButton(
                   Colors.red,
@@ -92,7 +72,7 @@ class _NewHomePageState extends State<NewHomePage> {
             SizedBox(height: 30),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              crossAxisAlignment: CrossAxisAlignment.end,
+              crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 Text(
                   "Today's Tasks",
@@ -126,6 +106,8 @@ class _NewHomePageState extends State<NewHomePage> {
                     toMe: true,
                     fromMe: false,
                     taskStatus: taskStatus,
+                    emptyButton: false,
+                    editing: true,
                   ),
                 );
               },

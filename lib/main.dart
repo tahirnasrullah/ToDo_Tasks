@@ -18,8 +18,7 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'UI_Project',
-      theme: ThemeData(),
-      // home: HomePage(),
+      theme: ThemeData.light(),
       home: SignupPage(),
     );
   }

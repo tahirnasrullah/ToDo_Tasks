@@ -10,102 +10,92 @@ class CardUi extends StatefulWidget {
   final dynamic value;
   final GestureTapCallback callbackAction;
 
-  const CardUi({super.key, required this.value, required this.callbackAction});
+  const CardUi({
+    super.key,
+    required this.value,
+    required this.callbackAction,
+  });
 
   @override
   State<CardUi> createState() => _CardUiState();
 }
 
 class _CardUiState extends State<CardUi> {
-
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.only(right: 10, top: 10, bottom: 10),
+      padding: const EdgeInsets.only(right: 20, top: 10, bottom: 10),
       child: InkWell(
         onTap: widget.callbackAction,
         child: Card(
-          elevation: 10,
+          elevation: 5,
           shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(10),
-            side: BorderSide(color: Colors.black),
+            borderRadius: BorderRadius.circular(20),
           ),
-          color: (widget.value.hashCode) % 2 == 0
-              ? Colors.blue
-              : Colors.red,
+          color:
+              widget.value.isCompleted == true
+              ? Colors.green
+              : widget.value.isAccepted == true
+              ? Colors.amber
+              : widget.value.isDeclined == true
+              ? Colors.red
+              : Colors.deepPurpleAccent.shade400,
+
 
           child: SizedBox(
             width: 220,
             child: Padding(
-              padding: const EdgeInsets.all(8.0),
+              padding: const EdgeInsets.only(
+                left: 16,
+                right: 16,
+                top: 20,
+                bottom: 20,
+              ),
               child: Column(
-                mainAxisAlignment: MainAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.center,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      widget.value.to ==
-                              FirebaseAuth.instance.currentUser!.displayName
-                          ? Text(
-                              "To: You",
-                              style: TextStyle(fontWeight: FontWeight.w800,color: Colors.white),
-                            )
-                          : Text(
-                              "To: ${widget.value.to}",
-                              style: TextStyle(fontWeight: FontWeight.w800,color: Colors.white),
-                              maxLines: 1,
-                              overflow: TextOverflow.ellipsis,
-                            ),
-                      widget.value.isCompleted == true
-                          ? Text(
-                              "Task completed",
-                              style: TextStyle(
-                                color: Colors.green,
-                                fontSize: 10,
-                              ),
-                            )
-                          : widget.value.isAccepted == true
-                          ? Text(
-                              "Task accepted",
-                              style: TextStyle(
-                                color: Colors.green,
-                                fontSize: 10,
-                              ),
-                            )
-                          : widget.value.isDeclined == true
-                          ? Text(
-                              "Task declined",
-                              style: TextStyle(color: Colors.red, fontSize: 10),
-                            )
-                          : Text(
-                              "Task pending",
-                              style: TextStyle(
-                                color: Colors.grey,
-                                fontSize: 10,
-                              ),
-                            ),
-                    ],
-                  ),
+                  widget.value.to ==
+                          FirebaseAuth.instance.currentUser!.displayName
+                      ? Text(
+                          "To: You",
+                          style: TextStyle(
+                            fontWeight: FontWeight.w800,
+                            color: Colors.white,
+                            fontSize: 16,
+
+                          ),
+                        )
+                      : Text(
+                          "To: ${widget.value.to}",
+                          style: TextStyle(
+                            fontWeight: FontWeight.w800,
+                            color: Colors.white,
+                            fontSize: 16,
+                          ),
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                        ),
                   SizedBox(height: 5),
                   Text(
                     "Title: ${widget.value.title}",
-                    style: TextStyle(fontWeight: FontWeight.bold,color: Colors.white),
+                    style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      color: Colors.white,
+                      fontSize: 16,
+                    ),
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
                   ),
                   SizedBox(height: 5),
-                  Expanded(
-                    child: Text(
-                      widget.value.desc,
-                      maxLines: 2,
-                      overflow: TextOverflow.ellipsis,
-                      style: TextStyle(color: Colors.white),
-                    ),
+                  Text(
+                    widget.value.desc,
+                    maxLines: 2,
+                    overflow: TextOverflow.ellipsis,
+                    style: TextStyle(color: Colors.white),
                   ),
                   SizedBox(height: 5),
-                  Container(color: Colors.white,width: double.infinity,
-                      child: TaskCountdown(endTime: widget.value.endDateTime)),
+                  TaskCountdown(endTime: widget.value.endDateTime,isAccepted: widget.value.isAccepted, isCompleted: widget.value.isCompleted,),
                 ],
               ),
             ),
@@ -225,7 +215,7 @@ class _cardAlertDialogState extends State<cardAlertDialog> {
           SizedBox(height: 5),
           Text(formatTaskDate(widget.value.startDateTime)),
           SizedBox(height: 5),
-          TaskCountdown(endTime: widget.value.endDateTime),
+          TaskCountdown(endTime: widget.value.endDateTime, isAccepted: widget.value.isAccepted, isCompleted: widget.value.isCompleted,),
         ],
       ),
       actions:
@@ -349,6 +339,6 @@ class _cardAlertDialogState extends State<cardAlertDialog> {
     Navigator.pop(context);
     ScaffoldMessenger.of(
       context,
-    ).showSnackBar(SnackBar(content: Text("Status updated successfully")));
+    ).showSnackBar(SnackBar(content: Text("Status updated successfully"),behavior: SnackBarBehavior.floating,showCloseIcon: true,));
   }
 }
