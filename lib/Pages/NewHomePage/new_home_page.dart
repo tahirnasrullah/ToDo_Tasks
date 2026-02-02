@@ -7,23 +7,26 @@ import '../../services/database.dart';
 import '../../services/list.dart';
 
 class NewHomePage extends StatefulWidget {
-  const NewHomePage({super.key});
+  final Function(int) onTabChange;
+
+  const NewHomePage({super.key, required this.onTabChange});
 
   @override
   State<NewHomePage> createState() => _NewHomePageState();
 }
 
 class _NewHomePageState extends State<NewHomePage> {
-  late TaskStatus taskStatus=TaskStatus.all ;
+  late TaskStatus taskStatus = TaskStatus.all;
 
   @override
   Widget build(BuildContext context) {
     TextEditingController searchController = TextEditingController();
     final TaskService taskService = TaskService();
 
+
     return Scaffold(
       body: Padding(
-        padding: const EdgeInsets.only(left: 16.0, right: 16.0,bottom: 30),
+        padding: const EdgeInsets.only(left: 16.0, right: 16.0, bottom: 30),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           mainAxisAlignment: MainAxisAlignment.start,
@@ -31,42 +34,36 @@ class _NewHomePageState extends State<NewHomePage> {
             SizedBox(height: 30),
             Greegings(),
             SizedBox(height: 30),
-            InkWell(child: SearchField(searchController: searchController)),
+            InkWell(
+              child: IgnorePointer(
+                child: Hero(tag: 'search',
+                child: SearchField(searchController: searchController)),
+              ),
+              onTap: () {
+                  print("Tapped Search");
+                  widget.onTabChange(1);
+              },
+            ),
             SizedBox(height: 30),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                TaskStatusButton(
-                  Colors.red,
-                  "To-Do",
-                  () {
-                    setState(() {
-                      taskStatus=TaskStatus.all;
-                    });
-                  },
-                  icon: FontAwesomeIcons.fileLines,
-                ),
-                TaskStatusButton(
-                  Colors.amber,
-                  "In-Progress",
-                  () {
-                    setState(() {
-                      taskStatus=TaskStatus.accepted;
-                    });
-                  },
-                  icon: FontAwesomeIcons.hourglass,
-                ),
-                TaskStatusButton(
-                  Colors.green,
-                  "Completed",
-                  () {
-                    setState(() {
-                      taskStatus=TaskStatus.completed;
-                    });
-                  },
-                  icon: FontAwesomeIcons.check,
-                ),
+                TaskStatusButton(Colors.red, "To-Do", () {
+                  setState(() {
+                    taskStatus = TaskStatus.all;
+                  });
+                }, icon: FontAwesomeIcons.fileLines),
+                TaskStatusButton(Colors.amber, "In-Progress", () {
+                  setState(() {
+                    taskStatus = TaskStatus.accepted;
+                  });
+                }, icon: FontAwesomeIcons.hourglass),
+                TaskStatusButton(Colors.green, "Completed", () {
+                  setState(() {
+                    taskStatus = TaskStatus.completed;
+                  });
+                }, icon: FontAwesomeIcons.check),
               ],
             ),
             SizedBox(height: 30),

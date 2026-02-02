@@ -16,13 +16,14 @@ class BottomNav extends StatefulWidget {
 class _BottomNavState extends State<BottomNav> {
   int _currentIndex = 0;
 
-  final List<Widget> _pages = [
-    NewHomePage(),
-    SearchPage(),
-    Center(child: Text("Settings")),
-    OtherUsersPage(),
-    Center(child: Text("Settings")),
-  ];
+  void changeTab(int index) {
+    print("Changing Tab");
+    setState(() {
+      _currentIndex = index;
+    });
+  }
+
+
 
   @override
   Widget build(BuildContext context) {
@@ -71,7 +72,17 @@ class _BottomNavState extends State<BottomNav> {
       floatingActionButtonAnimator: FloatingActionButtonAnimator.scaling,
 
 
-      body: _pages[_currentIndex],
+      body: IndexedStack(
+        index: _currentIndex,
+        children: [
+          NewHomePage(onTabChange: changeTab),
+          SearchPage(),
+          Center(child: Text("Settings")),
+          OtherUsersPage(),
+          Center(child: Text("Settings")),
+        ],
+      ),
+
 
       bottomNavigationBar: BottomNavigationBar(
         type: BottomNavigationBarType.fixed,
