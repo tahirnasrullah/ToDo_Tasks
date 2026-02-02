@@ -20,6 +20,10 @@ class UserDetailDatabase {
       return snapshot.docs
           .map((doc) => doc.data()[field] as String?)
           .whereType<String>()
+          .where(
+            (username) =>
+                username != FirebaseAuth.instance.currentUser?.displayName,
+          )
           .toList();
     });
   }
@@ -41,9 +45,13 @@ class TaskService {
         .collection("ToDoDailyTasks")
         .add(task.toMap());
 
-    ScaffoldMessenger.of(
-      context,
-    ).showSnackBar(const SnackBar(content: Text("Task Saved")));
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(
+        content: Text("Task Saved"),
+        showCloseIcon: true,
+        behavior: SnackBarBehavior.floating,
+      ),
+    );
   }
 
   Future<void> delnote(ToDoDailyTasksHistory task, BuildContext context) async {
@@ -52,9 +60,13 @@ class TaskService {
         .doc(task.docId)
         .delete();
 
-    ScaffoldMessenger.of(
-      context,
-    ).showSnackBar(const SnackBar(content: Text("Task Deleted")));
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(
+        content: Text("Task Deleted"),
+        showCloseIcon: true,
+        behavior: SnackBarBehavior.floating,
+      ),
+    );
   }
 
   Stream<List<ToDoDailyTasksHistory>> taskStream() {
@@ -76,13 +88,16 @@ class TaskService {
         .collection("ToDoDailyTasks")
         .doc(task.docId)
         .update(task.toMap());
-    ScaffoldMessenger.of(
-      context,
-    ).showSnackBar(const SnackBar(content: Text("Save Successfully")));
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(
+        content: Text("Save Successfully"),
+        showCloseIcon: true,
+        behavior: SnackBarBehavior.floating,
+      ),
+    );
   }
 
   Stream<int> assignedTaskCount() {
-
     return FirebaseFirestore.instance
         .collection('ToDoDailyTasks')
         .where('to', isEqualTo: FirebaseAuth.instance.currentUser!.displayName)
@@ -90,5 +105,4 @@ class TaskService {
         .snapshots()
         .map((snapshot) => snapshot.docs.length);
   }
-
 }

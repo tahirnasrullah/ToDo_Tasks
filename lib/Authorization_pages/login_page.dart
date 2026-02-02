@@ -139,7 +139,7 @@ class _LoginPageState extends State<LoginPage> {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           content: Text(
-              "Logged in Successfully", style: TextStyle(fontSize: 12)),
+              "Logged in Successfully", style: TextStyle(fontSize: 12)),behavior: SnackBarBehavior.floating
         ),
       );
     } on FirebaseAuthException catch (e) {
@@ -157,6 +157,7 @@ class _LoginPageState extends State<LoginPage> {
         SnackBar(
           backgroundColor: Colors.orange,
           content: Text(message, style: TextStyle(fontSize: 12)),
+          behavior: SnackBarBehavior.floating,
         ),
       );
     }

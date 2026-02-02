@@ -50,17 +50,16 @@ class _TodayTaskState extends State<TodayTask> {
           )
         : ListView(
             scrollDirection: Axis.horizontal,
-            children: widget.list
-                .map(
-                  (value) => Listing(
-                    value: value,
-                    editing: widget.editing,
-                    toMe: widget.toMe,
-                    fromMe: widget.fromMe,
-                    taskStatus: widget.taskStatus,
-                  ),
-                )
-                .toList(),
+            children: widget.list.map((value) {
+
+              return Listing(
+                value: value,
+                editing: widget.editing,
+                toMe: widget.toMe,
+                fromMe: widget.fromMe,
+                taskStatus: widget.taskStatus,
+              );
+            }).toList(),
           );
   }
 }
@@ -102,36 +101,28 @@ class _ListingState extends State<Listing> {
       if (widget.fromMe && !isFromMe) return false;
     }
 
-
     if (widget.toMe && !isToMe) return false;
     if (!widget.toMe && isToMe) return false;
 
     if (widget.fromMe && !isFromMe) return false;
     if (!widget.fromMe && isFromMe) return false;
 
-
     switch (widget.taskStatus) {
       case TaskStatus.completed:
         return task.isCompleted;
 
       case TaskStatus.accepted: // In-Progress
-        return task.isAccepted &&
-            !task.isCompleted &&
-            !task.isDeclined;
+        return task.isAccepted && !task.isCompleted && !task.isDeclined;
 
       case TaskStatus.declined:
         return task.isDeclined;
 
       case TaskStatus.pending:
-        return !task.isAccepted &&
-            !task.isCompleted &&
-            !task.isDeclined;
+        return !task.isAccepted && !task.isCompleted && !task.isDeclined;
 
       case TaskStatus.all:
         return true;
     }
-
-
   }
 
   @override

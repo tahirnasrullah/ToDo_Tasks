@@ -191,9 +191,11 @@ class _AddCardState extends State<AddCard> {
 
   @override
   Widget build(BuildContext context) {
-    return BackdropFilter(
-      filter: ImageFilter.blur(sigmaX: 5, sigmaY: 5),
-      child: SingleChildScrollView(
+    return
+      // BackdropFilter(
+      // filter: ImageFilter.blur(sigmaX: 5, sigmaY: 5),
+      // child:
+    SingleChildScrollView(
         child: AlertDialog(
           title: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -331,7 +333,7 @@ class _AddCardState extends State<AddCard> {
             ),
           ],
         ),
-      ),
+      // ),
     );
   }
 
@@ -472,7 +474,7 @@ class _AddCardState extends State<AddCard> {
   }
 
   void showError(String msg) {
-    ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(msg)));
+    ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(msg),behavior: SnackBarBehavior.floating,));
   }
 
   @override

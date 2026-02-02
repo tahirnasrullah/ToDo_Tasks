@@ -92,25 +92,31 @@ class SearchField extends StatelessWidget {
 }
 
 Widget TaskStatusButton(ButtonColor,_text,onpressed,{icon}) {
-  return Column(
-    children: [
-      InkWell(
-        onTap: onpressed,
-        child: Container(
-          width: 50,
-          height: 50,
-          decoration: BoxDecoration(
-            border: Border.all(color: ButtonColor),
-            borderRadius: BorderRadius.circular(25),
-            color: ButtonColor.withOpacity(0.2),
-          ),
-          child: Center(
-            child: FaIcon(icon, color: ButtonColor),
+  return Container(
+    width: 100,
+    height: 100,
+    child: Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      crossAxisAlignment: CrossAxisAlignment.center,
+      children: [
+        InkWell(
+          onTap: onpressed,
+          child: Container(
+            width: 50,
+            height: 50,
+            decoration: BoxDecoration(
+              border: Border.all(color: ButtonColor),
+              borderRadius: BorderRadius.circular(25),
+              color: ButtonColor.withOpacity(0.2),
+            ),
+            child: Center(
+              child: FaIcon(icon, color: ButtonColor),
+            ),
           ),
         ),
-      ),
-      SizedBox(height: 5),
-      Text(_text)
-    ],
+        SizedBox(height: 5),
+        Text(_text)
+      ],
+    ),
   );
 }

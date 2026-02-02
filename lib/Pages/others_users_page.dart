@@ -1,22 +1,20 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:to_do/Pages/HomePageElements/add_card.dart';
 import 'package:to_do/Pages/HomePageElements/task_history.dart';
 import 'package:to_do/Pages/HomePageElements/todays_task.dart';
-import 'package:to_do/Pages/NewHomePage/new_home_page.dart';
 import 'package:to_do/services/list.dart';
 
-import '../../services/database.dart';
-import '../../services/notification_services.dart';
+import '../services/database.dart';
+import '../services/notification_services.dart';
 
-class HomePage extends StatefulWidget {
-  const HomePage({super.key});
+class OtherUsersPage extends StatefulWidget {
+  const OtherUsersPage({super.key});
 
   @override
-  State<HomePage> createState() => _HomePageState();
+  State<OtherUsersPage> createState() => _OtherUsersPageState();
 }
 
-class _HomePageState extends State<HomePage> {
+class _OtherUsersPageState extends State<OtherUsersPage> {
   final TaskService taskService = TaskService();
   late bool _assigningToYou = false;
   late bool _accepted = false;
@@ -41,43 +39,6 @@ class _HomePageState extends State<HomePage> {
     return Scaffold(
       resizeToAvoidBottomInset: false,
 
-      appBar: AppBar(
-        titleSpacing: 0,
-        automaticallyImplyLeading: false,
-        backgroundColor: Colors.transparent,
-        title: Padding(
-          padding: const EdgeInsets.only(left: 10),
-          child: InkWell(
-            onTap: (){Navigator.push(context, MaterialPageRoute(builder: (context)=>NewHomePage()));},
-            child: const Text(
-              'Todo DailyTasks',
-              style: TextStyle(fontWeight: FontWeight.w800),
-            ),
-          ),
-        ),
-        actions: [
-          Padding(
-            padding: const EdgeInsets.only(right: 10, bottom: 10),
-            child: CircleAvatar(
-              radius: 30,
-              backgroundImage:FirebaseAuth.instance.currentUser!.photoURL == null
-              ?null: NetworkImage(FirebaseAuth.instance.currentUser!.photoURL!),
-              child: FirebaseAuth.instance.currentUser!.photoURL == null
-              ?Text(FirebaseAuth.instance.currentUser!.displayName!)
-              :null,
-            ),
-          ),
-        ],
-      ),
-
-      floatingActionButton: FloatingActionButton(
-        backgroundColor: Colors.grey.shade200,
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(70)),
-        child: const Icon(Icons.add),
-        onPressed: () {
-          _showCardDialog(context);
-        },
-      ),
 
       body: StreamBuilder<List<ToDoDailyTasksHistory>>(
         stream: taskService.taskStream(),
@@ -130,6 +91,7 @@ class _HomePageState extends State<HomePage> {
                 const SizedBox(height: 10),
 
                 Expanded(
+                  flex: 2,
                   child: _assigningToYou
                       ? TodayTask(
                           list: listTodayTasks,
@@ -186,6 +148,7 @@ class _HomePageState extends State<HomePage> {
                 const SizedBox(height: 10),
 
                 Expanded(
+                  flex: 2,
                   child: _accepted
                       ? TodayTask(
                           list: listTodayTasks,
@@ -244,6 +207,7 @@ class _HomePageState extends State<HomePage> {
                 const SizedBox(height: 10),
 
                 Expanded(
+                  flex: 1,
                   child: TaskHistory(
                     scrollableCondition: false,
                     list: listTodayTasks,
