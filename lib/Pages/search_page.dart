@@ -15,12 +15,14 @@ class _SearchPageState extends State<SearchPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          children: [
-            SearchField(searchController: searchController),
-          ],
+      resizeToAvoidBottomInset: false,
+      body: Container(
+        color: Colors.white,
+        child: Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: Column(
+            children: [SearchField(searchController: searchController)],
+          ),
         ),
       ),
     );

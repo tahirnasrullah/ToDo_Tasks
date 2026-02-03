@@ -91,10 +91,10 @@ class SearchField extends StatelessWidget {
   }
 }
 
-Widget TaskStatusButton(ButtonColor,_text,onpressed,{icon}) {
-  return Container(
-    width: 100,
-    height: 100,
+Widget taskStatusButton(buttonColor,text,onpressed,{icon}) {
+  return SizedBox(
+    width: 80,
+    height: 80,
     child: Column(
       mainAxisAlignment: MainAxisAlignment.center,
       crossAxisAlignment: CrossAxisAlignment.center,
@@ -105,17 +105,17 @@ Widget TaskStatusButton(ButtonColor,_text,onpressed,{icon}) {
             width: 50,
             height: 50,
             decoration: BoxDecoration(
-              border: Border.all(color: ButtonColor),
+              border: Border.all(color: buttonColor),
               borderRadius: BorderRadius.circular(25),
-              color: ButtonColor.withOpacity(0.2),
+              color: buttonColor.withOpacity(0.2),
             ),
             child: Center(
-              child: FaIcon(icon, color: ButtonColor),
+              child: FaIcon(icon,size: 20, color: buttonColor),
             ),
           ),
         ),
         SizedBox(height: 5),
-        Text(_text)
+        Text(text, style: TextStyle(color: buttonColor, fontSize: 12, fontWeight: FontWeight.w800))
       ],
     ),
   );

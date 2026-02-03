@@ -23,11 +23,10 @@ class _BottomNavState extends State<BottomNav> {
     });
   }
 
-
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.white,
       appBar: AppBar(
         titleSpacing: 0,
         automaticallyImplyLeading: false,
@@ -45,7 +44,7 @@ class _BottomNavState extends State<BottomNav> {
             child: CircleAvatar(
               radius: 30,
               backgroundImage:
-              FirebaseAuth.instance.currentUser!.photoURL == null
+                  FirebaseAuth.instance.currentUser!.photoURL == null
                   ? null
                   : NetworkImage(FirebaseAuth.instance.currentUser!.photoURL!),
               child: FirebaseAuth.instance.currentUser!.photoURL == null
@@ -68,9 +67,8 @@ class _BottomNavState extends State<BottomNav> {
           _showCardDialog(context);
         },
       ),
-      floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
+      floatingActionButtonLocation: FloatingActionButtonLocation.miniCenterDocked,
       floatingActionButtonAnimator: FloatingActionButtonAnimator.scaling,
-
 
       body: IndexedStack(
         index: _currentIndex,
@@ -82,7 +80,6 @@ class _BottomNavState extends State<BottomNav> {
           Center(child: Text("Settings")),
         ],
       ),
-
 
       bottomNavigationBar: BottomNavigationBar(
         type: BottomNavigationBarType.fixed,
@@ -107,8 +104,12 @@ class _BottomNavState extends State<BottomNav> {
             label: "",
           ),
           BottomNavigationBarItem(icon: Icon(Icons.search), label: ""),
-          BottomNavigationBarItem(icon: Icon(Icons.search), label: ""),
-          BottomNavigationBarItem(icon: Icon(Icons.group_add_outlined),activeIcon: Icon(Icons.group_add), label: ""),
+          BottomNavigationBarItem(icon: Icon(Icons.search), label: "",),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.group_add_outlined),
+            activeIcon: Icon(Icons.group_add),
+            label: "",
+          ),
           BottomNavigationBarItem(icon: Icon(Icons.settings), label: ""),
         ],
       ),
