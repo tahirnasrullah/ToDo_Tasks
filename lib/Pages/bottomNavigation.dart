@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:to_do/Pages/OthersUsersPage/others_users_page.dart';
 import 'package:to_do/Pages/NewHomePage/new_home_page.dart';
 import 'package:to_do/Pages/SearchPage/search_page.dart';
+import 'package:to_do/Pages/setting_page.dart';
 
 import 'MainPageElements/add_card.dart';
 
@@ -30,7 +31,8 @@ class _BottomNavState extends State<BottomNav> {
       appBar: AppBar(
         titleSpacing: 0,
         automaticallyImplyLeading: false,
-        backgroundColor: Colors.transparent,
+        backgroundColor: Colors.white,
+        shadowColor: Colors.white,
         title: Padding(
           padding: const EdgeInsets.only(left: 10),
           child: const Text(
@@ -39,17 +41,19 @@ class _BottomNavState extends State<BottomNav> {
           ),
         ),
         actions: [
-          Padding(
-            padding: const EdgeInsets.only(right: 10, top: 10),
-            child: CircleAvatar(
-              radius: 30,
-              backgroundImage:
-                  FirebaseAuth.instance.currentUser!.photoURL == null
-                  ? null
-                  : NetworkImage(FirebaseAuth.instance.currentUser!.photoURL!),
-              child: FirebaseAuth.instance.currentUser!.photoURL == null
-                  ? Text(FirebaseAuth.instance.currentUser!.displayName!)
-                  : null,
+          Center(
+            child: Padding(
+              padding: const EdgeInsets.only(right: 10),
+              child: CircleAvatar(
+                radius: 25,
+                backgroundImage:
+                    FirebaseAuth.instance.currentUser!.photoURL == null
+                    ? null
+                    : NetworkImage(FirebaseAuth.instance.currentUser!.photoURL!),
+                child: FirebaseAuth.instance.currentUser!.photoURL == null
+                    ? Text(FirebaseAuth.instance.currentUser!.displayName!)
+                    : null,
+              ),
             ),
           ),
         ],
@@ -77,7 +81,7 @@ class _BottomNavState extends State<BottomNav> {
           SearchPage(),
           SearchPage(),
           OtherUsersPage(),
-          Center(child: Text("Settings")),
+          SettingPage(),
         ],
       ),
 
@@ -85,7 +89,7 @@ class _BottomNavState extends State<BottomNav> {
         type: BottomNavigationBarType.fixed,
         useLegacyColorScheme: false,
         backgroundColor: Colors.white,
-        selectedItemColor: Colors.deepPurpleAccent,
+        selectedItemColor: Colors.deepPurpleAccent.shade700,
         unselectedItemColor: Colors.black,
         iconSize: 20,
         currentIndex: _currentIndex,

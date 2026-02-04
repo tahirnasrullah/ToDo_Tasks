@@ -243,30 +243,33 @@ class _OtherUsersPageState extends State<OtherUsersPage> {
                 style: TextStyle(fontWeight: FontWeight.w800),
               ),
             ),
-            body: StreamBuilder<List<ToDoDailyTasksHistory>>(
-              stream: taskService.taskStream(),
-              builder: (context, snapshot) {
-                if (snapshot.connectionState == ConnectionState.waiting) {
-                  return const Center(child: CircularProgressIndicator());
-                }
+            body: Container(
+              decoration: BoxDecoration(color: Colors.white),
+              child: StreamBuilder<List<ToDoDailyTasksHistory>>(
+                stream: taskService.taskStream(),
+                builder: (context, snapshot) {
+                  if (snapshot.connectionState == ConnectionState.waiting) {
+                    return const Center(child: CircularProgressIndicator());
+                  }
 
-                if (snapshot.hasError) {
-                  return const Center(child: Text("Something went wrong"));
-                }
+                  if (snapshot.hasError) {
+                    return const Center(child: Text("Something went wrong"));
+                  }
 
-                final tasks = snapshot.data ?? [];
+                  final tasks = snapshot.data ?? [];
 
-                return Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: TaskHistory(
-                    scrollableCondition: true,
-                    list: tasks,
-                    delAble: true,
-                    onlyMe: false,
-                    editing: true,
-                  ),
-                );
-              },
+                  return Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: TaskHistory(
+                      scrollableCondition: true,
+                      list: tasks,
+                      delAble: true,
+                      onlyMe: false,
+                      editing: true,
+                    ),
+                  );
+                },
+              ),
             ),
           ),
         );

@@ -135,17 +135,17 @@ void showCardDialogTasks(BuildContext context) {
     context: context,
     builder: (context) {
       final TaskService taskService = TaskService();
-      return Container(
-        decoration: const BoxDecoration(color: Colors.white),
-        child: Scaffold(
-          resizeToAvoidBottomInset: false,
-          appBar: AppBar(
-            title: const Text(
-              "All Tasks",
-              style: TextStyle(fontWeight: FontWeight.w800),
-            ),
+      return Scaffold(
+        resizeToAvoidBottomInset: false,
+        appBar: AppBar(
+          title: const Text(
+            "All Tasks",
+            style: TextStyle(fontWeight: FontWeight.w800),
           ),
-          body: StreamBuilder<List<ToDoDailyTasksHistory>>(
+        ),
+        body: Container(
+          decoration: BoxDecoration(color: Colors.white),
+          child: StreamBuilder<List<ToDoDailyTasksHistory>>(
             stream: taskService.taskStream(),
             builder: (context, snapshot) {
               if (snapshot.connectionState == ConnectionState.waiting) {

@@ -1,7 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:to_do/Pages/NewHomePage/color_widget_for_card.dart';
+import 'package:to_do/Widgets/color_widget_for_card.dart';
 import 'package:to_do/Widgets/task_countdown.dart';
 
 import '../services/database.dart';

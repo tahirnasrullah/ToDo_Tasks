@@ -318,6 +318,9 @@ class _AddCardState extends State<AddCard> {
               children: [
                 Expanded(
                   child: ElevatedButton(
+          style: ElevatedButton.styleFrom(
+            backgroundColor: Colors.deepPurpleAccent.shade700,
+          ),
                     onPressed: _isSaving ? null : saveTask,
                     child: _isSaving
                         ? const SizedBox(
@@ -325,15 +328,14 @@ class _AddCardState extends State<AddCard> {
                             width: 20,
                             child: CircularProgressIndicator(strokeWidth: 2),
                           )
-                        : const Text("Save"),
+                        : const Text("Save", style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold,color: Colors.white),
                   ),
                 ),
-              ],
+                )],
             ),
           ],
         ),
-      // ),
-    );
+      );
   }
 
   /// DATE PICKERS

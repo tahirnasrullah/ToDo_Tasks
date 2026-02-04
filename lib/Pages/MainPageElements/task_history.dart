@@ -1,6 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:to_do/Pages/NewHomePage/color_widget_for_card.dart';
+import 'package:to_do/Widgets/color_widget_for_card.dart';
 import 'package:to_do/services/list.dart';
 import '../../Widgets/card_ui.dart';
 import '../../services/database.dart';
@@ -120,11 +120,7 @@ class _HistoryUiState extends State<HistoryUi> {
             maxLines: 1,
             overflow: TextOverflow.ellipsis,
           ),
-          tileColor: colorCard(
-            widget.task.isCompleted,
-            widget.task.isAccepted,
-            widget.task.isDeclined,
-          ),
+          tileColor: Colors.white,
         ),
       ),
     );
