@@ -28,7 +28,7 @@ class _CardUiState extends State<CardUi> {
           elevation: 5,
           shape: RoundedRectangleBorder(
             side: BorderSide(
-              color: ColorCardText(
+              color: colorCardText(
                 widget.value.isCompleted,
                 widget.value.isAccepted,
                 widget.value.isDeclined,
@@ -37,7 +37,7 @@ class _CardUiState extends State<CardUi> {
 
             borderRadius: BorderRadius.circular(20),
           ),
-          color: ColorCard(
+          color: colorCard(
             widget.value.isCompleted,
             widget.value.isAccepted,
             widget.value.isDeclined,
@@ -62,7 +62,7 @@ class _CardUiState extends State<CardUi> {
                           "To: You",
                           style: TextStyle(
                             fontWeight: FontWeight.w800,
-                            color: ColorCardText(
+                            color: colorCardText(
                               widget.value.isCompleted,
                               widget.value.isAccepted,
                               widget.value.isDeclined,
@@ -74,7 +74,7 @@ class _CardUiState extends State<CardUi> {
                           "To: ${widget.value.to}",
                           style: TextStyle(
                             fontWeight: FontWeight.w800,
-                            color:ColorCardText(
+                            color: colorCardText(
                               widget.value.isCompleted,
                               widget.value.isAccepted,
                               widget.value.isDeclined,
@@ -89,7 +89,7 @@ class _CardUiState extends State<CardUi> {
                     "Title: ${widget.value.title}",
                     style: TextStyle(
                       fontWeight: FontWeight.bold,
-                      color: ColorCardText(
+                      color: colorCardText(
                         widget.value.isCompleted,
                         widget.value.isAccepted,
                         widget.value.isDeclined,
@@ -105,7 +105,7 @@ class _CardUiState extends State<CardUi> {
                     maxLines: 2,
                     overflow: TextOverflow.ellipsis,
                     style: TextStyle(
-                      color: ColorCardText(
+                      color: colorCardText(
                         widget.value.isCompleted,
                         widget.value.isAccepted,
                         widget.value.isDeclined,
@@ -246,7 +246,8 @@ class _cardAlertDialogState extends State<cardAlertDialog> {
       ),
       actions:
           widget.editing &&
-              widget.value.uid == FirebaseAuth.instance.currentUser!.uid
+              widget.value.uid == FirebaseAuth.instance.currentUser!.uid &&
+              widget.value.isCompleted == false
           ? [
               Row(
                 children: [

@@ -2,21 +2,24 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:to_do/Pages/NewHomePage/color_widget_for_card.dart';
 import 'package:to_do/services/list.dart';
-
+import '../../Widgets/card_ui.dart';
 import '../../services/database.dart';
+import 'editedOrDeleted_card.dart';
 
 class TaskHistory extends StatefulWidget {
   final List<ToDoDailyTasksHistory> list;
   final bool scrollableCondition;
   final bool delAble;
   final bool onlyMe;
+  final bool editing;
+
 
   const TaskHistory({
     super.key,
     required this.list,
     this.scrollableCondition = true,
     this.delAble = false,
-    required this.onlyMe,
+    required this.onlyMe, required this.editing,
   });
 
   @override
@@ -27,7 +30,7 @@ class _TaskHistoryState extends State<TaskHistory> {
   @override
   Widget build(BuildContext context) {
     return widget.list.isEmpty
-        ? Center(child: Text("Not Yet"))
+        ? Center(child: Text("Not Found"))
         : ListView(
             physics: widget.scrollableCondition
                 ? ScrollPhysics()
@@ -35,10 +38,10 @@ class _TaskHistoryState extends State<TaskHistory> {
             children: widget.list
                 .map(
                   (task) => widget.onlyMe == false
-                      ? HistoryUi(task: task, delAble: widget.delAble)
+                      ? HistoryUi(task: task, delAble: widget.delAble, editing: widget.editing)
                       : task.to ==
                             FirebaseAuth.instance.currentUser!.displayName
-                      ? HistoryUi(task: task, delAble: widget.delAble)
+                      ? HistoryUi(task: task, delAble: widget.delAble, editing: widget.editing)
                       : SizedBox.shrink(),
                 )
                 .toList(),
@@ -50,14 +53,21 @@ class HistoryUi extends StatefulWidget {
   final ToDoDailyTasksHistory task;
   final bool delAble;
   final TaskService taskService = TaskService();
+  final bool editing;
 
-  HistoryUi({super.key, required this.task, required this.delAble});
+
+  HistoryUi({super.key, required this.task, required this.delAble, required this.editing});
 
   @override
   State<HistoryUi> createState() => _HistoryUiState();
 }
 
 class _HistoryUiState extends State<HistoryUi> {
+
+  final TextEditingController titleController = TextEditingController();
+  final TextEditingController descriptionController = TextEditingController();
+  String? selectedAssignee;
+
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -65,8 +75,9 @@ class _HistoryUiState extends State<HistoryUi> {
       child: Container(
         decoration: BoxDecoration(
           border: Border(
-            bottom: BorderSide(width: 2,
-              color: ColorCardText(
+            bottom: BorderSide(
+              width: 2,
+              color: colorCardText(
                 widget.task.isCompleted,
                 widget.task.isAccepted,
                 widget.task.isDeclined,
@@ -75,6 +86,7 @@ class _HistoryUiState extends State<HistoryUi> {
           ),
         ),
         child: ListTile(
+          onTap: () {_showCardDialog(context, widget.task);},
           leading: widget.task.uid == FirebaseAuth.instance.currentUser!.uid
               ? Text(
                   "You",
@@ -90,7 +102,7 @@ class _HistoryUiState extends State<HistoryUi> {
                   ? Text("To: You")
                   : Text("To: ${widget.task.to}"),
               SizedBox(width: 10),
-              Text("For: ${widget.task.title}"),
+              Text("Title: ${widget.task.title}"),
             ],
           ),
           trailing:
@@ -108,7 +120,7 @@ class _HistoryUiState extends State<HistoryUi> {
             maxLines: 1,
             overflow: TextOverflow.ellipsis,
           ),
-          tileColor: ColorCard(
+          tileColor: colorCard(
             widget.task.isCompleted,
             widget.task.isAccepted,
             widget.task.isDeclined,
@@ -117,4 +129,45 @@ class _HistoryUiState extends State<HistoryUi> {
       ),
     );
   }
+
+
+  void _showCardDialog(context, ToDoDailyTasksHistory value) {
+    showDialog(
+      context: context,
+      builder: (value) {
+        return cardAlertDialog(
+          value: widget.task,
+          editing: widget.editing,
+          callback: () {
+            _showEditingCardDialog(
+              context,
+              widget.task,
+              titleController,
+              descriptionController,
+              selectedAssignee,
+            );
+          },
+        );
+      },
+    );
+  }
+
+  void _showEditingCardDialog(
+      BuildContext context,
+      ToDoDailyTasksHistory task,
+      TextEditingController titleController,
+      TextEditingController descriptionController,
+      String? selectedAssignee,
+      ) {
+    showDialog(
+      context: context,
+      builder: (value) {
+        titleController.text = task.title;
+        descriptionController.text = task.desc;
+        selectedAssignee = task.to;
+        return EditTaskCard(task: task);
+      },
+    );
+  }
 }
+

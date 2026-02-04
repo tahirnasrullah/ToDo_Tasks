@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:to_do/Pages/HomePageElements/add_card.dart';
-import 'package:to_do/Pages/HomePageElements/task_history.dart';
-import 'package:to_do/Pages/HomePageElements/todays_task.dart';
 import 'package:to_do/services/list.dart';
 
-import '../services/database.dart';
-import '../services/notification_services.dart';
+import '../../services/database.dart';
+import '../../services/notification_services.dart';
+import '../MainPageElements/add_card.dart';
+import '../MainPageElements/task_history.dart';
+import '../MainPageElements/todays_task.dart';
 
 class OtherUsersPage extends StatefulWidget {
   const OtherUsersPage({super.key});
@@ -92,7 +92,7 @@ class _OtherUsersPageState extends State<OtherUsersPage> {
 
                   Expanded(
                     flex: 2,
-                    child: _assigningToYou
+                    child: _assigningToYou == true
                         ? TodayTask(
                             list: listTodayTasks,
                             emptyText: "Not Yet",
@@ -119,7 +119,7 @@ class _OtherUsersPageState extends State<OtherUsersPage> {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       const Text(
-                        "Assigned to Others",
+                        "From You to Others",
                         style: TextStyle(
                           fontSize: 20,
                           fontWeight: FontWeight.bold,
@@ -149,7 +149,7 @@ class _OtherUsersPageState extends State<OtherUsersPage> {
 
                   Expanded(
                     flex: 2,
-                    child: _accepted
+                    child: _accepted == true
                         ? TodayTask(
                             list: listTodayTasks,
                             emptyText: "Assign now",
@@ -213,6 +213,7 @@ class _OtherUsersPageState extends State<OtherUsersPage> {
                       list: listTodayTasks,
                       delAble: false,
                       onlyMe: false,
+                      editing: false,
                     ),
                   ),
                 ],
@@ -262,6 +263,7 @@ class _OtherUsersPageState extends State<OtherUsersPage> {
                     list: tasks,
                     delAble: true,
                     onlyMe: false,
+                    editing: true,
                   ),
                 );
               },

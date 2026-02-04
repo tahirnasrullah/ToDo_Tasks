@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:to_do/Pages/HomePageElements/todays_task.dart';
-import 'package:to_do/Pages/NewHomePage/Elements.dart';
+import 'package:to_do/Pages/NewHomePage/elements.dart';
 
 import '../../services/database.dart';
 import '../../services/list.dart';
-import '../HomePageElements/task_history.dart';
+import '../MainPageElements/task_history.dart';
+import '../MainPageElements/todays_task.dart';
 
 class NewHomePage extends StatefulWidget {
   final Function(int) onTabChange;
@@ -41,7 +41,7 @@ class _NewHomePageState extends State<NewHomePage> {
                 child: IgnorePointer(
                   child: Hero(
                     tag: 'search',
-                    child: SearchField(searchController: searchController),
+                    child: SearchField(searchController: searchController,),
                   ),
                 ),
                 onTap: () {
@@ -161,6 +161,7 @@ void showCardDialogTasks(BuildContext context) {
               return Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: TaskHistory(
+                  editing: true,
                   scrollableCondition: true,
                   list: tasks,
                   delAble: true,

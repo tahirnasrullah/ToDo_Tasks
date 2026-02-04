@@ -1,10 +1,10 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:to_do/Pages/others_users_page.dart';
+import 'package:to_do/Pages/OthersUsersPage/others_users_page.dart';
 import 'package:to_do/Pages/NewHomePage/new_home_page.dart';
-import 'package:to_do/Pages/search_page.dart';
+import 'package:to_do/Pages/SearchPage/search_page.dart';
 
-import 'HomePageElements/add_card.dart';
+import 'MainPageElements/add_card.dart';
 
 class BottomNav extends StatefulWidget {
   const BottomNav({super.key});
@@ -75,7 +75,7 @@ class _BottomNavState extends State<BottomNav> {
         children: [
           NewHomePage(onTabChange: changeTab),
           SearchPage(),
-          Center(child: Text("Settings")),
+          SearchPage(),
           OtherUsersPage(),
           Center(child: Text("Settings")),
         ],
