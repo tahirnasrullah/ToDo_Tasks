@@ -1,10 +1,10 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:to_do/Pages/others_users_page.dart';
+import 'package:to_do/Pages/OthersUsersPage/others_users_page.dart';
 import 'package:to_do/Pages/NewHomePage/new_home_page.dart';
-import 'package:to_do/Pages/search_page.dart';
+import 'package:to_do/Pages/SearchPage/search_page.dart';
 
-import 'HomePageElements/add_card.dart';
+import 'MainPageElements/add_card.dart';
 
 class BottomNav extends StatefulWidget {
   const BottomNav({super.key});
@@ -23,11 +23,10 @@ class _BottomNavState extends State<BottomNav> {
     });
   }
 
-
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.white,
       appBar: AppBar(
         titleSpacing: 0,
         automaticallyImplyLeading: false,
@@ -45,7 +44,7 @@ class _BottomNavState extends State<BottomNav> {
             child: CircleAvatar(
               radius: 30,
               backgroundImage:
-              FirebaseAuth.instance.currentUser!.photoURL == null
+                  FirebaseAuth.instance.currentUser!.photoURL == null
                   ? null
                   : NetworkImage(FirebaseAuth.instance.currentUser!.photoURL!),
               child: FirebaseAuth.instance.currentUser!.photoURL == null
@@ -68,21 +67,19 @@ class _BottomNavState extends State<BottomNav> {
           _showCardDialog(context);
         },
       ),
-      floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
+      floatingActionButtonLocation: FloatingActionButtonLocation.miniCenterDocked,
       floatingActionButtonAnimator: FloatingActionButtonAnimator.scaling,
-
 
       body: IndexedStack(
         index: _currentIndex,
         children: [
           NewHomePage(onTabChange: changeTab),
           SearchPage(),
-          Center(child: Text("Settings")),
+          SearchPage(),
           OtherUsersPage(),
           Center(child: Text("Settings")),
         ],
       ),
-
 
       bottomNavigationBar: BottomNavigationBar(
         type: BottomNavigationBarType.fixed,
@@ -107,8 +104,12 @@ class _BottomNavState extends State<BottomNav> {
             label: "",
           ),
           BottomNavigationBarItem(icon: Icon(Icons.search), label: ""),
-          BottomNavigationBarItem(icon: Icon(Icons.search), label: ""),
-          BottomNavigationBarItem(icon: Icon(Icons.group_add_outlined),activeIcon: Icon(Icons.group_add), label: ""),
+          BottomNavigationBarItem(icon: Icon(Icons.search), label: "",),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.group_add_outlined),
+            activeIcon: Icon(Icons.group_add),
+            label: "",
+          ),
           BottomNavigationBarItem(icon: Icon(Icons.settings), label: ""),
         ],
       ),

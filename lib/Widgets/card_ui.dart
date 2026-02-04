@@ -1,6 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:to_do/Pages/NewHomePage/color_widget_for_card.dart';
 import 'package:to_do/Widgets/task_countdown.dart';
 
 import '../services/database.dart';
@@ -10,11 +11,7 @@ class CardUi extends StatefulWidget {
   final dynamic value;
   final GestureTapCallback callbackAction;
 
-  const CardUi({
-    super.key,
-    required this.value,
-    required this.callbackAction,
-  });
+  const CardUi({super.key, required this.value, required this.callbackAction});
 
   @override
   State<CardUi> createState() => _CardUiState();
@@ -30,17 +27,21 @@ class _CardUiState extends State<CardUi> {
         child: Card(
           elevation: 5,
           shape: RoundedRectangleBorder(
+            side: BorderSide(
+              color: colorCardText(
+                widget.value.isCompleted,
+                widget.value.isAccepted,
+                widget.value.isDeclined,
+              ),
+            ),
+
             borderRadius: BorderRadius.circular(20),
           ),
-          color:
-              widget.value.isCompleted == true
-              ? Colors.green
-              : widget.value.isAccepted == true
-              ? Colors.amber
-              : widget.value.isDeclined == true
-              ? Colors.red
-              : Colors.deepPurpleAccent.shade400,
-
+          color: colorCard(
+            widget.value.isCompleted,
+            widget.value.isAccepted,
+            widget.value.isDeclined,
+          ),
 
           child: SizedBox(
             width: 220,
@@ -61,16 +62,23 @@ class _CardUiState extends State<CardUi> {
                           "To: You",
                           style: TextStyle(
                             fontWeight: FontWeight.w800,
-                            color: Colors.white,
+                            color: colorCardText(
+                              widget.value.isCompleted,
+                              widget.value.isAccepted,
+                              widget.value.isDeclined,
+                            ),
                             fontSize: 16,
-
                           ),
                         )
                       : Text(
                           "To: ${widget.value.to}",
                           style: TextStyle(
                             fontWeight: FontWeight.w800,
-                            color: Colors.white,
+                            color: colorCardText(
+                              widget.value.isCompleted,
+                              widget.value.isAccepted,
+                              widget.value.isDeclined,
+                            ),
                             fontSize: 16,
                           ),
                           maxLines: 1,
@@ -81,7 +89,11 @@ class _CardUiState extends State<CardUi> {
                     "Title: ${widget.value.title}",
                     style: TextStyle(
                       fontWeight: FontWeight.bold,
-                      color: Colors.white,
+                      color: colorCardText(
+                        widget.value.isCompleted,
+                        widget.value.isAccepted,
+                        widget.value.isDeclined,
+                      ),
                       fontSize: 16,
                     ),
                     maxLines: 1,
@@ -92,10 +104,20 @@ class _CardUiState extends State<CardUi> {
                     widget.value.desc,
                     maxLines: 2,
                     overflow: TextOverflow.ellipsis,
-                    style: TextStyle(color: Colors.white),
+                    style: TextStyle(
+                      color: colorCardText(
+                        widget.value.isCompleted,
+                        widget.value.isAccepted,
+                        widget.value.isDeclined,
+                      ),
+                    ),
                   ),
                   SizedBox(height: 5),
-                  TaskCountdown(endTime: widget.value.endDateTime,isAccepted: widget.value.isAccepted, isCompleted: widget.value.isCompleted,),
+                  TaskCountdown(
+                    endTime: widget.value.endDateTime,
+                    isAccepted: widget.value.isAccepted,
+                    isCompleted: widget.value.isCompleted,
+                  ),
                 ],
               ),
             ),
@@ -215,12 +237,17 @@ class _cardAlertDialogState extends State<cardAlertDialog> {
           SizedBox(height: 5),
           Text(formatTaskDate(widget.value.startDateTime)),
           SizedBox(height: 5),
-          TaskCountdown(endTime: widget.value.endDateTime, isAccepted: widget.value.isAccepted, isCompleted: widget.value.isCompleted,),
+          TaskCountdown(
+            endTime: widget.value.endDateTime,
+            isAccepted: widget.value.isAccepted,
+            isCompleted: widget.value.isCompleted,
+          ),
         ],
       ),
       actions:
           widget.editing &&
-              widget.value.uid == FirebaseAuth.instance.currentUser!.uid
+              widget.value.uid == FirebaseAuth.instance.currentUser!.uid &&
+              widget.value.isCompleted == false
           ? [
               Row(
                 children: [
@@ -337,8 +364,12 @@ class _cardAlertDialogState extends State<cardAlertDialog> {
 
     await taskService.updateTask(updatedTask, context);
     Navigator.pop(context);
-    ScaffoldMessenger.of(
-      context,
-    ).showSnackBar(SnackBar(content: Text("Status updated successfully"),behavior: SnackBarBehavior.floating,showCloseIcon: true,));
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text("Status updated successfully"),
+        behavior: SnackBarBehavior.floating,
+        showCloseIcon: true,
+      ),
+    );
   }
 }

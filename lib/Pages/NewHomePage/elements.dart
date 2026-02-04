@@ -1,5 +1,3 @@
-import 'dart:ui';
-
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -60,18 +58,56 @@ class _GreegingsState extends State<Greegings> {
   }
 }
 
-class SearchField extends StatelessWidget {
+class SearchField extends StatefulWidget {
   final TextEditingController searchController;
+  final Function()? onTap;
 
-  const SearchField({super.key, required this.searchController});
+  const SearchField({super.key, required this.searchController, this.onTap});
 
+  @override
+  State<SearchField> createState() => _SearchFieldState();
+}
+
+class _SearchFieldState extends State<SearchField> {
   @override
   Widget build(BuildContext context) {
     return TextField(
-      controller: searchController,
+      onChanged: (value) {},
+      controller: widget.searchController,
       cursorColor: Colors.grey,
       style: const TextStyle(color: Colors.black, fontSize: 20),
       decoration: InputDecoration(
+        suffix: SizedBox(
+          width: 120,
+          height: 30,
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.end,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              SizedBox(
+                child: IconButton(
+                  onPressed: () {
+                    widget.searchController.clear();
+                  },
+                  icon: Icon(Icons.close, color: Colors.grey, size: 20),
+                ),
+              ),
+
+              SizedBox(width: 5),
+              SizedBox(
+                width: 60,
+                height: 30,
+                child: ElevatedButton(
+                  onPressed: widget.onTap,
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Colors.deepPurpleAccent.shade700,
+                  ),
+                  child: Center(child: Icon(Icons.search, color: Colors.white)),
+                ),
+              ),
+            ],
+          ),
+        ),
         fillColor: Colors.grey.shade200,
         filled: true,
         alignLabelWithHint: true,
@@ -91,10 +127,10 @@ class SearchField extends StatelessWidget {
   }
 }
 
-Widget TaskStatusButton(ButtonColor,_text,onpressed,{icon}) {
-  return Container(
-    width: 100,
-    height: 100,
+Widget taskStatusButton(buttonColor, text, onpressed, {icon}) {
+  return SizedBox(
+    width: 80,
+    height: 80,
     child: Column(
       mainAxisAlignment: MainAxisAlignment.center,
       crossAxisAlignment: CrossAxisAlignment.center,
@@ -105,17 +141,22 @@ Widget TaskStatusButton(ButtonColor,_text,onpressed,{icon}) {
             width: 50,
             height: 50,
             decoration: BoxDecoration(
-              border: Border.all(color: ButtonColor),
+              border: Border.all(color: buttonColor),
               borderRadius: BorderRadius.circular(25),
-              color: ButtonColor.withOpacity(0.2),
+              color: buttonColor.withOpacity(0.2),
             ),
-            child: Center(
-              child: FaIcon(icon, color: ButtonColor),
-            ),
+            child: Center(child: FaIcon(icon, size: 20, color: buttonColor)),
           ),
         ),
         SizedBox(height: 5),
-        Text(_text)
+        Text(
+          text,
+          style: TextStyle(
+            color: buttonColor,
+            fontSize: 12,
+            fontWeight: FontWeight.w800,
+          ),
+        ),
       ],
     ),
   );
