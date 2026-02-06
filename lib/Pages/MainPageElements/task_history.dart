@@ -1,6 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:to_do/Pages/NewHomePage/color_widget_for_card.dart';
+import 'package:to_do/Widgets/color_widget_for_card.dart';
 import 'package:to_do/services/list.dart';
 import '../../Widgets/card_ui.dart';
 import '../../services/database.dart';
@@ -87,27 +87,29 @@ class _HistoryUiState extends State<HistoryUi> {
         ),
         child: ListTile(
           onTap: () {_showCardDialog(context, widget.task);},
-          leading: widget.task.uid == FirebaseAuth.instance.currentUser!.uid
-              ? Text(
-                  "You",
-                  style: TextStyle(fontWeight: FontWeight.w800, fontSize: 15),
-                )
-              : Text(
-                  widget.task.from,
-                  style: TextStyle(fontWeight: FontWeight.w800, fontSize: 15),
-                ),
-          title: Row(
+          leading: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
+              widget.task.uid == FirebaseAuth.instance.currentUser!.uid
+                  ? Text(
+                      "You",
+                      style: TextStyle(fontWeight: FontWeight.w800, fontSize: 15),
+                    )
+                  : Text(
+                      widget.task.from,
+                      style: TextStyle(fontWeight: FontWeight.w800, fontSize: 15),
+                    ),
               widget.task.to == FirebaseAuth.instance.currentUser!.displayName
-                  ? Text("To: You")
-                  : Text("To: ${widget.task.to}"),
-              SizedBox(width: 10),
-              Text("Title: ${widget.task.title}"),
+                  ? Text("To: You", style: TextStyle(fontWeight: FontWeight.w800, fontSize: 15))
+                  : Text("To: ${widget.task.to}", style: TextStyle(fontWeight: FontWeight.w800, fontSize: 15)),
             ],
           ),
+          title: Text("Title: ${widget.task.title}", maxLines: 1, overflow: TextOverflow.ellipsis,style: TextStyle(fontWeight: FontWeight.w800, fontSize: 18),),
           trailing:
               widget.delAble &&
                   widget.task.uid == FirebaseAuth.instance.currentUser!.uid
+                  && widget.task.isCompleted == true
               ? IconButton(
                   onPressed: () async {
                     await widget.taskService.delnote(widget.task, context);
@@ -120,11 +122,7 @@ class _HistoryUiState extends State<HistoryUi> {
             maxLines: 1,
             overflow: TextOverflow.ellipsis,
           ),
-          tileColor: colorCard(
-            widget.task.isCompleted,
-            widget.task.isAccepted,
-            widget.task.isDeclined,
-          ),
+          tileColor: Colors.white,
         ),
       ),
     );

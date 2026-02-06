@@ -19,7 +19,7 @@ class _OtherUsersPageState extends State<OtherUsersPage> {
   late bool _assigningToYou = false;
   late bool _accepted = false;
   late String showAssignTo = 'to only you';
-  late String showAccepted = 'only accepted task';
+  late String showAccepted = 'all tasks';
   NotificationServices notificationServices = NotificationServices();
 
   @override
@@ -54,7 +54,7 @@ class _OtherUsersPageState extends State<OtherUsersPage> {
             final listTodayTasks = snapshot.data ?? [];
 
             return Padding(
-              padding: const EdgeInsets.all(16),
+              padding: const EdgeInsets.all(8),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -108,7 +108,7 @@ class _OtherUsersPageState extends State<OtherUsersPage> {
                             emptyButton: false,
                             editing: false,
                             toMe: false,
-                            fromMe: true,
+                            fromMe: false,
                             taskStatus: TaskStatus.all,
                           ),
                   ),
@@ -137,9 +137,9 @@ class _OtherUsersPageState extends State<OtherUsersPage> {
                         onTap: () {
                           setState(() {
                             _accepted = !_accepted;
-                            showAccepted == 'only accepted tasks'
-                                ? showAccepted = 'all tasks'
-                                : showAccepted = 'only accepted tasks';
+                            showAccepted == 'all tasks'
+                                ? showAccepted = 'only accepted tasks'
+                                : showAccepted = 'all tasks';
                           });
                         },
                       ),
@@ -211,7 +211,6 @@ class _OtherUsersPageState extends State<OtherUsersPage> {
                     child: TaskHistory(
                       scrollableCondition: false,
                       list: listTodayTasks,
-                      delAble: false,
                       onlyMe: false,
                       editing: false,
                     ),
@@ -243,30 +242,33 @@ class _OtherUsersPageState extends State<OtherUsersPage> {
                 style: TextStyle(fontWeight: FontWeight.w800),
               ),
             ),
-            body: StreamBuilder<List<ToDoDailyTasksHistory>>(
-              stream: taskService.taskStream(),
-              builder: (context, snapshot) {
-                if (snapshot.connectionState == ConnectionState.waiting) {
-                  return const Center(child: CircularProgressIndicator());
-                }
+            body: Container(
+              decoration: BoxDecoration(color: Colors.white),
+              child: StreamBuilder<List<ToDoDailyTasksHistory>>(
+                stream: taskService.taskStream(),
+                builder: (context, snapshot) {
+                  if (snapshot.connectionState == ConnectionState.waiting) {
+                    return const Center(child: CircularProgressIndicator());
+                  }
 
-                if (snapshot.hasError) {
-                  return const Center(child: Text("Something went wrong"));
-                }
+                  if (snapshot.hasError) {
+                    return const Center(child: Text("Something went wrong"));
+                  }
 
-                final tasks = snapshot.data ?? [];
+                  final tasks = snapshot.data ?? [];
 
-                return Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: TaskHistory(
-                    scrollableCondition: true,
-                    list: tasks,
-                    delAble: true,
-                    onlyMe: false,
-                    editing: true,
-                  ),
-                );
-              },
+                  return Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: TaskHistory(
+                      scrollableCondition: true,
+                      list: tasks,
+                      delAble: true,
+                      onlyMe: false,
+                      editing: true,
+                    ),
+                  );
+                },
+              ),
             ),
           ),
         );

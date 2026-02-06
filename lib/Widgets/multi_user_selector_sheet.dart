@@ -121,11 +121,14 @@ class _MultiUserSelectorSheetState extends State<MultiUserSelectorSheet> {
             SizedBox(
               width: double.infinity,
               child: ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Colors.deepPurpleAccent,
+                ),
                 onPressed: () {
                   widget.onDone(tempSelected);
                   Navigator.pop(context);
                 },
-                child: const Text("Done"),
+                child: const Text("Done", style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold,color: Colors.white)),
               ),
             ),
           ],

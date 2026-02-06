@@ -1,8 +1,9 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:to_do/Pages/NewHomePage/color_widget_for_card.dart';
+import 'package:to_do/Widgets/color_widget_for_card.dart';
 import 'package:to_do/Widgets/task_countdown.dart';
+import 'package:to_do/Pages/MainPageElements/task_status.dart';
 
 import '../services/database.dart';
 import '../services/list.dart';
@@ -153,193 +154,189 @@ class _cardAlertDialogState extends State<cardAlertDialog> {
 
   @override
   Widget build(BuildContext context) {
-    return AlertDialog(
-      title: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          const Text("Task details"),
-          IconButton(
-            onPressed: () {
-              Navigator.pop(context);
-            },
-            icon: Icon(Icons.close),
+    return Card(
+      elevation: 5,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(30),
+        side: BorderSide(
+          color: colorCardText(
+            widget.value.isCompleted,
+            widget.value.isAccepted,
+            widget.value.isDeclined,
           ),
-        ],
+          width: 4,
+        ),
       ),
-      content: Column(
-        mainAxisSize: MainAxisSize.min,
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Container(
-            decoration: BoxDecoration(
-              border: Border.all(color: Colors.grey),
-              borderRadius: BorderRadius.circular(10),
-              color: Colors.grey[200],
-            ),
-            height: 40,
-
-            child: Center(
-              child: widget.value.uid == FirebaseAuth.instance.currentUser!.uid
-                  ? Text("From: You")
-                  : Text("From: ${widget.value.from}"),
-            ),
-          ),
-          SizedBox(height: 5),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              widget.value.to == FirebaseAuth.instance.currentUser!.displayName
-                  ? Text("To: You")
-                  : Text("To: ${widget.value.to}"),
-              Container(
-                decoration: BoxDecoration(
-                  border: Border.all(color: Colors.grey),
-                  borderRadius: BorderRadius.circular(10),
-                  color: Colors.white,
-                ),
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                  child: widget.value.isCompleted == true
-                      ? Text(
-                          "Task completed",
-                          style: TextStyle(color: Colors.green, fontSize: 10),
-                        )
-                      : widget.value.isAccepted == true
-                      ? Text(
-                          "Task accepted",
-                          style: TextStyle(color: Colors.green, fontSize: 10),
-                        )
-                      : widget.value.isDeclined == true
-                      ? Text(
-                          "Task declined",
-                          style: TextStyle(color: Colors.red, fontSize: 10),
-                        )
-                      : widget.value.isCompleted == true
-                      ? Text(
-                          "Task completed",
-                          style: TextStyle(color: Colors.green, fontSize: 10),
-                        )
-                      : Text(
-                          "Task pending",
-                          style: TextStyle(color: Colors.grey, fontSize: 10),
-                        ),
-                ),
-              ),
-            ],
-          ),
-          SizedBox(height: 5),
-          Text(
-            widget.value.title,
-            style: TextStyle(fontWeight: FontWeight.w800),
-          ),
-          SizedBox(height: 5),
-          Text(widget.value.desc),
-          SizedBox(height: 5),
-          Text(formatTaskDate(widget.value.startDateTime)),
-          SizedBox(height: 5),
-          TaskCountdown(
-            endTime: widget.value.endDateTime,
-            isAccepted: widget.value.isAccepted,
-            isCompleted: widget.value.isCompleted,
-          ),
-        ],
+      color: colorCard(
+        widget.value.isCompleted,
+        widget.value.isAccepted,
+        widget.value.isDeclined,
       ),
-      actions:
-          widget.editing &&
-              widget.value.uid == FirebaseAuth.instance.currentUser!.uid &&
-              widget.value.isCompleted == false
-          ? [
-              Row(
-                children: [
-                  Expanded(
-                    child: ElevatedButton(
-                      onPressed: widget.callback,
-                      child: Text('Edit it'),
-                    ),
-                  ),
-                  SizedBox(width: 5),
-                  Expanded(
-                    child: OutlinedButton(
-                      onPressed: () {},
-                      child: Text('Remind'),
-                    ),
-                  ),
-                ],
-              ),
-            ]
-          : [
-              widget.value.to == FirebaseAuth.instance.currentUser!.displayName
-                  ? Column(
+      margin: EdgeInsets.only(left: 16, right: 16, bottom: 200, top: 50),
+      child: Padding(
+        padding: const EdgeInsets.all(20.0),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            SizedBox(
+              child: SingleChildScrollView(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        widget.value.isAccepted == false &&
-                                widget.value.isCompleted == false
-                            ? Row(
-                                children: [
-                                  Expanded(
-                                    child: ElevatedButton(
-                                      onPressed: () {
-                                        updateStatus(
-                                          widget.value.isCompleted,
-                                          true,
-                                          widget.value.isDeclined,
-                                        );
-                                      },
-                                      style: ElevatedButton.styleFrom(
-                                        backgroundColor: Colors.black,
-                                      ),
-                                      child: Text(
-                                        "Accept",
-                                        style: TextStyle(color: Colors.white),
-                                      ),
-                                    ),
-                                  ),
-                                ],
-                              )
-                            : SizedBox.shrink(),
-                        widget.value.isAccepted == true ||
-                                widget.value.isCompleted == true
-                            ? SizedBox.shrink()
-                            : SizedBox(height: 5),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          children: [
-                            widget.value.isAccepted == false &&
-                                    widget.value.isCompleted == false &&
-                                    widget.value.isDeclined == false
-                                ? Expanded(
-                                    child: ElevatedButton(
-                                      onPressed: () {
-                                        updateStatus(
-                                          widget.value.isCompleted,
-                                          widget.value.isAccepted,
-                                          true,
-                                        );
-                                      },
-                                      child: Text("Decline"),
-                                    ),
-                                  )
-                                : SizedBox.shrink(),
-                            SizedBox(width: 5),
-                            widget.value.isCompleted == false
-                                ? Expanded(
-                                    child: OutlinedButton(
-                                      onPressed: () {
-                                        updateStatus(
-                                          true,
-                                          widget.value.isAccepted,
-                                          widget.value.isDeclined,
-                                        );
-                                      },
-                                      child: Text('Completed'),
-                                    ),
-                                  )
-                                : SizedBox.shrink(),
-                          ],
+                        Text(
+                          "Task details",
+                          style: TextStyle(
+                            fontSize: 26,
+                            fontWeight: FontWeight.w800,
+                            color: colorCardText(
+                              widget.value.isCompleted,
+                              widget.value.isAccepted,
+                              widget.value.isDeclined,
+                            ),
+                          ),
+                        ),
+                        IconButton(
+                          onPressed: () {
+                            Navigator.pop(context);
+                          },
+                          icon: Icon(Icons.close),
                         ),
                       ],
-                    )
-                  : SizedBox.shrink(),
-            ],
+                    ),
+                    Container(
+                      decoration: BoxDecoration(
+                        border: Border.all(color: Colors.grey),
+                        borderRadius: BorderRadius.circular(10),
+                        color: colorCardText(
+                          widget.value.isCompleted,
+                          widget.value.isAccepted,
+                          widget.value.isDeclined,
+                        ),
+                      ),
+                      height: 40,
+                      child: Center(
+                        child:
+                            widget.value.uid ==
+                                FirebaseAuth.instance.currentUser!.uid
+                            ? Text(
+                                "From: You",
+                                style: TextStyle(
+                                  fontWeight: FontWeight.w800,
+                                  color: Colors.white,
+                                  fontSize: 20,
+                                ),
+                              )
+                            : Text(
+                                "From: ${widget.value.from}",
+                                style: TextStyle(
+                                  fontWeight: FontWeight.w800,
+                                  color: Colors.white,
+                                  fontSize: 20,
+                                ),
+                              ),
+                      ),
+                    ),
+                    SizedBox(height: 10),
+                    widget.value.to ==
+                            FirebaseAuth.instance.currentUser!.displayName
+                        ? Text(
+                            "To: You",
+                            style: TextStyle(
+                              decoration: TextDecoration.underline,
+                              decorationColor: colorCardText(
+                                widget.value.isCompleted,
+                                widget.value.isAccepted,
+                                widget.value.isDeclined,
+                              ),
+                              decorationThickness: 2,
+                              fontSize: 20,
+                              fontWeight: FontWeight.w800,
+                              color: colorCardText(
+                                widget.value.isCompleted,
+                                widget.value.isAccepted,
+                                widget.value.isDeclined,
+                              ),
+                            ),
+                          )
+                        : Text(
+                            "To: ${widget.value.to}",
+                            style: TextStyle(
+                              decoration: TextDecoration.underline,
+                              decorationColor: colorCardText(
+                                widget.value.isCompleted,
+                                widget.value.isAccepted,
+                                widget.value.isDeclined,
+                              ),
+                              decorationThickness: 2,
+                              fontSize: 20,
+                              fontWeight: FontWeight.w800,
+                              color: colorCardText(
+                                widget.value.isCompleted,
+                                widget.value.isAccepted,
+                                widget.value.isDeclined,
+                              ),
+                            ),
+                          ),
+                    SizedBox(height: 5),
+                    Text(
+                      widget.value.title,
+                      style: TextStyle(
+                        fontWeight: FontWeight.w800,
+                        fontSize: 18,
+                        color: colorCardText(
+                          widget.value.isCompleted,
+                          widget.value.isAccepted,
+                          widget.value.isDeclined,
+                        ),
+                      ),
+                    ),
+                    SizedBox(height: 5),
+                    SizedBox(
+                      height:
+                          widget.value.isAccepted == true &&
+                              widget.value.isCompleted == false
+                          ? 220
+                          : widget.value.isCompleted == true
+                          ? 280
+                          : 160,
+                      child: SingleChildScrollView(
+                        child: Text(
+                          widget.value.desc,
+                          style: TextStyle(
+                            fontSize: 16,
+                            color: colorCardText(
+                              widget.value.isCompleted,
+                              widget.value.isAccepted,
+                              widget.value.isDeclined,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+            Column(
+              children: [
+                Text(formatTaskDate(widget.value.startDateTime)),
+                SizedBox(height: 5),
+                TaskCountdown(
+                  endTime: widget.value.endDateTime,
+                  isAccepted: widget.value.isAccepted,
+                  isCompleted: widget.value.isCompleted,
+                ),
+                SizedBox(height: 10),
+                taskStatusButtons(widget, updateStatus),
+              ],
+            ),
+          ],
+        ),
+      ),
     );
   }
 
@@ -372,4 +369,44 @@ class _cardAlertDialogState extends State<cardAlertDialog> {
       ),
     );
   }
+}
+
+Widget taskStatusButtons(widget, updateStatus) {
+  return widget.editing &&
+          widget.value.uid == FirebaseAuth.instance.currentUser!.uid &&
+          widget.value.isCompleted == false
+      ? Row(
+          children: [
+            Expanded(
+              child: ElevatedButton(
+                onPressed: widget.callback,
+                child: Text('Edit it'),
+              ),
+            ),
+            SizedBox(width: 5),
+            Expanded(
+              child: OutlinedButton(onPressed: () {}, child: Text('Remind')),
+            ),
+          ],
+        )
+      : SizedBox(
+          child:
+              widget.value.to == FirebaseAuth.instance.currentUser!.displayName
+              ? Column(
+                  children: [
+                    acceptedButton(widget, updateStatus),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: [
+                        declinedButton(widget, updateStatus),
+                        widget.value.isDeclined == true
+                            ? SizedBox.shrink()
+                            : SizedBox(width: 10),
+                        completedButton(widget, updateStatus),
+                      ],
+                    ),
+                  ],
+                )
+              : SizedBox.shrink(),
+        );
 }
