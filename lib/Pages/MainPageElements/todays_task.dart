@@ -91,7 +91,6 @@ class _ListingState extends State<Listing> {
 
   bool shouldShowTask(ToDoDailyTasksHistory task) {
     final currentUser = FirebaseAuth.instance.currentUser!.displayName;
-
     final isToMe = task.to == currentUser;
     final isFromMe = task.from == currentUser;
     final noDirectionSelected = !widget.toMe && !widget.fromMe;

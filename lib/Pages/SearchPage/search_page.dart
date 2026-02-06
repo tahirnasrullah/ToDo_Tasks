@@ -45,15 +45,11 @@ class _SearchPageState extends State<SearchPage> {
       body: Container(
         color: Colors.white,
         child: Padding(
-          padding: const EdgeInsets.all(16.0),
+          padding: const EdgeInsets.all(8.0),
           child: Column(
             children: [
               SearchField(
                 searchController: searchController,
-                onTap: () {
-                  setState(() {});
-                  FocusScope.of(context).unfocus();
-                },
               ),
               SizedBox(height: 10),
               FilterUsers(
@@ -109,7 +105,6 @@ class _SearchPageState extends State<SearchPage> {
 
                     return TaskHistory(
                       list: filteredTasks,
-                      delAble: false,
                       onlyMe: false,
                       editing: true,
                       scrollableCondition: true,

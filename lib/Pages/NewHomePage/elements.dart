@@ -60,9 +60,8 @@ class _GreegingsState extends State<Greegings> {
 
 class SearchField extends StatefulWidget {
   final TextEditingController searchController;
-  final Function()? onTap;
 
-  const SearchField({super.key, required this.searchController, this.onTap});
+  const SearchField({super.key, required this.searchController,});
 
   @override
   State<SearchField> createState() => _SearchFieldState();
@@ -71,56 +70,33 @@ class SearchField extends StatefulWidget {
 class _SearchFieldState extends State<SearchField> {
   @override
   Widget build(BuildContext context) {
-    return TextField(
-      onChanged: (value) {},
-      controller: widget.searchController,
-      cursorColor: Colors.grey,
-      style: const TextStyle(color: Colors.black, fontSize: 20),
-      decoration: InputDecoration(
-        suffix: SizedBox(
-          width: 120,
-          height: 30,
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.end,
-            crossAxisAlignment: CrossAxisAlignment.center,
+    return SizedBox(
+      height: 60,
+      child: TextField(
+        controller: widget.searchController,
+        cursorColor: Colors.grey,
+        style: const TextStyle(color: Colors.black, fontSize: 20),
+        decoration: InputDecoration(
+          suffix: IconButton(
+            onPressed: () {
+              widget.searchController.clear();
+            },
+            icon: Icon(Icons.close, color: Colors.grey, size: 20),
+          ),
+          fillColor: Colors.grey.shade200,
+          filled: true,
+          alignLabelWithHint: true,
+          hint: const Row(
             children: [
-              SizedBox(
-                child: IconButton(
-                  onPressed: () {
-                    widget.searchController.clear();
-                  },
-                  icon: Icon(Icons.close, color: Colors.grey, size: 20),
-                ),
-              ),
-
-              SizedBox(width: 5),
-              SizedBox(
-                width: 60,
-                height: 30,
-                child: ElevatedButton(
-                  onPressed: widget.onTap,
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.deepPurpleAccent.shade700,
-                  ),
-                  child: Center(child: Icon(Icons.search, color: Colors.white)),
-                ),
-              ),
+              Icon(Icons.search, color: Colors.grey),
+              Text("Search", style: TextStyle(color: Colors.grey)),
             ],
           ),
-        ),
-        fillColor: Colors.grey.shade200,
-        filled: true,
-        alignLabelWithHint: true,
-        hint: const Row(
-          children: [
-            Icon(Icons.search, color: Colors.grey),
-            Text("Search", style: TextStyle(color: Colors.grey)),
-          ],
-        ),
-        hintStyle: const TextStyle(color: Colors.grey),
-        border: OutlineInputBorder(
-          borderSide: BorderSide.none,
-          borderRadius: BorderRadius.circular(20),
+          hintStyle: const TextStyle(color: Colors.grey),
+          border: OutlineInputBorder(
+            borderSide: BorderSide.none,
+            borderRadius: BorderRadius.circular(20),
+          ),
         ),
       ),
     );

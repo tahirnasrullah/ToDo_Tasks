@@ -265,120 +265,137 @@ class _EditTaskCardState extends State<EditTaskCard> {
     return BackdropFilter(
       filter: ImageFilter.blur(sigmaX: 5, sigmaY: 5),
       child: SingleChildScrollView(
-        child: AlertDialog(
-          title: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              const Text("Edit Task"),
-              IconButton(
-                onPressed: () {
-                  Navigator.pop(context);
-                },
-                icon: Icon(Icons.close),
+        child: Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: Card(
+            color: Colors.white,
+            elevation: 5,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(20),
+            ),
+            child: Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: Column(
+                children: [
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      const Text("Edit Task"),
+                      IconButton(
+                        onPressed: () {
+                          Navigator.pop(context);
+                        },
+                        icon: Icon(Icons.close),
+                      ),
+                    ],
+                  ),
+                  Form(
+                    key: formKey,
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Container(
+                          height: 50,
+                          width: double.infinity,
+                          decoration: BoxDecoration(
+                            border: Border.all(color: Colors.black),
+                            borderRadius: BorderRadius.circular(20),
+                            color: Colors.white,
+                          ),
+                          child: Center(child: Text(widget.task.to)),
+                        ),
+
+                        const SizedBox(height: 12),
+
+                        /// DATE & TIME
+                        Row(
+                          children: [
+                            Expanded(
+                              child: InkWell(
+                                onTap: pickStartDateTime,
+                                child: InputDecorator(
+                                  decoration: InputDecoration(
+                                    labelText: "Start Date & Time",
+                                    border: OutlineInputBorder(
+                                      borderRadius: BorderRadius.circular(20),
+                                    ),
+                                  ),
+                                  child: Text(formatDate(startDateTime!)),
+                                ),
+                              ),
+                            ),
+                            const SizedBox(width: 10),
+                            Expanded(
+                              child: InkWell(
+                                onTap: pickEndDateTime,
+                                child: InputDecorator(
+                                  decoration: InputDecoration(
+                                    labelText: "End Date & Time",
+                                    border: OutlineInputBorder(
+                                      borderRadius: BorderRadius.circular(20),
+                                    ),
+                                  ),
+                                  child: Text(formatDate(endDateTime!)),
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+
+                        const SizedBox(height: 12),
+
+                        /// TITLE
+                        Text_Field_Form(
+                          controller: titleController,
+                          labelText: "Title",
+                          errorText: "Required",
+                        ),
+
+                        const SizedBox(height: 10),
+
+                        /// DESCRIPTION
+                        Text_Field_Form(
+                          controller: descriptionController,
+                          labelText: "Description",
+                          errorText: "Required",
+                          maxLines: 4,
+                        ),
+                      ],
+                    ),
+                  ),
+                  const SizedBox(height: 10),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: [
+                      Expanded(
+                        child: OutlinedButton(
+                          onPressed: confirmDelete,
+                          child: const Text("Delete",style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold,color: Colors.red),),
+                        ),
+                      ),
+
+                      SizedBox(width: 5),
+                      Expanded(
+                        child: ElevatedButton(
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: Colors.deepPurpleAccent.shade700,
+                          ),
+                          onPressed: _isSaving ? null : updateTask,
+                          child: _isSaving
+                              ? const SizedBox(
+                                  height: 20,
+                                  width: 20,
+                                  child: CircularProgressIndicator(strokeWidth: 2),
+                                )
+                              : const Text("Update",style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold,color: Colors.white),),
+                        ),
+                      ),
+                    ],
+                  ),
+                ],
               ),
-            ],
-          ),
-          content: Form(
-            key: formKey,
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Container(
-                  height: 50,
-                  width: double.infinity,
-                  decoration: BoxDecoration(
-                    border: Border.all(color: Colors.black),
-                    borderRadius: BorderRadius.circular(20),
-                    color: Colors.white,
-                  ),
-                  child: Center(child: Text(widget.task.to)),
-                ),
-
-                const SizedBox(height: 12),
-
-                /// DATE & TIME
-                Row(
-                  children: [
-                    Expanded(
-                      child: InkWell(
-                        onTap: pickStartDateTime,
-                        child: InputDecorator(
-                          decoration: InputDecoration(
-                            labelText: "Start Date & Time",
-                            border: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(20),
-                            ),
-                          ),
-                          child: Text(formatDate(startDateTime!)),
-                        ),
-                      ),
-                    ),
-                    const SizedBox(width: 10),
-                    Expanded(
-                      child: InkWell(
-                        onTap: pickEndDateTime,
-                        child: InputDecorator(
-                          decoration: InputDecoration(
-                            labelText: "End Date & Time",
-                            border: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(20),
-                            ),
-                          ),
-                          child: Text(formatDate(endDateTime!)),
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-
-                const SizedBox(height: 12),
-
-                /// TITLE
-                Text_Field_Form(
-                  controller: titleController,
-                  labelText: "Title",
-                  errorText: "Required",
-                ),
-
-                const SizedBox(height: 10),
-
-                /// DESCRIPTION
-                Text_Field_Form(
-                  controller: descriptionController,
-                  labelText: "Description",
-                  errorText: "Required",
-                  maxLines: 4,
-                ),
-              ],
             ),
           ),
-          actions: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.end,
-              children: [
-                Expanded(
-                  child: OutlinedButton(
-                    onPressed: confirmDelete,
-                    child: const Text("Delete"),
-                  ),
-                ),
-
-                SizedBox(width: 5),
-                Expanded(
-                  child: ElevatedButton(
-                    onPressed: _isSaving ? null : updateTask,
-                    child: _isSaving
-                        ? const SizedBox(
-                            height: 20,
-                            width: 20,
-                            child: CircularProgressIndicator(strokeWidth: 2),
-                          )
-                        : const Text("Update"),
-                  ),
-                ),
-              ],
-            ),
-          ],
         ),
       ),
     );
@@ -464,8 +481,7 @@ class _EditTaskCardState extends State<EditTaskCard> {
       );
 
       await taskService.updateTask(updatedTask, context);
-      if (mounted)
-        Navigator.pop(context);
+      if (mounted) Navigator.pop(context);
       Navigator.pop(context);
     } catch (e) {
       showError("Update failed");
@@ -479,14 +495,17 @@ class _EditTaskCardState extends State<EditTaskCard> {
     showDialog(
       context: context,
       builder: (_) => AlertDialog(
-        title: const Text("Delete Task"),
+        backgroundColor: Colors.white,
+        title: const Text("Delete Task",style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold,color: Colors.red),),
         content: const Text("Are you sure you want to delete this task?"),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(context),
-            child: const Text("Cancel"),
+            child: const Text("Cancel",style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold,color: Colors.grey),),
           ),
-          ElevatedButton(
+          OutlinedButton(
+            style: ElevatedButton.styleFrom(
+            ),
             onPressed: () async {
               await taskService.delnote(widget.task, context);
               if (mounted) {
@@ -494,7 +513,7 @@ class _EditTaskCardState extends State<EditTaskCard> {
                 Navigator.pop(context);
               }
             },
-            child: const Text("Delete"),
+            child: const Text("Delete",style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold,color: Colors.red),),
           ),
         ],
       ),

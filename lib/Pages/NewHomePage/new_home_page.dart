@@ -29,7 +29,7 @@ class _NewHomePageState extends State<NewHomePage> {
       body: Container(
         color: Colors.white,
         child: Padding(
-          padding: const EdgeInsets.only(left: 16.0, right: 16.0, bottom: 30),
+          padding: const EdgeInsets.only(left: 8.0, right: 8.0, bottom: 30),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             mainAxisAlignment: MainAxisAlignment.start,
@@ -164,7 +164,6 @@ void showCardDialogTasks(BuildContext context) {
                   editing: true,
                   scrollableCondition: true,
                   list: tasks,
-                  delAble: true,
                   onlyMe: true,
                 ),
               );

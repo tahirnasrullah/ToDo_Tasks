@@ -9,29 +9,36 @@ class SettingPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ListView(
-        shrinkWrap: true,
-        children: [
-          const ListTile(
-            title: Text("Settings", style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),)
-          ),
+    return Scaffold(
+      body: Container(
+        color: Colors.white,
+        height: double.infinity,
+        width: double.infinity,
+        child: ListView(
+            shrinkWrap: true,
+            children: [
+              const ListTile(
+                title: Text("Settings", style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),)
+              ),
 
-          ListTile(
-            leading: const Icon(Icons.logout,color: Colors.red,),
-            title: const Text("Logout",style: TextStyle(color: Colors.red,fontSize: 18,fontWeight: FontWeight.bold),),
-            onTap: () async {
-              FirebaseAuth.instance.signOut();
-              Navigator.pushReplacement(
-                context,
-                MaterialPageRoute(builder: (context) => LoginPage()),
-              );
-              var prefs = await SharedPreferences.getInstance();
-              prefs.setBool('isLoggedIn', false);
-            },
-          ),
+              ListTile(
+                leading: const Icon(Icons.logout,color: Colors.red,),
+                title: const Text("Logout",style: TextStyle(color: Colors.red,fontSize: 18,fontWeight: FontWeight.bold),),
+                onTap: () async {
+                  FirebaseAuth.instance.signOut();
+                  Navigator.pushReplacement(
+                    context,
+                    MaterialPageRoute(builder: (context) => LoginPage()),
+                  );
+                  var prefs = await SharedPreferences.getInstance();
+                  prefs.setBool('isLoggedIn', false);
+                },
+              ),
 
 
-        ]
+            ]
+        ),
+      ),
     );
   }
 }

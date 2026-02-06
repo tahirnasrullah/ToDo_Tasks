@@ -87,27 +87,29 @@ class _HistoryUiState extends State<HistoryUi> {
         ),
         child: ListTile(
           onTap: () {_showCardDialog(context, widget.task);},
-          leading: widget.task.uid == FirebaseAuth.instance.currentUser!.uid
-              ? Text(
-                  "You",
-                  style: TextStyle(fontWeight: FontWeight.w800, fontSize: 15),
-                )
-              : Text(
-                  widget.task.from,
-                  style: TextStyle(fontWeight: FontWeight.w800, fontSize: 15),
-                ),
-          title: Row(
+          leading: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
+              widget.task.uid == FirebaseAuth.instance.currentUser!.uid
+                  ? Text(
+                      "You",
+                      style: TextStyle(fontWeight: FontWeight.w800, fontSize: 15),
+                    )
+                  : Text(
+                      widget.task.from,
+                      style: TextStyle(fontWeight: FontWeight.w800, fontSize: 15),
+                    ),
               widget.task.to == FirebaseAuth.instance.currentUser!.displayName
-                  ? Text("To: You")
-                  : Text("To: ${widget.task.to}"),
-              SizedBox(width: 10),
-              Text("Title: ${widget.task.title}"),
+                  ? Text("To: You", style: TextStyle(fontWeight: FontWeight.w800, fontSize: 15))
+                  : Text("To: ${widget.task.to}", style: TextStyle(fontWeight: FontWeight.w800, fontSize: 15)),
             ],
           ),
+          title: Text("Title: ${widget.task.title}", maxLines: 1, overflow: TextOverflow.ellipsis,style: TextStyle(fontWeight: FontWeight.w800, fontSize: 18),),
           trailing:
               widget.delAble &&
                   widget.task.uid == FirebaseAuth.instance.currentUser!.uid
+                  && widget.task.isCompleted == true
               ? IconButton(
                   onPressed: () async {
                     await widget.taskService.delnote(widget.task, context);
