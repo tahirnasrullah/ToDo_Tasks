@@ -29,7 +29,17 @@ class _SignupPageState extends State<SignupPage> {
       body: SingleChildScrollView(
         child: Column(
           children: [
-            Container(height: 150, color: Colors.grey),
+            Container(
+              height: 150,
+              decoration: BoxDecoration(
+                gradient: LinearGradient(
+                  colors: [
+                    Colors.deepPurpleAccent.shade200,
+                    Colors.deepPurpleAccent.shade700,
+                  ],
+                ),
+              ),
+            ),
             Center(
               child: SizedBox(
                 width: 300,
@@ -70,17 +80,18 @@ class _SignupPageState extends State<SignupPage> {
                       SizedBox(height: 10),
                       ElevatedButton(
                         style: ElevatedButton.styleFrom(
-                          backgroundColor: Colors.grey,
+                          backgroundColor: Colors.deepPurpleAccent.shade700,
                         ),
                         onPressed: () {
                           if (_formKey.currentState!.validate()) {
                             setState(() {
-                              email = emailController.text;
-                              username = userNameController.text;
-                              password = passwordController.text;
+                              email = emailController.text.trim();
+                              username = userNameController.text.trim();
+                              password = passwordController.text.trim();
                             });
+
+                            registration(); // CALL HERE ONLY
                           }
-                          registration();
                         },
                         child: Padding(
                           padding: const EdgeInsets.symmetric(horizontal: 20),
@@ -112,39 +123,39 @@ class _SignupPageState extends State<SignupPage> {
     );
   }
 
-
-
-
   Future<void> registration() async {
-    if (password != "" && userNameController != "" && emailController != "") {
+    if (passwordController.text.isNotEmpty &&
+        userNameController.text.isNotEmpty &&
+        emailController.text.isNotEmpty) {
       try {
-        UserCredential _ = await FirebaseAuth.instance
-            .createUserWithEmailAndPassword(email: email, password: password);
+        UserCredential userCredential = await FirebaseAuth.instance
+            .createUserWithEmailAndPassword(
+            email: email, password: password);
+
+        User? user = userCredential.user; // STORE USER
+
+        if (user != null) {
+          await user.updateDisplayName(username);
+
+          Map<String, dynamic> userInfoMap = {
+            "email": email,
+            "username": username,
+            "uid": user.uid,
+          };
+
+          await userDb.addUser(user.uid, userInfoMap);
+        }
+
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: Text(
-              'Registered Successfully',
-              style: TextStyle(fontSize: 16),
-            ),behavior: SnackBarBehavior.floating,
+            content: Text('Registered Successfully'),
+            behavior: SnackBarBehavior.floating,
           ),
         );
+
         Navigator.pushReplacement(
           context,
           MaterialPageRoute(builder: (context) => BottomNav()),
-        );
-        await FirebaseAuth.instance.currentUser!.updateDisplayName(username);
-
-        Map<String, dynamic> userInfoMap = {
-          "email": email,
-          "username": username,
-          "imgUrl":
-              "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRnVvDx9Kezwg0D77WzdAUzjOEHf1WEqQ3-fA&s",
-          "uid": FirebaseAuth.instance.currentUser!.uid,
-        };
-
-        await userDb.addUser(
-          FirebaseAuth.instance.currentUser!.uid,
-          userInfoMap,
         );
       } on FirebaseAuthException catch (e) {
         String message = "";
@@ -153,10 +164,11 @@ class _SignupPageState extends State<SignupPage> {
         } else if (e.code == "email-already-in-use") {
           message = "E-mail already in use";
         }
+
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
             backgroundColor: Colors.orange,
-            content: Text(message, style: TextStyle(fontSize: 12)),
+            content: Text(message),
             behavior: SnackBarBehavior.floating,
           ),
         );

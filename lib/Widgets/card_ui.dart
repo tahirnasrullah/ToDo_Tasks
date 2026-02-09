@@ -103,7 +103,7 @@ class _CardUiState extends State<CardUi> {
                   SizedBox(height: 5),
                   Text(
                     widget.value.desc,
-                    maxLines: 2,
+                    maxLines: 1,
                     overflow: TextOverflow.ellipsis,
                     style: TextStyle(
                       color: colorCardText(
@@ -301,7 +301,7 @@ class _cardAlertDialogState extends State<cardAlertDialog> {
                               widget.value.isCompleted == false
                           ? 220
                           : widget.value.isCompleted == true
-                          ? 280
+                          ? 240
                           : 160,
                       child: SingleChildScrollView(
                         child: Text(
