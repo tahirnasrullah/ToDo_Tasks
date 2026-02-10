@@ -19,7 +19,8 @@ class _LoginPageState extends State<LoginPage> {
   TextEditingController passwordController = TextEditingController();
   final _formKey = GlobalKey<FormState>();
 
-  String email = "", password = "";
+  String email = "",
+      password = "";
 
   @override
   void initState() {
@@ -36,7 +37,17 @@ class _LoginPageState extends State<LoginPage> {
       body: SingleChildScrollView(
         child: Column(
           children: [
-            Container(height: 150, color: Colors.grey),
+            Container(
+              height: 150,
+              decoration: BoxDecoration(
+                gradient: LinearGradient(
+                  colors: [
+                  Colors.deepPurpleAccent.shade200,
+                  Colors.deepPurpleAccent.shade700,
+                  ],
+                ),
+              ),
+            ),
             Center(
               child: SizedBox(
                 width: 300,
@@ -70,7 +81,7 @@ class _LoginPageState extends State<LoginPage> {
                       SizedBox(height: 10),
                       ElevatedButton(
                         style: ElevatedButton.styleFrom(
-                          backgroundColor: Colors.grey,
+                          backgroundColor: Colors.deepPurpleAccent.shade700,
                         ),
                         onPressed: () {
                           if (_formKey.currentState!.validate()) {
@@ -184,5 +195,4 @@ class _LoginPageState extends State<LoginPage> {
       });
     }
   }
-
 }

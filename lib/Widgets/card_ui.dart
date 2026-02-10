@@ -103,7 +103,7 @@ class _CardUiState extends State<CardUi> {
                   SizedBox(height: 5),
                   Text(
                     widget.value.desc,
-                    maxLines: 2,
+                    maxLines: 1,
                     overflow: TextOverflow.ellipsis,
                     style: TextStyle(
                       color: colorCardText(
@@ -179,8 +179,8 @@ class _cardAlertDialogState extends State<cardAlertDialog> {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            SizedBox(
-              child: SingleChildScrollView(
+            Expanded(
+              child: SizedBox(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
@@ -209,7 +209,6 @@ class _cardAlertDialogState extends State<cardAlertDialog> {
                     ),
                     Container(
                       decoration: BoxDecoration(
-                        border: Border.all(color: Colors.grey),
                         borderRadius: BorderRadius.circular(10),
                         color: colorCardText(
                           widget.value.isCompleted,
@@ -241,77 +240,95 @@ class _cardAlertDialogState extends State<cardAlertDialog> {
                       ),
                     ),
                     SizedBox(height: 10),
-                    widget.value.to ==
-                            FirebaseAuth.instance.currentUser!.displayName
-                        ? Text(
-                            "To: You",
-                            style: TextStyle(
-                              decoration: TextDecoration.underline,
-                              decorationColor: colorCardText(
-                                widget.value.isCompleted,
-                                widget.value.isAccepted,
-                                widget.value.isDeclined,
-                              ),
-                              decorationThickness: 2,
-                              fontSize: 20,
-                              fontWeight: FontWeight.w800,
-                              color: colorCardText(
-                                widget.value.isCompleted,
-                                widget.value.isAccepted,
-                                widget.value.isDeclined,
-                              ),
-                            ),
-                          )
-                        : Text(
-                            "To: ${widget.value.to}",
-                            style: TextStyle(
-                              decoration: TextDecoration.underline,
-                              decorationColor: colorCardText(
-                                widget.value.isCompleted,
-                                widget.value.isAccepted,
-                                widget.value.isDeclined,
-                              ),
-                              decorationThickness: 2,
-                              fontSize: 20,
-                              fontWeight: FontWeight.w800,
-                              color: colorCardText(
-                                widget.value.isCompleted,
-                                widget.value.isAccepted,
-                                widget.value.isDeclined,
-                              ),
-                            ),
-                          ),
-                    SizedBox(height: 5),
-                    Text(
-                      widget.value.title,
-                      style: TextStyle(
-                        fontWeight: FontWeight.w800,
-                        fontSize: 18,
-                        color: colorCardText(
-                          widget.value.isCompleted,
-                          widget.value.isAccepted,
-                          widget.value.isDeclined,
+                    Expanded(
+                      child: Container(
+                        width: double.infinity,
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(10),
+                          color: Colors.white,
                         ),
-                      ),
-                    ),
-                    SizedBox(height: 5),
-                    SizedBox(
-                      height:
-                          widget.value.isAccepted == true &&
-                              widget.value.isCompleted == false
-                          ? 220
-                          : widget.value.isCompleted == true
-                          ? 280
-                          : 160,
-                      child: SingleChildScrollView(
-                        child: Text(
-                          widget.value.desc,
-                          style: TextStyle(
-                            fontSize: 16,
-                            color: colorCardText(
-                              widget.value.isCompleted,
-                              widget.value.isAccepted,
-                              widget.value.isDeclined,
+                        child: Expanded(
+                          child: Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                widget.value.to ==
+                                        FirebaseAuth
+                                            .instance
+                                            .currentUser!
+                                            .displayName
+                                    ? Text(
+                                        "To: You",
+                                        style: TextStyle(
+                                          decoration: TextDecoration.underline,
+                                          decorationColor: colorCardText(
+                                            widget.value.isCompleted,
+                                            widget.value.isAccepted,
+                                            widget.value.isDeclined,
+                                          ),
+                                          decorationThickness: 2,
+                                          fontSize: 20,
+                                          fontWeight: FontWeight.w800,
+                                          color: colorCardText(
+                                            widget.value.isCompleted,
+                                            widget.value.isAccepted,
+                                            widget.value.isDeclined,
+                                          ),
+                                        ),
+                                      )
+                                    : Text(
+                                        "To: ${widget.value.to}",
+                                        style: TextStyle(
+                                          decoration: TextDecoration.underline,
+                                          decorationColor: colorCardText(
+                                            widget.value.isCompleted,
+                                            widget.value.isAccepted,
+                                            widget.value.isDeclined,
+                                          ),
+                                          decorationThickness: 2,
+                                          fontSize: 20,
+                                          fontWeight: FontWeight.w800,
+                                          color: colorCardText(
+                                            widget.value.isCompleted,
+                                            widget.value.isAccepted,
+                                            widget.value.isDeclined,
+                                          ),
+                                        ),
+                                      ),
+                                SizedBox(height: 5),
+                                Text(
+                                  widget.value.title,
+                                  style: TextStyle(
+                                    fontWeight: FontWeight.w800,
+                                    fontSize: 18,
+                                    color: colorCardText(
+                                      widget.value.isCompleted,
+                                      widget.value.isAccepted,
+                                      widget.value.isDeclined,
+                                    ),
+                                  ),
+                                ),
+                                SizedBox(height: 5),
+                                Expanded(
+                                  child: SizedBox(
+                                    child: SingleChildScrollView(
+                                      child: Text(
+                                        widget.value.desc,
+                                        style: TextStyle(
+                                          fontSize: 16,
+                                          color: colorCardText(
+                                            widget.value.isCompleted,
+                                            widget.value.isAccepted,
+                                            widget.value.isDeclined,
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ],
                             ),
                           ),
                         ),
@@ -321,18 +338,36 @@ class _cardAlertDialogState extends State<cardAlertDialog> {
                 ),
               ),
             ),
-            Column(
-              children: [
-                Text(formatTaskDate(widget.value.startDateTime)),
-                SizedBox(height: 5),
-                TaskCountdown(
-                  endTime: widget.value.endDateTime,
-                  isAccepted: widget.value.isAccepted,
-                  isCompleted: widget.value.isCompleted,
-                ),
-                SizedBox(height: 10),
-                taskStatusButtons(widget, updateStatus),
-              ],
+            SizedBox(height: 5),
+            SizedBox(
+              child: Column(
+                children: [
+                  Container(
+                    width: double.infinity,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(10),
+                      color: Colors.white,
+                    ),
+                    child: Column(
+                      children: [
+                        Text(formatTaskDate(widget.value.startDateTime)),
+                        SizedBox(height: 5),
+                        TaskCountdown(
+                          endTime: widget.value.endDateTime,
+                          isAccepted: widget.value.isAccepted,
+                          isCompleted: widget.value.isCompleted,
+                        ),
+                      ],
+                    ),
+                  ),
+                  widget.value.uid !=
+                          FirebaseAuth.instance.currentUser!.uid
+                      ? SizedBox.shrink()
+                      : SizedBox(height: 10),
+
+                  taskStatusButtons(widget, updateStatus),
+                ],
+              ),
             ),
           ],
         ),
@@ -379,13 +414,38 @@ Widget taskStatusButtons(widget, updateStatus) {
           children: [
             Expanded(
               child: ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Colors.white,
+                  foregroundColor: colorCardText(
+                    widget.value.isCompleted,
+                    widget.value.isAccepted,
+                    widget.value.isDeclined,
+                  ),
+                ),
                 onPressed: widget.callback,
                 child: Text('Edit it'),
               ),
             ),
             SizedBox(width: 5),
             Expanded(
-              child: OutlinedButton(onPressed: () {}, child: Text('Remind')),
+              child: OutlinedButton(
+                style: OutlinedButton.styleFrom(
+                  side: BorderSide(
+                    color: colorCardText(
+                      widget.value.isCompleted,
+                      widget.value.isAccepted,
+                      widget.value.isDeclined,
+                    ),
+                  ),
+                  foregroundColor: colorCardText(
+                    widget.value.isCompleted,
+                    widget.value.isAccepted,
+                    widget.value.isDeclined,
+                  ),
+                ),
+                onPressed: () {},
+                child: Text('Remind'),
+              ),
             ),
           ],
         )
@@ -401,7 +461,7 @@ Widget taskStatusButtons(widget, updateStatus) {
                         declinedButton(widget, updateStatus),
                         widget.value.isDeclined == true
                             ? SizedBox.shrink()
-                            : SizedBox(width: 10),
+                            : SizedBox(width: 5),
                         completedButton(widget, updateStatus),
                       ],
                     ),

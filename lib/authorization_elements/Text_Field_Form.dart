@@ -53,7 +53,6 @@ class Text_Field_Form extends StatefulWidget {
 class _Text_Field_Form_State extends State<Text_Field_Form> {
   bool _ishidden = true;
 
-
   @override
   Widget build(BuildContext context) {
     return TextFormField(
@@ -69,9 +68,12 @@ class _Text_Field_Form_State extends State<Text_Field_Form> {
       decoration: InputDecoration(
         fillColor: Colors.white,
         alignLabelWithHint: true,
+        contentPadding: EdgeInsets.symmetric(horizontal: 10, vertical: 10),
         suffixIcon: widget.isPassword
             ? IconButton(
-                icon: Icon(_ishidden ? Icons.visibility_off : Icons.visibility),
+                icon: Icon(
+                  _ishidden ? Icons.visibility_off : Icons.visibility,
+                ),
                 iconSize: 15,
                 onPressed: () {
                   setState(() {
@@ -84,6 +86,7 @@ class _Text_Field_Form_State extends State<Text_Field_Form> {
         label: Text(
           widget.labelText,
           style: TextStyle(color: widget.labelColor),
+          textAlign: TextAlign.center,
         ),
       ),
       validator: (value) {

@@ -308,38 +308,41 @@ class _EditTaskCardState extends State<EditTaskCard> {
                         const SizedBox(height: 12),
 
                         /// DATE & TIME
-                        Row(
-                          children: [
-                            Expanded(
-                              child: InkWell(
-                                onTap: pickStartDateTime,
-                                child: InputDecorator(
-                                  decoration: InputDecoration(
-                                    labelText: "Start Date & Time",
-                                    border: OutlineInputBorder(
-                                      borderRadius: BorderRadius.circular(20),
+                        SizedBox(
+                          height: 50,
+                          child: Row(
+                            children: [
+                              Expanded(
+                                child: InkWell(
+                                  onTap: pickStartDateTime,
+                                  child: InputDecorator(
+                                    decoration: InputDecoration(
+                                      labelText: "Start Date & Time",
+                                      border: OutlineInputBorder(
+                                        borderRadius: BorderRadius.circular(20),
+                                      ),
                                     ),
+                                    child: Text(formatDate(startDateTime!)),
                                   ),
-                                  child: Text(formatDate(startDateTime!)),
                                 ),
                               ),
-                            ),
-                            const SizedBox(width: 10),
-                            Expanded(
-                              child: InkWell(
-                                onTap: pickEndDateTime,
-                                child: InputDecorator(
-                                  decoration: InputDecoration(
-                                    labelText: "End Date & Time",
-                                    border: OutlineInputBorder(
-                                      borderRadius: BorderRadius.circular(20),
+                              const SizedBox(width: 10),
+                              Expanded(
+                                child: InkWell(
+                                  onTap: pickEndDateTime,
+                                  child: InputDecorator(
+                                    decoration: InputDecoration(
+                                      labelText: "End Date & Time",
+                                      border: OutlineInputBorder(
+                                        borderRadius: BorderRadius.circular(20),
+                                      ),
                                     ),
+                                    child: Text(formatDate(endDateTime!)),
                                   ),
-                                  child: Text(formatDate(endDateTime!)),
                                 ),
                               ),
-                            ),
-                          ],
+                            ],
+                          ),
                         ),
 
                         const SizedBox(height: 12),

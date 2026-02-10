@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:to_do/services/auth.dart';
 
-Widget Or_login_with(Subtitle, ink_well_text, to_page, context) {
+Widget Or_login_with(Subtitle, inkWellText, toPage, context) {
   return Column(
     children: [
       Text(
@@ -20,12 +20,12 @@ Widget Or_login_with(Subtitle, ink_well_text, to_page, context) {
             onPressed: () {
               AuthMethords().signInWithGoogle(context);
             },
-            icon: FaIcon(FontAwesomeIcons.google, size: 60),
+            icon: FaIcon(FontAwesomeIcons.google, size: 60,color: Colors.black),
           ),
           SizedBox(width: 40),
           IconButton(
             onPressed: () {},
-            icon: FaIcon(FontAwesomeIcons.apple, size: 60),
+            icon: FaIcon(FontAwesomeIcons.apple, size: 60,color: Colors.black,),
           ),
         ],
       ),
@@ -38,17 +38,18 @@ Widget Or_login_with(Subtitle, ink_well_text, to_page, context) {
           ),
           InkWell(
             child: Text(
-              ink_well_text,
+              inkWellText,
               style: TextStyle(
                 fontWeight: FontWeight.bold,
                 fontSize: 16,
+                color: Colors.deepPurpleAccent.shade700,
               ),
             ),
             onTap: () {
               Navigator.pushReplacement(
                 context,
                 MaterialPageRoute(
-                  builder: (context) => to_page,
+                  builder: (context) => toPage,
                 ),
               );
             },

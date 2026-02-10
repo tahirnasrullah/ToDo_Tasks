@@ -230,22 +230,24 @@ class _AddCardState extends State<AddCard> {
 
                         final users = snapshot.data!;
 
-                        return InkWell(
-                          onTap: () => openUserSelector(users),
-                          child: InputDecorator(
-                            decoration: InputDecoration(
-                              labelText: "Assign To",
-                              border: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(20),
+                        return SizedBox(
+                          child: InkWell(
+                            onTap: () => openUserSelector(users),
+                            child: InputDecorator(
+                              decoration: InputDecoration(
+                                labelText: "Assign To",
+                                border: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(20),
+                                ),
+                                errorText: selectedAssignees.isEmpty
+                                    ? "Select at least one user"
+                                    : null,
                               ),
-                              errorText: selectedAssignees.isEmpty
-                                  ? "Select at least one user"
-                                  : null,
-                            ),
-                            child: Text(
-                              selectedAssignees.isEmpty
-                                  ? "Tap to select users"
-                                  : selectedAssignees.join(", "),
+                              child: Text(
+                                selectedAssignees.isEmpty
+                                    ? "Tap to select users"
+                                    : selectedAssignees.join(", "),
+                              ),
                             ),
                           ),
                         );
@@ -256,6 +258,7 @@ class _AddCardState extends State<AddCard> {
 
                     /// DATE & TIME PICKERS
                     SizedBox(
+                      height: 50,
                       child: Row(
                         children: [
                           Expanded(
