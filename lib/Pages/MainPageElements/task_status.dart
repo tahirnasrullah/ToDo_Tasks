@@ -37,29 +37,33 @@ Widget acceptedButton(widget, updateStatus) {
           ? Row(
         children: [
           Expanded(
-            child: ElevatedButton(
-              onPressed: () {
-                updateStatus(
-                  widget.value.isCompleted,
-                  true,
-                  widget.value.isDeclined,
-                );
-              },
-              style: ElevatedButton.styleFrom(
-                backgroundColor: Colors.black,
-              ),
-              child: Text(
-                "Accept",
-                style: TextStyle(color: Colors.white, fontSize: 14, fontWeight: FontWeight.bold),
+            child: SizedBox(
+              height: 40,
+              child: ElevatedButton(
+                onPressed: () {
+                  updateStatus(
+                    widget.value.isCompleted,
+                    true,
+                    widget.value.isDeclined,
+                  );
+                },
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Colors.black,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(5),
+                  ),
+                ),
+                child: Text(
+                  "Accept",
+                  style: TextStyle(color: Colors.white, fontSize: 14, fontWeight: FontWeight.bold),
+                ),
               ),
             ),
           ),
         ],
       )
           : SizedBox.shrink(),
-      widget.value.isAccepted == true || widget.value.isCompleted == true
-          ? SizedBox.shrink()
-          : SizedBox(height: 5),
+
     ],
   );
 }
@@ -68,6 +72,11 @@ Widget declinedButton(widget, updateStatus) {
   return widget.value.isCompleted == false && widget.value.isDeclined == false
       ? Expanded(
     child: ElevatedButton(
+      style: ElevatedButton.styleFrom(
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(5),
+        ),
+      ),
       onPressed: () {
         updateStatus(
           widget.value.isCompleted,
@@ -85,7 +94,11 @@ Widget completedButton(widget, updateStatus) {
   return widget.value.isCompleted == false
       ? Expanded(
     child: ElevatedButton(
+
       style: ElevatedButton.styleFrom(
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(5),
+        ),
         backgroundColor: colorCardText(widget.value.isCompleted, widget.value.isAccepted, widget.value.isDeclined),
       ),
       onPressed: () {
