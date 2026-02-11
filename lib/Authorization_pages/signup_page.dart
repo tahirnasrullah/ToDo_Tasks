@@ -1,8 +1,8 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:to_do/authorization_elements/Or_login_with.dart';
-import '../authorization_elements/Text_Field_Form.dart';
-import '../Pages/bottomNavigation.dart';
+import 'package:to_do/authorization_elements/or_login_with.dart';
+import '../authorization_elements/text_field_form.dart';
+import '../Pages/bottom_navigation.dart';
 import '../services/database.dart';
 import 'login_page.dart';
 
@@ -58,20 +58,20 @@ class _SignupPageState extends State<SignupPage> {
                         ),
                       ),
                       SizedBox(height: 15),
-                      Text_Field_Form(
+                      TextFieldForm(
                         controller: userNameController,
                         errorText: 'Require Your Username',
                         labelText: 'Username',
                       ),
 
                       SizedBox(height: 10),
-                      Text_Field_Form(
+                      TextFieldForm(
                         controller: emailController,
                         errorText: 'Require Your E-mail',
                         labelText: 'E-mail',
                       ),
                       SizedBox(height: 10),
-                      Text_Field_Form(
+                      TextFieldForm(
                         controller: passwordController,
                         errorText: 'Require Your Password',
                         labelText: 'Password',
@@ -105,11 +105,10 @@ class _SignupPageState extends State<SignupPage> {
                         ),
                       ),
                       SizedBox(height: 60),
-                      Or_login_with(
-                        "Already have an account? ",
-                        "Login",
-                        LoginPage(),
-                        context,
+                      OrLoginWith(
+                        subtitle:"Already have an account? ",
+                        inkWellText:"Login",
+                        toPage:LoginPage(),
                       ),
                     ],
                   ),

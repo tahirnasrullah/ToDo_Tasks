@@ -3,7 +3,7 @@
 // import 'package:firebase_auth/firebase_auth.dart';
 // import 'package:flutter/material.dart';
 // import 'package:to_do/services/list.dart';
-// import 'package:to_do/authorization_elements/Text_Field_Form.dart';
+// import 'package:to_do/authorization_elements/text_field_form.dart';
 //
 // import '../../services/database.dart';
 //
@@ -221,7 +221,7 @@ import 'dart:ui';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:to_do/services/list.dart';
-import 'package:to_do/authorization_elements/Text_Field_Form.dart';
+import 'package:to_do/authorization_elements/text_field_form.dart';
 
 import '../../Widgets/multi_user_selector_sheet.dart';
 import '../../services/database.dart';
@@ -268,7 +268,7 @@ class _EditTaskCardState extends State<EditTaskCard> {
         child: Padding(
           padding: const EdgeInsets.all(16.0),
           child: Card(
-            color: Colors.white,
+            // color: Colors.white,
             elevation: 5,
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(20),
@@ -298,11 +298,11 @@ class _EditTaskCardState extends State<EditTaskCard> {
                           height: 50,
                           width: double.infinity,
                           decoration: BoxDecoration(
-                            border: Border.all(color: Colors.black),
+                            border: Border.all(color:Theme.of(context).brightness == Brightness.dark? Colors.grey:Colors.black),
                             borderRadius: BorderRadius.circular(20),
-                            color: Colors.white,
+                            color: Colors.transparent,
                           ),
-                          child: Center(child: Text(widget.task.to)),
+                          child: Center(child: Text("To: ${widget.task.to}")),
                         ),
 
                         const SizedBox(height: 12),
@@ -348,7 +348,7 @@ class _EditTaskCardState extends State<EditTaskCard> {
                         const SizedBox(height: 12),
 
                         /// TITLE
-                        Text_Field_Form(
+                        TextFieldForm(
                           controller: titleController,
                           labelText: "Title",
                           errorText: "Required",
@@ -357,7 +357,7 @@ class _EditTaskCardState extends State<EditTaskCard> {
                         const SizedBox(height: 10),
 
                         /// DESCRIPTION
-                        Text_Field_Form(
+                        TextFieldForm(
                           controller: descriptionController,
                           labelText: "Description",
                           errorText: "Required",

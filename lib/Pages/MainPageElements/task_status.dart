@@ -2,7 +2,7 @@
 import 'package:flutter/material.dart';
 import 'package:to_do/Widgets/color_widget_for_card.dart';
 
-Widget task_status(widget){
+Widget taskStatus(widget){
   return widget.value.isCompleted == true
       ? Text(
     "Task completed",
@@ -39,7 +39,7 @@ Widget acceptedButton(widget, updateStatus) {
           Expanded(
             child: SizedBox(
               height: 40,
-              child: ElevatedButton(
+              child: OutlinedButton(
                 onPressed: () {
                   updateStatus(
                     widget.value.isCompleted,
@@ -50,7 +50,7 @@ Widget acceptedButton(widget, updateStatus) {
                 style: ElevatedButton.styleFrom(
                   backgroundColor: Colors.black,
                   shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(5),
+                    borderRadius: BorderRadius.circular(10),
                   ),
                 ),
                 child: Text(
@@ -73,8 +73,9 @@ Widget declinedButton(widget, updateStatus) {
       ? Expanded(
     child: ElevatedButton(
       style: ElevatedButton.styleFrom(
+        backgroundColor: Colors.white,
         shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(5),
+          borderRadius: BorderRadius.circular(10),
         ),
       ),
       onPressed: () {
@@ -97,7 +98,7 @@ Widget completedButton(widget, updateStatus) {
 
       style: ElevatedButton.styleFrom(
         shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(5),
+          borderRadius: BorderRadius.circular(10),
         ),
         backgroundColor: colorCardText(widget.value.isCompleted, widget.value.isAccepted, widget.value.isDeclined),
       ),

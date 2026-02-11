@@ -38,11 +38,15 @@ class _CardUiState extends State<CardUi> {
 
             borderRadius: BorderRadius.circular(20),
           ),
-          color: colorCard(
-            widget.value.isCompleted,
-            widget.value.isAccepted,
-            widget.value.isDeclined,
-          ),
+          color:
+          Theme.of(context).brightness == Brightness.dark
+              ? Colors.transparent
+              :
+          colorCard(
+                  widget.value.isCompleted,
+                  widget.value.isAccepted,
+                  widget.value.isDeclined,
+                ),
 
           child: SizedBox(
             width: 220,
@@ -129,12 +133,12 @@ class _CardUiState extends State<CardUi> {
   }
 }
 
-class cardAlertDialog extends StatefulWidget {
+class CardAlertDialog extends StatefulWidget {
   final dynamic value;
   final bool editing;
   final VoidCallback? callback;
 
-  const cardAlertDialog({
+  const CardAlertDialog({
     super.key,
     required this.value,
     required this.editing,
@@ -142,10 +146,10 @@ class cardAlertDialog extends StatefulWidget {
   });
 
   @override
-  State<cardAlertDialog> createState() => _cardAlertDialogState();
+  State<CardAlertDialog> createState() => _CardAlertDialogState();
 }
 
-class _cardAlertDialogState extends State<cardAlertDialog> {
+class _CardAlertDialogState extends State<CardAlertDialog> {
   TaskService taskService = TaskService();
 
   String formatTaskDate(DateTime date) {
@@ -167,7 +171,9 @@ class _cardAlertDialogState extends State<cardAlertDialog> {
           width: 4,
         ),
       ),
-      color: colorCard(
+      color: Theme.of(context).brightness == Brightness.dark
+          ? Colors.black54
+          : colorCard(
         widget.value.isCompleted,
         widget.value.isAccepted,
         widget.value.isDeclined,
@@ -245,7 +251,7 @@ class _cardAlertDialogState extends State<cardAlertDialog> {
                         width: double.infinity,
                         decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(10),
-                          color: Colors.white,
+                          color: Theme.of(context).brightness == Brightness.dark?Colors.black:Colors.white,
                         ),
                         child: Expanded(
                           child: Padding(
@@ -346,7 +352,7 @@ class _cardAlertDialogState extends State<cardAlertDialog> {
                     width: double.infinity,
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(10),
-                      color: Colors.white,
+                      color: Theme.of(context).brightness == Brightness.dark?Colors.black:Colors.white,
                     ),
                     child: Column(
                       children: [
@@ -360,10 +366,7 @@ class _cardAlertDialogState extends State<cardAlertDialog> {
                       ],
                     ),
                   ),
-                  widget.value.uid !=
-                          FirebaseAuth.instance.currentUser!.uid
-                      ? SizedBox.shrink()
-                      : SizedBox(height: 10),
+                  SizedBox(height: 10),
 
                   taskStatusButtons(widget, updateStatus),
                 ],
@@ -395,6 +398,7 @@ class _cardAlertDialogState extends State<cardAlertDialog> {
     );
 
     await taskService.updateTask(updatedTask, context);
+    if (!mounted) return;
     Navigator.pop(context);
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
@@ -406,7 +410,10 @@ class _cardAlertDialogState extends State<cardAlertDialog> {
   }
 }
 
-Widget taskStatusButtons(widget, updateStatus) {
+Widget taskStatusButtons(
+  CardAlertDialog widget,
+  Future<void> Function(bool, bool, bool) updateStatus,
+) {
   return widget.editing &&
           widget.value.uid == FirebaseAuth.instance.currentUser!.uid &&
           widget.value.isCompleted == false

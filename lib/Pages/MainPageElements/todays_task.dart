@@ -2,7 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:to_do/Widgets/card_ui.dart';
 import 'package:to_do/services/list.dart';
-import 'editedOrDeleted_card.dart';
+import 'edited_or_deleted_card.dart';
 
 class TodayTask extends StatefulWidget {
   final List<ToDoDailyTasksHistory> list;
@@ -142,7 +142,7 @@ class _ListingState extends State<Listing> {
     showDialog(
       context: context,
       builder: (value) {
-        return cardAlertDialog(
+        return CardAlertDialog(
           value: widget.value,
           editing: widget.editing,
           callback: () {

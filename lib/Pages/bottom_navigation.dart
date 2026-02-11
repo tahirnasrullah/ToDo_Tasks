@@ -18,7 +18,6 @@ class _BottomNavState extends State<BottomNav> {
   int _currentIndex = 0;
 
   void changeTab(int index) {
-    print("Changing Tab");
     setState(() {
       _currentIndex = index;
     });
@@ -27,17 +26,16 @@ class _BottomNavState extends State<BottomNav> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
       appBar: AppBar(
         titleSpacing: 0,
+        backgroundColor: Theme.of(context).scaffoldBackgroundColor,
         automaticallyImplyLeading: false,
-        backgroundColor: Colors.white,
-        shadowColor: Colors.white,
+        shadowColor: Colors.transparent,
         title: Padding(
           padding: const EdgeInsets.only(left: 10),
-          child: const Text(
+          child: Text(
             'Todo DailyTasks',
-            style: TextStyle(fontWeight: FontWeight.w800),
+            style: TextStyle(fontWeight: FontWeight.w800, fontSize: 20,color: Theme.of(context).textTheme.titleLarge?.color,),
           ),
         ),
         actions: [
@@ -62,7 +60,7 @@ class _BottomNavState extends State<BottomNav> {
       resizeToAvoidBottomInset: false,
 
       floatingActionButton: FloatingActionButton(
-        backgroundColor: Colors.deepPurpleAccent.shade400,
+        backgroundColor: Colors.deepPurpleAccent.shade700,
         elevation: 10,
         tooltip: "Add a new task",
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(70)),
@@ -88,9 +86,9 @@ class _BottomNavState extends State<BottomNav> {
       bottomNavigationBar: BottomNavigationBar(
         type: BottomNavigationBarType.fixed,
         useLegacyColorScheme: false,
-        backgroundColor: Colors.white,
+        backgroundColor: Theme.of(context).bottomNavigationBarTheme.backgroundColor,
         selectedItemColor: Colors.deepPurpleAccent.shade700,
-        unselectedItemColor: Colors.black,
+        unselectedItemColor: Theme.of(context).bottomNavigationBarTheme.unselectedItemColor,
         iconSize: 20,
         currentIndex: _currentIndex,
         elevation: 20,

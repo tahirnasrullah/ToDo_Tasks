@@ -4,7 +4,7 @@ import 'package:to_do/Widgets/color_widget_for_card.dart';
 import 'package:to_do/services/list.dart';
 import '../../Widgets/card_ui.dart';
 import '../../services/database.dart';
-import 'editedOrDeleted_card.dart';
+import 'edited_or_deleted_card.dart';
 
 class TaskHistory extends StatefulWidget {
   final List<ToDoDailyTasksHistory> list;
@@ -94,18 +94,18 @@ class _HistoryUiState extends State<HistoryUi> {
               widget.task.uid == FirebaseAuth.instance.currentUser!.uid
                   ? Text(
                       "You",
-                      style: TextStyle(fontWeight: FontWeight.w800, fontSize: 15),
+                      style: TextStyle(fontWeight: FontWeight.w800, fontSize: 15,color: Theme.of(context).textTheme.titleLarge?.color),
                     )
                   : Text(
                       widget.task.from,
-                      style: TextStyle(fontWeight: FontWeight.w800, fontSize: 15),
+                      style: TextStyle(fontWeight: FontWeight.w800, fontSize: 15,color: Theme.of(context).textTheme.titleLarge?.color),
                     ),
               widget.task.to == FirebaseAuth.instance.currentUser!.displayName
-                  ? Text("To: You", style: TextStyle(fontWeight: FontWeight.w800, fontSize: 15))
-                  : Text("To: ${widget.task.to}", style: TextStyle(fontWeight: FontWeight.w800, fontSize: 15)),
+                  ? Text("To: You", style: TextStyle(fontWeight: FontWeight.w800, fontSize: 15,color: Theme.of(context).textTheme.titleLarge?.color))
+                  : Text("To: ${widget.task.to}", style: TextStyle(fontWeight: FontWeight.w800, fontSize: 15,color: Theme.of(context).textTheme.titleLarge?.color)),
             ],
           ),
-          title: Text("Title: ${widget.task.title}", maxLines: 1, overflow: TextOverflow.ellipsis,style: TextStyle(fontWeight: FontWeight.w800, fontSize: 18),),
+          title: Text("Title: ${widget.task.title}", maxLines: 1, overflow: TextOverflow.ellipsis,style: TextStyle(fontWeight: FontWeight.w800, fontSize: 18, color: Theme.of(context).textTheme.titleLarge?.color),),
           trailing:
               widget.delAble &&
                   widget.task.uid == FirebaseAuth.instance.currentUser!.uid
@@ -119,10 +119,10 @@ class _HistoryUiState extends State<HistoryUi> {
               : null,
           subtitle: Text(
             widget.task.desc,
+            style: TextStyle(color: Theme.of(context).textTheme.titleLarge?.color,),
             maxLines: 1,
             overflow: TextOverflow.ellipsis,
           ),
-          tileColor: Colors.white,
         ),
       ),
     );
@@ -133,7 +133,7 @@ class _HistoryUiState extends State<HistoryUi> {
     showDialog(
       context: context,
       builder: (value) {
-        return cardAlertDialog(
+        return CardAlertDialog(
           value: widget.task,
           editing: widget.editing,
           callback: () {

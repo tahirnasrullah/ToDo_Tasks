@@ -1,14 +1,14 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
-import 'package:to_do/Pages/bottomNavigation.dart';
+import 'package:to_do/Pages/bottom_navigation.dart';
 import 'package:to_do/services/database.dart';
 
 class AuthMethords {
   final FirebaseAuth auth = FirebaseAuth.instance;
 
   Future<User?>? getCurrentUser() async {
-    return await auth.currentUser;
+    return auth.currentUser;
   }
 
   Future<void> signInWithGoogle(BuildContext context) async {

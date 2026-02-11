@@ -35,9 +35,9 @@ class _GreegingsState extends State<Greegings> {
               text: TextSpan(
                 text: 'You have ',
                 style: TextStyle(
-                  color: Colors.black,
                   fontSize: 30,
                   fontWeight: FontWeight.w800,
+                  color: Theme.of(context).textTheme.titleLarge?.color,
                 ),
                 children: [
                   TextSpan(

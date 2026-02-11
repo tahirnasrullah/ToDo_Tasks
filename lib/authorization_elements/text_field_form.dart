@@ -28,8 +28,8 @@ import 'package:flutter/material.dart';
 //   );
 // }
 
-class Text_Field_Form extends StatefulWidget {
-  const Text_Field_Form({
+class TextFieldForm extends StatefulWidget {
+  const TextFieldForm({
     super.key,
     required this.controller,
     required this.labelText,
@@ -40,7 +40,7 @@ class Text_Field_Form extends StatefulWidget {
   });
 
   @override
-  State<Text_Field_Form> createState() => _Text_Field_Form_State();
+  State<TextFieldForm> createState() => _TextFieldFormState();
 
   final TextEditingController controller;
   final String labelText;
@@ -50,13 +50,13 @@ class Text_Field_Form extends StatefulWidget {
   final int maxLines;
 }
 
-class _Text_Field_Form_State extends State<Text_Field_Form> {
+class _TextFieldFormState extends State<TextFieldForm> {
   bool _ishidden = true;
 
   @override
   Widget build(BuildContext context) {
     return TextFormField(
-      style: TextStyle(color: widget.labelColor),
+      // style: TextStyle(color: widget.labelColor),
       obscureText: widget.isPassword ? _ishidden : false,
       enableSuggestions: !widget.isPassword,
       maxLines: widget.maxLines,
@@ -66,7 +66,6 @@ class _Text_Field_Form_State extends State<Text_Field_Form> {
       keyboardType: TextInputType.emailAddress,
 
       decoration: InputDecoration(
-        fillColor: Colors.white,
         alignLabelWithHint: true,
         contentPadding: EdgeInsets.symmetric(horizontal: 10, vertical: 10),
         suffixIcon: widget.isPassword
@@ -85,7 +84,7 @@ class _Text_Field_Form_State extends State<Text_Field_Form> {
         border: OutlineInputBorder(borderRadius: BorderRadius.circular(20)),
         label: Text(
           widget.labelText,
-          style: TextStyle(color: widget.labelColor),
+          // style: TextStyle(color: widget.labelColor),
           textAlign: TextAlign.center,
         ),
       ),
