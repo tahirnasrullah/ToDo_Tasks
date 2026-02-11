@@ -25,105 +25,102 @@ class _NewHomePageState extends State<NewHomePage> {
     final TaskService taskService = TaskService();
 
     return Scaffold(
+      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       resizeToAvoidBottomInset: false,
-      body: Container(
-        color: Colors.white,
-        child: Padding(
-          padding: const EdgeInsets.only(left: 8.0, right: 8.0, bottom: 30),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            mainAxisAlignment: MainAxisAlignment.start,
-            children: [
-              SizedBox(height: 30),
-              Greegings(),
-              SizedBox(height: 30),
-              InkWell(
-                child: IgnorePointer(
-                  child: Hero(
-                    tag: 'search',
-                    child: SearchField(searchController: searchController,),
-                  ),
+      body: Padding(
+        padding: const EdgeInsets.only(left: 8.0, right: 8.0, bottom: 30),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisAlignment: MainAxisAlignment.start,
+          children: [
+            SizedBox(height: 30),
+            Greegings(),
+            SizedBox(height: 30),
+            InkWell(
+              child: IgnorePointer(
+                child: Hero(
+                  tag: 'search',
+                  child: SearchField(searchController: searchController,),
                 ),
-                onTap: () {
-                  print("Tapped Search");
-                  widget.onTabChange(1);
-                },
               ),
-              SizedBox(height: 30),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  taskStatusButton(Colors.red, "All Tasks", () {
-                    setState(() {
-                      taskStatus = TaskStatus.all;
-                    });
-                  }, icon: FontAwesomeIcons.fileLines),
-                  taskStatusButton(Colors.deepPurpleAccent, "New", () {
-                    setState(() {
-                      taskStatus = TaskStatus.pending;
-                    });
-                  }, icon: FontAwesomeIcons.fileLines),
-                  taskStatusButton(Colors.amber, "In-Progress", () {
-                    setState(() {
-                      taskStatus = TaskStatus.accepted;
-                    });
-                  }, icon: FontAwesomeIcons.hourglass),
-                  taskStatusButton(Colors.green, "Completed", () {
-                    setState(() {
-                      taskStatus = TaskStatus.completed;
-                    });
-                  }, icon: FontAwesomeIcons.check),
-                ],
-              ),
-              SizedBox(height: 30),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  Text(
-                    "Today's Tasks",
-                    style: TextStyle(fontSize: 22, fontWeight: FontWeight.w800),
+              onTap: () {
+                widget.onTabChange(1);
+              },
+            ),
+            SizedBox(height: 30),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                taskStatusButton(Colors.red, "All Tasks", () {
+                  setState(() {
+                    taskStatus = TaskStatus.all;
+                  });
+                }, icon: FontAwesomeIcons.fileLines),
+                taskStatusButton(Colors.deepPurpleAccent, "New", () {
+                  setState(() {
+                    taskStatus = TaskStatus.pending;
+                  });
+                }, icon: FontAwesomeIcons.fileLines),
+                taskStatusButton(Colors.amber, "In-Progress", () {
+                  setState(() {
+                    taskStatus = TaskStatus.accepted;
+                  });
+                }, icon: FontAwesomeIcons.hourglass),
+                taskStatusButton(Colors.green, "Completed", () {
+                  setState(() {
+                    taskStatus = TaskStatus.completed;
+                  });
+                }, icon: FontAwesomeIcons.check),
+              ],
+            ),
+            SizedBox(height: 30),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                Text(
+                  "Today's Tasks",
+                  style: TextStyle(fontSize: 22, fontWeight: FontWeight.w800,color: Theme.of(context).textTheme.titleLarge?.color),
+                ),
+                InkWell(
+                  child: Text(
+                    "See All",
+                    style: TextStyle(color: Colors.grey, fontSize: 14),
                   ),
-                  InkWell(
-                    child: Text(
-                      "See All",
-                      style: TextStyle(color: Colors.grey, fontSize: 14),
-                    ),
-                    onTap: () {
-                      showCardDialogTasks(context);
-                    },
+                  onTap: () {
+                    showCardDialogTasks(context);
+                  },
+                ),
+              ],
+            ),
+            SizedBox(height: 30),
+            StreamBuilder<List<ToDoDailyTasksHistory>>(
+              stream: taskService.taskStream(),
+              builder: (context, snapshot) {
+                if (snapshot.connectionState == ConnectionState.waiting) {
+                  return const Center(child: CircularProgressIndicator());
+                }
+
+                if (snapshot.hasError) {
+                  return const Center(child: Text("Something went wrong"));
+                }
+
+                final listTodayTasks = snapshot.data ?? [];
+                return Expanded(
+                  child: TodayTask(
+                    list: listTodayTasks,
+                    emptyText: "Not Yet",
+                    toMe: true,
+                    fromMe: false,
+                    taskStatus: taskStatus,
+                    emptyButton: false,
+                    editing: true,
                   ),
-                ],
-              ),
-              SizedBox(height: 30),
-              StreamBuilder<List<ToDoDailyTasksHistory>>(
-                stream: taskService.taskStream(),
-                builder: (context, snapshot) {
-                  if (snapshot.connectionState == ConnectionState.waiting) {
-                    return const Center(child: CircularProgressIndicator());
-                  }
-
-                  if (snapshot.hasError) {
-                    return const Center(child: Text("Something went wrong"));
-                  }
-
-                  final listTodayTasks = snapshot.data ?? [];
-                  return Expanded(
-                    child: TodayTask(
-                      list: listTodayTasks,
-                      emptyText: "Not Yet",
-                      toMe: true,
-                      fromMe: false,
-                      taskStatus: taskStatus,
-                      emptyButton: false,
-                      editing: true,
-                    ),
-                  );
-                },
-              ),
-            ],
-          ),
+                );
+              },
+            ),
+          ],
         ),
       ),
     );
@@ -138,13 +135,14 @@ void showCardDialogTasks(BuildContext context) {
       return Scaffold(
         resizeToAvoidBottomInset: false,
         appBar: AppBar(
-          title: const Text(
+          leading:IconButton(onPressed: (){Navigator.pop(context);}, icon: Icon(Icons.arrow_back,color: Theme.of(context).textTheme.titleLarge?.color,)),
+          title:  Text(
             "All Tasks",
-            style: TextStyle(fontWeight: FontWeight.w800),
+            style: TextStyle(fontWeight: FontWeight.w800,color: Theme.of(context).textTheme.titleLarge?.color,),
           ),
         ),
         body: Container(
-          decoration: BoxDecoration(color: Colors.white),
+          decoration: BoxDecoration(color: Theme.of(context).scaffoldBackgroundColor),
           child: StreamBuilder<List<ToDoDailyTasksHistory>>(
             stream: taskService.taskStream(),
             builder: (context, snapshot) {

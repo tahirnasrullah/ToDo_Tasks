@@ -27,199 +27,197 @@ class _OtherUsersPageState extends State<OtherUsersPage> {
     // TODO: implement initState
     super.initState();
     notificationServices.requestNotificationPermission();
-    notificationServices.getToken().then((value) {
-      print('device token');
-      print(value);
-    });
+    notificationServices.getToken().then((value) {});
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       resizeToAvoidBottomInset: false,
+      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
 
-      body: Container(
-        decoration: BoxDecoration(color: Colors.white),
-        child: StreamBuilder<List<ToDoDailyTasksHistory>>(
-          stream: taskService.taskStream(),
-          builder: (context, snapshot) {
-            if (snapshot.connectionState == ConnectionState.waiting) {
-              return const Center(child: CircularProgressIndicator());
-            }
+      body: StreamBuilder<List<ToDoDailyTasksHistory>>(
+        stream: taskService.taskStream(),
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return const Center(child: CircularProgressIndicator());
+          }
 
-            if (snapshot.hasError) {
-              return const Center(child: Text("Something went wrong"));
-            }
+          if (snapshot.hasError) {
+            return const Center(child: Text("Something went wrong"));
+          }
 
-            final listTodayTasks = snapshot.data ?? [];
+          final listTodayTasks = snapshot.data ?? [];
 
-            return Padding(
-              padding: const EdgeInsets.all(8),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      const Text(
-                        "Current Tasks",
-                        style: TextStyle(
-                          fontSize: 20,
-                          fontWeight: FontWeight.bold,
-                        ),
+          return Padding(
+            padding: const EdgeInsets.all(8),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(
+                      "Current Tasks",
+                      style: TextStyle(
+                        fontSize: 20,
+                        fontWeight: FontWeight.bold,
+                        color: Theme.of(context).textTheme.titleLarge?.color,
                       ),
-                      InkWell(
-                        child: Text(
-                          showAssignTo,
-                          style: TextStyle(
-                            fontSize: 12,
-                            color: Colors.blue,
-                            fontStyle: FontStyle.italic,
-                          ),
-                        ),
-                        onTap: () {
-                          setState(() {
-                            _assigningToYou = !_assigningToYou;
-                            showAssignTo == 'to only you'
-                                ? showAssignTo = 'to others'
-                                : showAssignTo = 'to only you';
-                          });
-                        },
-                      ),
-                    ],
-                  ),
-                  const SizedBox(height: 10),
-
-                  Expanded(
-                    flex: 2,
-                    child: _assigningToYou == true
-                        ? TodayTask(
-                            list: listTodayTasks,
-                            emptyText: "Not Yet",
-                            emptyButton: false,
-                            editing: false,
-                            toMe: true,
-                            fromMe: false,
-                            taskStatus: TaskStatus.all,
-                          )
-                        : TodayTask(
-                            list: listTodayTasks,
-                            emptyText: "No tasks today",
-                            emptyButton: false,
-                            editing: false,
-                            toMe: false,
-                            fromMe: false,
-                            taskStatus: TaskStatus.all,
-                          ),
-                  ),
-
-                  const SizedBox(height: 20),
-
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      const Text(
-                        "From You to Others",
-                        style: TextStyle(
-                          fontSize: 20,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                      InkWell(
-                        child: Text(
-                          showAccepted,
-                          style: TextStyle(
-                            fontSize: 12,
-                            color: Colors.blue,
-                            fontStyle: FontStyle.italic,
-                          ),
-                        ),
-                        onTap: () {
-                          setState(() {
-                            _accepted = !_accepted;
-                            showAccepted == 'all tasks'
-                                ? showAccepted = 'only accepted tasks'
-                                : showAccepted = 'all tasks';
-                          });
-                        },
-                      ),
-                    ],
-                  ),
-                  const SizedBox(height: 10),
-
-                  Expanded(
-                    flex: 2,
-                    child: _accepted == true
-                        ? TodayTask(
-                            list: listTodayTasks,
-                            emptyText: "Assign now",
-                            emptyButton: true,
-                            editing: true,
-                            toMe: false,
-                            fromMe: true,
-                            taskStatus: TaskStatus.all,
-                            callbackActionEmptyButton: () {
-                              _showCardDialog(context);
-                            },
-                          )
-                        : TodayTask(
-                            list: listTodayTasks,
-                            emptyText: "Assign now",
-                            emptyButton: true,
-                            editing: true,
-                            toMe: false,
-                            fromMe: true,
-                            taskStatus: TaskStatus.accepted,
-                            callbackActionEmptyButton: () {
-                              _showCardDialog(context);
-                            },
-                          ),
-                  ),
-
-                  const SizedBox(height: 20),
-
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      const Text(
-                        "Tasks History",
-                        style: TextStyle(
-                          fontSize: 20,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                      InkWell(
-                        onTap: () {
-                          showCardDialogTasks(context);
-                        },
-                        child: const Text(
-                          'Show all...',
-                          style: TextStyle(
-                            fontSize: 12,
-                            color: Colors.blue,
-                            fontStyle: FontStyle.italic,
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-
-                  const SizedBox(height: 10),
-
-                  Expanded(
-                    flex: 1,
-                    child: TaskHistory(
-                      scrollableCondition: false,
-                      list: listTodayTasks,
-                      onlyMe: false,
-                      editing: false,
                     ),
+                    InkWell(
+                      child: Text(
+                        showAssignTo,
+                        style: TextStyle(
+                          fontSize: 12,
+                          color: Colors.blue,
+                          fontStyle: FontStyle.italic,
+                        ),
+                      ),
+                      onTap: () {
+                        setState(() {
+                          _assigningToYou = !_assigningToYou;
+                          showAssignTo == 'to only you'
+                              ? showAssignTo = 'to others'
+                              : showAssignTo = 'to only you';
+                        });
+                      },
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 10),
+
+                Expanded(
+                  flex: 2,
+                  child: _assigningToYou == true
+                      ? TodayTask(
+                          list: listTodayTasks,
+                          emptyText: "Not Yet",
+                          emptyButton: false,
+                          editing: false,
+                          toMe: true,
+                          fromMe: false,
+                          taskStatus: TaskStatus.all,
+                        )
+                      : TodayTask(
+                          list: listTodayTasks,
+                          emptyText: "No tasks today",
+                          emptyButton: false,
+                          editing: false,
+                          toMe: false,
+                          fromMe: false,
+                          taskStatus: TaskStatus.all,
+                        ),
+                ),
+
+                const SizedBox(height: 20),
+
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(
+                      "From You to Others",
+                      style: TextStyle(
+                        fontSize: 20,
+                        fontWeight: FontWeight.bold,
+                        color: Theme.of(context).textTheme.titleLarge?.color,
+                      ),
+                    ),
+                    InkWell(
+                      child: Text(
+                        showAccepted,
+                        style: TextStyle(
+                          fontSize: 12,
+                          color: Colors.blue,
+                          fontStyle: FontStyle.italic,
+                        ),
+                      ),
+                      onTap: () {
+                        setState(() {
+                          _accepted = !_accepted;
+                          showAccepted == 'all tasks'
+                              ? showAccepted = 'only accepted tasks'
+                              : showAccepted = 'all tasks';
+                        });
+                      },
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 10),
+
+                Expanded(
+                  flex: 2,
+                  child: _accepted == true
+                      ? TodayTask(
+                          list: listTodayTasks,
+                          emptyText: "Assign now",
+                          emptyButton: true,
+                          editing: true,
+                          toMe: false,
+                          fromMe: true,
+                          taskStatus: TaskStatus.all,
+                          callbackActionEmptyButton: () {
+                            _showCardDialog(context);
+                          },
+                        )
+                      : TodayTask(
+                          list: listTodayTasks,
+                          emptyText: "Assign now",
+                          emptyButton: true,
+                          editing: true,
+                          toMe: false,
+                          fromMe: true,
+                          taskStatus: TaskStatus.accepted,
+                          callbackActionEmptyButton: () {
+                            _showCardDialog(context);
+                          },
+                        ),
+                ),
+
+                const SizedBox(height: 20),
+
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(
+                      "Tasks History",
+                      style: TextStyle(
+                        fontSize: 20,
+                        fontWeight: FontWeight.bold,
+                        color: Theme.of(context).textTheme.titleLarge?.color,
+                      ),
+                    ),
+                    InkWell(
+                      onTap: () {
+                        showCardDialogTasks(context);
+                      },
+                      child: const Text(
+                        'Show all...',
+                        style: TextStyle(
+                          fontSize: 12,
+                          color: Colors.blue,
+                          fontStyle: FontStyle.italic,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+
+                const SizedBox(height: 10),
+
+                Expanded(
+                  flex: 1,
+                  child: TaskHistory(
+                    scrollableCondition: false,
+                    list: listTodayTasks,
+                    onlyMe: false,
+                    editing: false,
                   ),
-                ],
-              ),
-            );
-          },
-        ),
+                ),
+              ],
+            ),
+          );
+        },
       ),
     );
   }
@@ -236,39 +234,49 @@ class _OtherUsersPageState extends State<OtherUsersPage> {
           decoration: const BoxDecoration(color: Colors.white),
           child: Scaffold(
             resizeToAvoidBottomInset: false,
+            backgroundColor: Theme.of(context).scaffoldBackgroundColor,
             appBar: AppBar(
-              title: const Text(
-                "Tasks History",
-                style: TextStyle(fontWeight: FontWeight.w800),
-              ),
-            ),
-            body: Container(
-              decoration: BoxDecoration(color: Colors.white),
-              child: StreamBuilder<List<ToDoDailyTasksHistory>>(
-                stream: taskService.taskStream(),
-                builder: (context, snapshot) {
-                  if (snapshot.connectionState == ConnectionState.waiting) {
-                    return const Center(child: CircularProgressIndicator());
-                  }
-
-                  if (snapshot.hasError) {
-                    return const Center(child: Text("Something went wrong"));
-                  }
-
-                  final tasks = snapshot.data ?? [];
-
-                  return Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: TaskHistory(
-                      scrollableCondition: true,
-                      list: tasks,
-                      delAble: true,
-                      onlyMe: false,
-                      editing: true,
-                    ),
-                  );
+              leading: IconButton(
+                icon: Icon(
+                  Icons.arrow_back,
+                  color: Theme.of(context).textTheme.titleLarge?.color,
+                ),
+                onPressed: () {
+                  Navigator.pop(context);
                 },
               ),
+              title: Text(
+                "Tasks History",
+                style: TextStyle(
+                  fontWeight: FontWeight.w800,
+                  color: Theme.of(context).textTheme.titleLarge?.color,
+                ),
+              ),
+            ),
+            body: StreamBuilder<List<ToDoDailyTasksHistory>>(
+              stream: taskService.taskStream(),
+              builder: (context, snapshot) {
+                if (snapshot.connectionState == ConnectionState.waiting) {
+                  return const Center(child: CircularProgressIndicator());
+                }
+
+                if (snapshot.hasError) {
+                  return const Center(child: Text("Something went wrong"));
+                }
+
+                final tasks = snapshot.data ?? [];
+
+                return Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: TaskHistory(
+                    scrollableCondition: true,
+                    list: tasks,
+                    delAble: true,
+                    onlyMe: false,
+                    editing: true,
+                  ),
+                );
+              },
             ),
           ),
         );

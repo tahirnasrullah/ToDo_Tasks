@@ -10,34 +10,48 @@ class SettingPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Container(
-        color: Colors.white,
-        height: double.infinity,
-        width: double.infinity,
-        child: ListView(
-            shrinkWrap: true,
-            children: [
-              const ListTile(
-                title: Text("Settings", style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),)
+      body: ListView(
+        shrinkWrap: true,
+        children: [
+          const ListTile(
+            title: Text(
+              "Settings",
+              style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+            ),
+          ),
+          ListTile(
+            leading: Icon(
+              Theme.of(context).brightness == Brightness.dark
+                  ? Icons.dark_mode_outlined
+                  : Icons.light_mode_outlined,
+            ),
+            title: Text(
+              "Switch Theme",
+              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+            ),
+            trailing: Switch(value: false, onChanged: (bool value) {  },),
+          ),
+          ListTile(
+            leading: const Icon(Icons.logout, color: Colors.red),
+            title: const Text(
+              "Logout",
+              style: TextStyle(
+                color: Colors.red,
+                fontSize: 18,
+                fontWeight: FontWeight.bold,
               ),
-
-              ListTile(
-                leading: const Icon(Icons.logout,color: Colors.red,),
-                title: const Text("Logout",style: TextStyle(color: Colors.red,fontSize: 18,fontWeight: FontWeight.bold),),
-                onTap: () async {
-                  FirebaseAuth.instance.signOut();
-                  Navigator.pushReplacement(
-                    context,
-                    MaterialPageRoute(builder: (context) => LoginPage()),
-                  );
-                  var prefs = await SharedPreferences.getInstance();
-                  prefs.setBool('isLoggedIn', false);
-                },
-              ),
-
-
-            ]
-        ),
+            ),
+            onTap: () async {
+              FirebaseAuth.instance.signOut();
+              Navigator.pushReplacement(
+                context,
+                MaterialPageRoute(builder: (context) => LoginPage()),
+              );
+              var prefs = await SharedPreferences.getInstance();
+              prefs.setBool('isLoggedIn', false);
+            },
+          ),
+        ],
       ),
     );
   }

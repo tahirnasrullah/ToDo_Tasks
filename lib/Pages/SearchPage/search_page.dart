@@ -4,7 +4,7 @@ import 'package:to_do/services/list.dart';
 import '../../services/database.dart';
 import '../MainPageElements/task_history.dart';
 import '../NewHomePage/elements.dart';
-import 'filterUsers.dart';
+import 'filter_users.dart';
 
 class SearchPage extends StatefulWidget {
   const SearchPage({super.key});
@@ -42,78 +42,75 @@ class _SearchPageState extends State<SearchPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       resizeToAvoidBottomInset: false,
-      body: Container(
-        color: Colors.white,
-        child: Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: Column(
-            children: [
-              SearchField(
-                searchController: searchController,
-              ),
-              SizedBox(height: 10),
-              FilterUsers(
-                statusText: "From: ",
-                selectedUser: selectedUserFrom,
-                onUserSelected: (user) {
-                  setState(() {
-                    selectedUserFrom = user;
-                  });
-                },
-              ),
-              SizedBox(height: 10),
-              FilterUsers(
-                statusText: "To: ",
-                selectedUser: selectedUserTo,
-                onUserSelected: (user) {
-                  setState(() {
-                    selectedUserTo = user;
-                  });
-                },
-              ),
-              SizedBox(height: 10),
-              Expanded(
-                child: StreamBuilder<List<ToDoDailyTasksHistory>>(
-                  stream: taskService.taskStream(),
-                  builder: (context, snapshot) {
-                    if (snapshot.connectionState == ConnectionState.waiting) {
-                      return const Center(child: CircularProgressIndicator());
-                    }
+      body: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: Column(
+          children: [
+            SearchField(
+              searchController: searchController,
+            ),
+            SizedBox(height: 10),
+            FilterUsers(
+              statusText: "From: ",
+              selectedUser: selectedUserFrom,
+              onUserSelected: (user) {
+                setState(() {
+                  selectedUserFrom = user;
+                });
+              },
+            ),
+            SizedBox(height: 10),
+            FilterUsers(
+              statusText: "To: ",
+              selectedUser: selectedUserTo,
+              onUserSelected: (user) {
+                setState(() {
+                  selectedUserTo = user;
+                });
+              },
+            ),
+            SizedBox(height: 10),
+            Expanded(
+              child: StreamBuilder<List<ToDoDailyTasksHistory>>(
+                stream: taskService.taskStream(),
+                builder: (context, snapshot) {
+                  if (snapshot.connectionState == ConnectionState.waiting) {
+                    return const Center(child: CircularProgressIndicator());
+                  }
 
-                    if (snapshot.hasError) {
-                      return const Center(child: Text("Something went wrong"));
-                    }
+                  if (snapshot.hasError) {
+                    return const Center(child: Text("Something went wrong"));
+                  }
 
-                    final listTodayTasks = snapshot.data ?? [];
-                    final searchText = searchController.text.toLowerCase();
+                  final listTodayTasks = snapshot.data ?? [];
+                  final searchText = searchController.text.toLowerCase();
 
-                    final filteredTasks = listTodayTasks.where((task) {
-                      final matchTitle = task.title.toLowerCase().contains(
-                        searchText,
-                      );
-
-                      final matchUser =
-                          selectedUserFrom == null ||
-                          task.from == selectedUserFrom;
-
-                      final matchTo =
-                          selectedUserTo == null || task.to == selectedUserTo;
-
-                      return matchTitle && matchUser && matchTo;
-
-                    }).toList();
-
-                    return TaskHistory(
-                      list: filteredTasks,
-                      onlyMe: false,
-                      editing: true,
-                      scrollableCondition: true,
+                  final filteredTasks = listTodayTasks.where((task) {
+                    final matchTitle = task.title.toLowerCase().contains(
+                      searchText,
                     );
-                  },
-                ),
+
+                    final matchUser =
+                        selectedUserFrom == null ||
+                        task.from == selectedUserFrom;
+
+                    final matchTo =
+                        selectedUserTo == null || task.to == selectedUserTo;
+
+                    return matchTitle && matchUser && matchTo;
+
+                  }).toList();
+
+                  return TaskHistory(
+                    list: filteredTasks,
+                    onlyMe: false,
+                    editing: true,
+                    scrollableCondition: true,
+                  );
+                },
               ),
-            ],
-          ),
+            ),
+          ],
         ),
       ),
     );

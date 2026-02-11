@@ -1,10 +1,10 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:to_do/Authorization_pages/forget_password-page.dart';
-import 'package:to_do/Pages/bottomNavigation.dart';
-import 'package:to_do/authorization_elements/Or_login_with.dart';
-import '../authorization_elements/Text_Field_Form.dart';
+import 'package:to_do/Authorization_pages/forget_password_page.dart';
+import 'package:to_do/Pages/bottom_navigation.dart';
+import 'package:to_do/authorization_elements/or_login_with.dart';
+import '../authorization_elements/text_field_form.dart';
 import 'package:to_do/Authorization_pages/signup_page.dart';
 
 class LoginPage extends StatefulWidget {
@@ -66,13 +66,13 @@ class _LoginPageState extends State<LoginPage> {
                         ),
                       ),
                       SizedBox(height: 15),
-                      Text_Field_Form(
+                      TextFieldForm(
                         controller: emailController,
                         errorText: 'Require Your E-mail',
                         labelText: 'E-mail',
                       ),
                       SizedBox(height: 10),
-                      Text_Field_Form(
+                      TextFieldForm(
                         controller: passwordController,
                         errorText: 'Require Your Password',
                         labelText: 'Password',
@@ -117,15 +117,13 @@ class _LoginPageState extends State<LoginPage> {
                         },
                         child: Text(
                           'Forget Password?',
-                          style: TextStyle(color: Colors.black),
                         ),
                       ),
                       SizedBox(height: 60),
-                      Or_login_with(
-                        "Don't have an account? ",
-                        "Sign Up",
-                        SignupPage(),
-                        context,
+                      OrLoginWith(
+                        subtitle:"Don't have an account? ",
+                        inkWellText:"Sign Up",
+                        toPage:SignupPage(),
                       ),
                     ],
                   ),
