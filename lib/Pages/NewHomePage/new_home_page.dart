@@ -57,16 +57,26 @@ class _NewHomePageState extends State<NewHomePage> {
                     taskStatus = TaskStatus.all;
                   });
                 }, icon: FontAwesomeIcons.fileLines),
-                taskStatusButton(Colors.deepPurpleAccent.shade700, "New", () {
-                  setState(() {
-                    taskStatus = TaskStatus.pending;
-                  });
-                }, icon: FontAwesomeIcons.fileLines),
-                taskStatusButton(Colors.amber.shade700, "In-Progress", () {
-                  setState(() {
-                    taskStatus = TaskStatus.accepted;
-                  });
-                }, icon: FontAwesomeIcons.hourglass),
+                taskStatusButton(
+                  Colors.deepPurpleAccent.shade700,
+                  "New",
+                  () {
+                    setState(() {
+                      taskStatus = TaskStatus.pending;
+                    });
+                  },
+                  icon: FontAwesomeIcons.fileLines,
+                ),
+                taskStatusButton(
+                  Colors.amber.shade700,
+                  "In-Progress",
+                  () {
+                    setState(() {
+                      taskStatus = TaskStatus.accepted;
+                    });
+                  },
+                  icon: FontAwesomeIcons.hourglass,
+                ),
                 taskStatusButton(Colors.green.shade600, "Completed", () {
                   setState(() {
                     taskStatus = TaskStatus.completed;

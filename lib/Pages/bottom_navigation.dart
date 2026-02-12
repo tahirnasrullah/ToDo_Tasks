@@ -35,7 +35,11 @@ class _BottomNavState extends State<BottomNav> {
           padding: const EdgeInsets.only(left: 10),
           child: Text(
             'Todo DailyTasks',
-            style: TextStyle(fontWeight: FontWeight.w800, fontSize: 20,color: Theme.of(context).textTheme.titleLarge?.color,),
+            style: TextStyle(
+              fontWeight: FontWeight.w800,
+              fontSize: 20,
+              color: Theme.of(context).textTheme.titleLarge?.color,
+            ),
           ),
         ),
         actions: [
@@ -47,7 +51,9 @@ class _BottomNavState extends State<BottomNav> {
                 backgroundImage:
                     FirebaseAuth.instance.currentUser!.photoURL == null
                     ? null
-                    : NetworkImage(FirebaseAuth.instance.currentUser!.photoURL!),
+                    : NetworkImage(
+                        FirebaseAuth.instance.currentUser!.photoURL!,
+                      ),
                 child: FirebaseAuth.instance.currentUser!.photoURL == null
                     ? Text(FirebaseAuth.instance.currentUser!.displayName!)
                     : null,
@@ -69,7 +75,8 @@ class _BottomNavState extends State<BottomNav> {
           _showCardDialog(context);
         },
       ),
-      floatingActionButtonLocation: FloatingActionButtonLocation.miniCenterDocked,
+      floatingActionButtonLocation:
+          FloatingActionButtonLocation.miniCenterDocked,
       floatingActionButtonAnimator: FloatingActionButtonAnimator.scaling,
 
       body: IndexedStack(
@@ -86,9 +93,13 @@ class _BottomNavState extends State<BottomNav> {
       bottomNavigationBar: BottomNavigationBar(
         type: BottomNavigationBarType.fixed,
         useLegacyColorScheme: false,
-        backgroundColor: Theme.of(context).bottomNavigationBarTheme.backgroundColor,
+        backgroundColor: Theme.of(
+          context,
+        ).bottomNavigationBarTheme.backgroundColor,
         selectedItemColor: Colors.deepPurpleAccent.shade700,
-        unselectedItemColor: Theme.of(context).bottomNavigationBarTheme.unselectedItemColor,
+        unselectedItemColor: Theme.of(
+          context,
+        ).bottomNavigationBarTheme.unselectedItemColor,
         iconSize: 20,
         currentIndex: _currentIndex,
         elevation: 20,
@@ -106,7 +117,7 @@ class _BottomNavState extends State<BottomNav> {
             label: "",
           ),
           BottomNavigationBarItem(icon: Icon(Icons.search), label: ""),
-          BottomNavigationBarItem(icon: Icon(Icons.search), label: "",),
+          BottomNavigationBarItem(icon: Icon(Icons.search), label: ""),
           BottomNavigationBarItem(
             icon: Icon(Icons.group_add_outlined),
             activeIcon: Icon(Icons.group_add),

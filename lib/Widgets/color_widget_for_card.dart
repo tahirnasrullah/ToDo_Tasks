@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 
-Color colorCardText(isCompleted,isAccepted,isDeclined)=>
-    isCompleted == true
+Color colorCardText(isCompleted, isAccepted, isDeclined) => isCompleted == true
     ? Colors.green.shade700
     : isAccepted == true
     ? Colors.amber.shade700
@@ -9,9 +8,7 @@ Color colorCardText(isCompleted,isAccepted,isDeclined)=>
     ? Colors.red.shade700
     : Colors.deepPurpleAccent.shade700;
 
-
-Color colorCard(isCompleted,isAccepted,isDeclined)=>
-    isCompleted == true
+Color colorCard(isCompleted, isAccepted, isDeclined) => isCompleted == true
     ? Colors.green.shade100
     : isAccepted == true
     ? Colors.amber.shade100

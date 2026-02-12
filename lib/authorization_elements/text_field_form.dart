@@ -70,9 +70,7 @@ class _TextFieldFormState extends State<TextFieldForm> {
         contentPadding: EdgeInsets.symmetric(horizontal: 10, vertical: 10),
         suffixIcon: widget.isPassword
             ? IconButton(
-                icon: Icon(
-                  _ishidden ? Icons.visibility_off : Icons.visibility,
-                ),
+                icon: Icon(_ishidden ? Icons.visibility_off : Icons.visibility),
                 iconSize: 15,
                 onPressed: () {
                   setState(() {

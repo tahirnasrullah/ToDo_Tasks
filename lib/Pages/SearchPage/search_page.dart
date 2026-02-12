@@ -20,7 +20,6 @@ class _SearchPageState extends State<SearchPage> {
   String? selectedUserFrom;
   String? selectedUserTo;
 
-
   @override
   void dispose() {
     // TODO: implement dispose
@@ -46,9 +45,7 @@ class _SearchPageState extends State<SearchPage> {
         padding: const EdgeInsets.all(8.0),
         child: Column(
           children: [
-            SearchField(
-              searchController: searchController,
-            ),
+            SearchField(searchController: searchController),
             SizedBox(height: 10),
             FilterUsers(
               statusText: "From: ",
@@ -98,7 +95,6 @@ class _SearchPageState extends State<SearchPage> {
                         selectedUserTo == null || task.to == selectedUserTo;
 
                     return matchTitle && matchUser && matchTo;
-
                   }).toList();
 
                   return TaskHistory(
@@ -116,4 +112,3 @@ class _SearchPageState extends State<SearchPage> {
     );
   }
 }
-

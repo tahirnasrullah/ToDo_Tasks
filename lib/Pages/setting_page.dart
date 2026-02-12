@@ -36,21 +36,27 @@ class _SettingPageState extends State<SettingPage> {
           ListTile(
             title: Text(
               "Settings",
-              style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold,color:Theme.of(context).textTheme.titleLarge?.color),
+              style: TextStyle(
+                fontSize: 24,
+                fontWeight: FontWeight.bold,
+                color: Theme.of(context).textTheme.titleLarge?.color,
+              ),
             ),
           ),
 
           // THEME SWITCH
           ListTile(
             leading: Icon(
-              isDarkMode
-                  ? Icons.dark_mode_outlined
-                  : Icons.light_mode_outlined,
+              isDarkMode ? Icons.dark_mode_outlined : Icons.light_mode_outlined,
               color: Theme.of(context).textTheme.titleLarge?.color,
             ),
             title: Text(
               "Switch Theme",
-              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold,color:Theme.of(context).textTheme.titleLarge?.color),
+              style: TextStyle(
+                fontSize: 18,
+                fontWeight: FontWeight.bold,
+                color: Theme.of(context).textTheme.titleLarge?.color,
+              ),
             ),
             trailing: Switch(
               value: isDarkMode,

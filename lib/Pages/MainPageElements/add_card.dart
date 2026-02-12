@@ -157,7 +157,6 @@
 //   }
 // }
 
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -191,165 +190,177 @@ class _AddCardState extends State<AddCard> {
   @override
   Widget build(BuildContext context) {
     return
-      // BackdropFilter(
-      // filter: ImageFilter.blur(sigmaX: 5, sigmaY: 5),
-      // child:
+    // BackdropFilter(
+    // filter: ImageFilter.blur(sigmaX: 5, sigmaY: 5),
+    // child:
     SingleChildScrollView(
-        child: Padding(
-          padding: const EdgeInsets.all(16.0),
-          child: Card(
-            elevation: 5,
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(20),
-            ),
-            child: Padding(
-              padding: const EdgeInsets.all(16.0),
-              child: Column(children: [Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  const Text("Add New Task"),
-                  IconButton(
-                    onPressed: () {
-                      Navigator.pop(context);
-                    },
-                    icon: Icon(Icons.close),
-                  ),
-                ],
-              ),Form(
-                key: formKey,
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
+      child: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Card(
+          elevation: 5,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(20),
+          ),
+          child: Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: Column(
+              children: [
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    /// ASSIGN USERS
-                    StreamBuilder<List<String>>(
-                      stream: userDb.getDropdownValues('username'),
-                      builder: (context, snapshot) {
-                        if (!snapshot.hasData) {
-                          return const CircularProgressIndicator();
-                        }
+                    const Text("Add New Task"),
+                    IconButton(
+                      onPressed: () {
+                        Navigator.pop(context);
+                      },
+                      icon: Icon(Icons.close),
+                    ),
+                  ],
+                ),
+                Form(
+                  key: formKey,
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      /// ASSIGN USERS
+                      StreamBuilder<List<String>>(
+                        stream: userDb.getDropdownValues('username'),
+                        builder: (context, snapshot) {
+                          if (!snapshot.hasData) {
+                            return const CircularProgressIndicator();
+                          }
 
-                        final users = snapshot.data!;
+                          final users = snapshot.data!;
 
-                        return SizedBox(
-                          child: InkWell(
-                            onTap: () => openUserSelector(users),
-                            child: InputDecorator(
-                              decoration: InputDecoration(
-                                labelText: "Assign To",
-                                border: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(20),
+                          return SizedBox(
+                            child: InkWell(
+                              onTap: () => openUserSelector(users),
+                              child: InputDecorator(
+                                decoration: InputDecoration(
+                                  labelText: "Assign To",
+                                  border: OutlineInputBorder(
+                                    borderRadius: BorderRadius.circular(20),
+                                  ),
+                                  errorText: selectedAssignees.isEmpty
+                                      ? "Select at least one user"
+                                      : null,
                                 ),
-                                errorText: selectedAssignees.isEmpty
-                                    ? "Select at least one user"
-                                    : null,
-                              ),
-                              child: Text(
-                                selectedAssignees.isEmpty
-                                    ? "Tap to select users"
-                                    : selectedAssignees.join(", "),
+                                child: Text(
+                                  selectedAssignees.isEmpty
+                                      ? "Tap to select users"
+                                      : selectedAssignees.join(", "),
+                                ),
                               ),
                             ),
-                          ),
-                        );
-                      },
-                    ),
+                          );
+                        },
+                      ),
 
-                    const SizedBox(height: 12),
+                      const SizedBox(height: 12),
 
-                    /// DATE & TIME PICKERS
-                    SizedBox(
-                      height: 50,
-                      child: Row(
+                      /// DATE & TIME PICKERS
+                      SizedBox(
+                        height: 50,
+                        child: Row(
+                          children: [
+                            Expanded(
+                              child: InkWell(
+                                onTap: pickStartDateTime,
+                                child: InputDecorator(
+                                  decoration: InputDecoration(
+                                    labelText: "Start Date & Time",
+                                    border: OutlineInputBorder(
+                                      borderRadius: BorderRadius.circular(20),
+                                    ),
+                                  ),
+                                  child: Text(
+                                    startDateTime == null
+                                        ? "Select"
+                                        : formatDate(startDateTime!),
+                                  ),
+                                ),
+                              ),
+                            ),
+                            const SizedBox(width: 10),
+                            Expanded(
+                              child: InkWell(
+                                onTap: pickEndDateTime,
+                                child: InputDecorator(
+                                  decoration: InputDecoration(
+                                    labelText: "End Date & Time",
+                                    border: OutlineInputBorder(
+                                      borderRadius: BorderRadius.circular(20),
+                                    ),
+                                  ),
+                                  child: Text(
+                                    endDateTime == null
+                                        ? "Select"
+                                        : formatDate(endDateTime!),
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+
+                      const SizedBox(height: 12),
+
+                      /// TITLE
+                      TextFieldForm(
+                        controller: titleController,
+                        labelText: "Title",
+                        errorText: "Required",
+                      ),
+
+                      const SizedBox(height: 10),
+
+                      /// DESCRIPTION
+                      TextFieldForm(
+                        controller: descriptionController,
+                        labelText: "Description",
+                        errorText: "Required",
+                        maxLines: 4,
+                      ),
+                      const SizedBox(height: 10),
+                      Row(
                         children: [
                           Expanded(
-                            child: InkWell(
-                              onTap: pickStartDateTime,
-                              child: InputDecorator(
-                                decoration: InputDecoration(
-                                  labelText: "Start Date & Time",
-                                  border: OutlineInputBorder(
-                                    borderRadius: BorderRadius.circular(20),
-                                  ),
-                                ),
-                                child: Text(
-                                  startDateTime == null
-                                      ? "Select"
-                                      : formatDate(startDateTime!),
-                                ),
+                            child: ElevatedButton(
+                              style: ElevatedButton.styleFrom(
+                                backgroundColor:
+                                    Colors.deepPurpleAccent.shade700,
                               ),
-                            ),
-                          ),
-                          const SizedBox(width: 10),
-                          Expanded(
-                            child: InkWell(
-                              onTap: pickEndDateTime,
-                              child: InputDecorator(
-                                decoration: InputDecoration(
-                                  labelText: "End Date & Time",
-                                  border: OutlineInputBorder(
-                                    borderRadius: BorderRadius.circular(20),
-                                  ),
-                                ),
-                                child: Text(
-                                  endDateTime == null
-                                      ? "Select"
-                                      : formatDate(endDateTime!),
-                                ),
-                              ),
+                              onPressed: _isSaving ? null : saveTask,
+                              child: _isSaving
+                                  ? const SizedBox(
+                                      height: 20,
+                                      width: 20,
+                                      child: CircularProgressIndicator(
+                                        strokeWidth: 2,
+                                      ),
+                                    )
+                                  : const Text(
+                                      "Save",
+                                      style: TextStyle(
+                                        fontSize: 18,
+                                        fontWeight: FontWeight.bold,
+                                        color: Colors.white,
+                                      ),
+                                    ),
                             ),
                           ),
                         ],
                       ),
-                    ),
-
-                    const SizedBox(height: 12),
-
-                    /// TITLE
-                    TextFieldForm(
-                      controller: titleController,
-                      labelText: "Title",
-                      errorText: "Required",
-                    ),
-
-                    const SizedBox(height: 10),
-
-                    /// DESCRIPTION
-                    TextFieldForm(
-                      controller: descriptionController,
-                      labelText: "Description",
-                      errorText: "Required",
-                      maxLines: 4,
-                    ),
-                    const SizedBox(height: 10),
-                    Row(
-                      children: [
-                        Expanded(
-                          child: ElevatedButton(
-                            style: ElevatedButton.styleFrom(
-                              backgroundColor: Colors.deepPurpleAccent.shade700,
-                            ),
-                            onPressed: _isSaving ? null : saveTask,
-                            child: _isSaving
-                                ? const SizedBox(
-                              height: 20,
-                              width: 20,
-                              child: CircularProgressIndicator(strokeWidth: 2),
-                            )
-                                : const Text("Save", style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold,color: Colors.white),
-                            ),
-                          ),
-                        )],
-                    ),
-
-                  ],
+                    ],
+                  ),
                 ),
-              ),],),
-            )
-
-
+              ],
+            ),
           ),
-        )
-      );
+        ),
+      ),
+    );
   }
 
   /// DATE PICKERS
@@ -364,7 +375,6 @@ class _AddCardState extends State<AddCard> {
     if (date == null) return;
 
     final time = await showTimePicker(
-
       context: context,
       initialTime: TimeOfDay.now(),
     );
@@ -490,7 +500,9 @@ class _AddCardState extends State<AddCard> {
   }
 
   void showError(String msg) {
-    ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(msg),behavior: SnackBarBehavior.floating,));
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(content: Text(msg), behavior: SnackBarBehavior.floating),
+    );
   }
 
   @override

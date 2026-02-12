@@ -13,8 +13,7 @@ class MultiUserSelectorSheet extends StatefulWidget {
   });
 
   @override
-  State<MultiUserSelectorSheet> createState() =>
-      _MultiUserSelectorSheetState();
+  State<MultiUserSelectorSheet> createState() => _MultiUserSelectorSheetState();
 }
 
 class _MultiUserSelectorSheetState extends State<MultiUserSelectorSheet> {
@@ -128,7 +127,14 @@ class _MultiUserSelectorSheetState extends State<MultiUserSelectorSheet> {
                   widget.onDone(tempSelected);
                   Navigator.pop(context);
                 },
-                child: const Text("Done", style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold,color: Colors.white)),
+                child: const Text(
+                  "Done",
+                  style: TextStyle(
+                    fontSize: 18,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.white,
+                  ),
+                ),
               ),
             ),
           ],

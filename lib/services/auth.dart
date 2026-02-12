@@ -32,12 +32,13 @@ class AuthMethords {
       "imgUrl": userDetails.photoURL,
       "uid": userDetails.uid,
     };
-    await UserDetailDatabase().addUser(userDetails.uid, userInfoMap).then(
-            (value) {
+    await UserDetailDatabase().addUser(userDetails.uid, userInfoMap).then((
+      value,
+    ) {
       Navigator.pushReplacement(
         context,
         MaterialPageRoute(builder: (context) => BottomNav()),
-      );}
-    );
-    }
+      );
+    });
+  }
 }

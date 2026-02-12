@@ -106,9 +106,9 @@ class _SignupPageState extends State<SignupPage> {
                       ),
                       SizedBox(height: 60),
                       OrLoginWith(
-                        subtitle:"Already have an account? ",
-                        inkWellText:"Login",
-                        toPage:LoginPage(),
+                        subtitle: "Already have an account? ",
+                        inkWellText: "Login",
+                        toPage: LoginPage(),
                       ),
                     ],
                   ),
@@ -128,8 +128,7 @@ class _SignupPageState extends State<SignupPage> {
         emailController.text.isNotEmpty) {
       try {
         UserCredential userCredential = await FirebaseAuth.instance
-            .createUserWithEmailAndPassword(
-            email: email, password: password);
+            .createUserWithEmailAndPassword(email: email, password: password);
 
         User? user = userCredential.user; // STORE USER
 

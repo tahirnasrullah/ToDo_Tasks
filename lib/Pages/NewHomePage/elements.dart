@@ -61,7 +61,7 @@ class _GreegingsState extends State<Greegings> {
 class SearchField extends StatefulWidget {
   final TextEditingController searchController;
 
-  const SearchField({super.key, required this.searchController,});
+  const SearchField({super.key, required this.searchController});
 
   @override
   State<SearchField> createState() => _SearchFieldState();

@@ -24,7 +24,11 @@ class FilterUsers extends StatelessWidget {
       children: [
         Text(
           statusText,
-          style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold,color: Theme.of(context).textTheme.titleLarge?.color),
+          style: TextStyle(
+            fontSize: 16,
+            fontWeight: FontWeight.bold,
+            color: Theme.of(context).textTheme.titleLarge?.color,
+          ),
         ),
         SizedBox(width: 10),
         Expanded(
@@ -52,7 +56,13 @@ class FilterUsers extends StatelessWidget {
                               ? Colors.white
                               : Colors.black,
                         ),
-                        child: Text("All Users",style: TextStyle(fontSize: 12,fontWeight: FontWeight.w800),),
+                        child: Text(
+                          "All Users",
+                          style: TextStyle(
+                            fontSize: 12,
+                            fontWeight: FontWeight.w800,
+                          ),
+                        ),
                       ),
                     ),
                     // Me button
@@ -121,7 +131,8 @@ class _FilterElevatedButtonState extends State<FilterElevatedButton> {
             ? "Me"
             : widget.updateUsers.isNotEmpty
             ? widget.updateUsers
-            : "All Users",style: TextStyle(fontSize: 12,fontWeight: FontWeight.w800),
+            : "All Users",
+        style: TextStyle(fontSize: 12, fontWeight: FontWeight.w800),
       ),
     );
   }
