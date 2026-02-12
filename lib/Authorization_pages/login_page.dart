@@ -19,8 +19,7 @@ class _LoginPageState extends State<LoginPage> {
   TextEditingController passwordController = TextEditingController();
   final _formKey = GlobalKey<FormState>();
 
-  String email = "",
-      password = "";
+  String email = "", password = "";
 
   @override
   void initState() {
@@ -42,8 +41,8 @@ class _LoginPageState extends State<LoginPage> {
               decoration: BoxDecoration(
                 gradient: LinearGradient(
                   colors: [
-                  Colors.deepPurpleAccent.shade200,
-                  Colors.deepPurpleAccent.shade700,
+                    Colors.deepPurpleAccent.shade200,
+                    Colors.deepPurpleAccent.shade700,
                   ],
                 ),
               ),
@@ -115,15 +114,13 @@ class _LoginPageState extends State<LoginPage> {
                             ),
                           );
                         },
-                        child: Text(
-                          'Forget Password?',
-                        ),
+                        child: Text('Forget Password?'),
                       ),
                       SizedBox(height: 60),
                       OrLoginWith(
-                        subtitle:"Don't have an account? ",
-                        inkWellText:"Sign Up",
-                        toPage:SignupPage(),
+                        subtitle: "Don't have an account? ",
+                        inkWellText: "Sign Up",
+                        toPage: SignupPage(),
                       ),
                     ],
                   ),

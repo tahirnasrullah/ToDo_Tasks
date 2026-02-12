@@ -298,7 +298,13 @@ class _EditTaskCardState extends State<EditTaskCard> {
                           height: 50,
                           width: double.infinity,
                           decoration: BoxDecoration(
-                            border: Border.all(color:Theme.of(context).brightness == Brightness.dark? Colors.grey:Colors.black),
+                            border: Border.all(
+                              color:
+                                  Theme.of(context).brightness ==
+                                      Brightness.dark
+                                  ? Colors.grey
+                                  : Colors.black,
+                            ),
                             borderRadius: BorderRadius.circular(20),
                             color: Colors.transparent,
                           ),
@@ -373,7 +379,14 @@ class _EditTaskCardState extends State<EditTaskCard> {
                       Expanded(
                         child: OutlinedButton(
                           onPressed: confirmDelete,
-                          child: const Text("Delete",style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold,color: Colors.red),),
+                          child: const Text(
+                            "Delete",
+                            style: TextStyle(
+                              fontSize: 18,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.red,
+                            ),
+                          ),
                         ),
                       ),
 
@@ -388,9 +401,18 @@ class _EditTaskCardState extends State<EditTaskCard> {
                               ? const SizedBox(
                                   height: 20,
                                   width: 20,
-                                  child: CircularProgressIndicator(strokeWidth: 2),
+                                  child: CircularProgressIndicator(
+                                    strokeWidth: 2,
+                                  ),
                                 )
-                              : const Text("Update",style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold,color: Colors.white),),
+                              : const Text(
+                                  "Update",
+                                  style: TextStyle(
+                                    fontSize: 18,
+                                    fontWeight: FontWeight.bold,
+                                    color: Colors.white,
+                                  ),
+                                ),
                         ),
                       ),
                     ],
@@ -499,16 +521,29 @@ class _EditTaskCardState extends State<EditTaskCard> {
       context: context,
       builder: (_) => AlertDialog(
         backgroundColor: Colors.white,
-        title: const Text("Delete Task",style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold,color: Colors.red),),
+        title: const Text(
+          "Delete Task",
+          style: TextStyle(
+            fontSize: 18,
+            fontWeight: FontWeight.bold,
+            color: Colors.red,
+          ),
+        ),
         content: const Text("Are you sure you want to delete this task?"),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(context),
-            child: const Text("Cancel",style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold,color: Colors.grey),),
+            child: const Text(
+              "Cancel",
+              style: TextStyle(
+                fontSize: 18,
+                fontWeight: FontWeight.bold,
+                color: Colors.grey,
+              ),
+            ),
           ),
           OutlinedButton(
-            style: ElevatedButton.styleFrom(
-            ),
+            style: ElevatedButton.styleFrom(),
             onPressed: () async {
               await taskService.delnote(widget.task, context);
               if (mounted) {
@@ -516,7 +551,14 @@ class _EditTaskCardState extends State<EditTaskCard> {
                 Navigator.pop(context);
               }
             },
-            child: const Text("Delete",style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold,color: Colors.red),),
+            child: const Text(
+              "Delete",
+              style: TextStyle(
+                fontSize: 18,
+                fontWeight: FontWeight.bold,
+                color: Colors.red,
+              ),
+            ),
           ),
         ],
       ),

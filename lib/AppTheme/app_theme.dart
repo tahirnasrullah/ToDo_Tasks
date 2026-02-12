@@ -13,17 +13,12 @@ class AppTheme {
       elevation: 0,
       centerTitle: false,
     ),
-    textTheme: const TextTheme(
-      titleLarge: TextStyle(
-        color: Colors.black,
-      )
-    ),
+    textTheme: const TextTheme(titleLarge: TextStyle(color: Colors.black)),
     bottomNavigationBarTheme: BottomNavigationBarThemeData(
       backgroundColor: Colors.white,
       selectedItemColor: Colors.deepPurpleAccent.shade700,
       unselectedItemColor: Colors.grey,
-    )
-
+    ),
   );
 
   static ThemeData darkTheme = ThemeData(
@@ -36,16 +31,11 @@ class AppTheme {
       elevation: 0,
       centerTitle: false,
     ),
-      textTheme: const TextTheme(
-          titleLarge: TextStyle(
-            color: Colors.grey,
-          ),
+    textTheme: const TextTheme(titleLarge: TextStyle(color: Colors.white)),
 
-      ),
-
-      bottomNavigationBarTheme: BottomNavigationBarThemeData(
+    bottomNavigationBarTheme: BottomNavigationBarThemeData(
       backgroundColor: Colors.black,
       unselectedItemColor: Colors.white,
-    )
+    ),
   );
 }

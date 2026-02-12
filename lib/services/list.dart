@@ -22,8 +22,8 @@ class ToDoDailyTasksHistory {
     required this.title,
     required this.desc,
     required this.uid,
-    required this.isCompleted ,
-    required this.isAccepted ,
+    required this.isCompleted,
+    required this.isAccepted,
     required this.isDeclined,
   });
 

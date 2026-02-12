@@ -43,7 +43,7 @@ class _GreegingsState extends State<Greegings> {
                   TextSpan(
                     text: '${snapshot.data} tasks',
                     style: TextStyle(
-                      color: Colors.blue,
+                      color: Colors.deepPurpleAccent.shade700,
                       fontWeight: FontWeight.w800,
                     ),
                   ),
@@ -61,7 +61,7 @@ class _GreegingsState extends State<Greegings> {
 class SearchField extends StatefulWidget {
   final TextEditingController searchController;
 
-  const SearchField({super.key, required this.searchController,});
+  const SearchField({super.key, required this.searchController});
 
   @override
   State<SearchField> createState() => _SearchFieldState();
@@ -71,7 +71,7 @@ class _SearchFieldState extends State<SearchField> {
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      height: 60,
+      height: 50,
       child: TextField(
         controller: widget.searchController,
         cursorColor: Colors.grey,

@@ -13,13 +13,13 @@ class TaskHistory extends StatefulWidget {
   final bool onlyMe;
   final bool editing;
 
-
   const TaskHistory({
     super.key,
     required this.list,
     this.scrollableCondition = true,
     this.delAble = false,
-    required this.onlyMe, required this.editing,
+    required this.onlyMe,
+    required this.editing,
   });
 
   @override
@@ -38,10 +38,18 @@ class _TaskHistoryState extends State<TaskHistory> {
             children: widget.list
                 .map(
                   (task) => widget.onlyMe == false
-                      ? HistoryUi(task: task, delAble: widget.delAble, editing: widget.editing)
+                      ? HistoryUi(
+                          task: task,
+                          delAble: widget.delAble,
+                          editing: widget.editing,
+                        )
                       : task.to ==
                             FirebaseAuth.instance.currentUser!.displayName
-                      ? HistoryUi(task: task, delAble: widget.delAble, editing: widget.editing)
+                      ? HistoryUi(
+                          task: task,
+                          delAble: widget.delAble,
+                          editing: widget.editing,
+                        )
                       : SizedBox.shrink(),
                 )
                 .toList(),
@@ -55,15 +63,18 @@ class HistoryUi extends StatefulWidget {
   final TaskService taskService = TaskService();
   final bool editing;
 
-
-  HistoryUi({super.key, required this.task, required this.delAble, required this.editing});
+  HistoryUi({
+    super.key,
+    required this.task,
+    required this.delAble,
+    required this.editing,
+  });
 
   @override
   State<HistoryUi> createState() => _HistoryUiState();
 }
 
 class _HistoryUiState extends State<HistoryUi> {
-
   final TextEditingController titleController = TextEditingController();
   final TextEditingController descriptionController = TextEditingController();
   String? selectedAssignee;
@@ -86,7 +97,9 @@ class _HistoryUiState extends State<HistoryUi> {
           ),
         ),
         child: ListTile(
-          onTap: () {_showCardDialog(context, widget.task);},
+          onTap: () {
+            _showCardDialog(context, widget.task);
+          },
           leading: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -94,22 +107,53 @@ class _HistoryUiState extends State<HistoryUi> {
               widget.task.uid == FirebaseAuth.instance.currentUser!.uid
                   ? Text(
                       "You",
-                      style: TextStyle(fontWeight: FontWeight.w800, fontSize: 15,color: Theme.of(context).textTheme.titleLarge?.color),
+                      style: TextStyle(
+                        fontWeight: FontWeight.w800,
+                        fontSize: 15,
+                        color: Theme.of(context).textTheme.titleLarge?.color,
+                      ),
                     )
                   : Text(
                       widget.task.from,
-                      style: TextStyle(fontWeight: FontWeight.w800, fontSize: 15,color: Theme.of(context).textTheme.titleLarge?.color),
+                      style: TextStyle(
+                        fontWeight: FontWeight.w800,
+                        fontSize: 15,
+                        color: Theme.of(context).textTheme.titleLarge?.color,
+                      ),
                     ),
               widget.task.to == FirebaseAuth.instance.currentUser!.displayName
-                  ? Text("To: You", style: TextStyle(fontWeight: FontWeight.w800, fontSize: 15,color: Theme.of(context).textTheme.titleLarge?.color))
-                  : Text("To: ${widget.task.to}", style: TextStyle(fontWeight: FontWeight.w800, fontSize: 15,color: Theme.of(context).textTheme.titleLarge?.color)),
+                  ? Text(
+                      "To: You",
+                      style: TextStyle(
+                        fontWeight: FontWeight.w800,
+                        fontSize: 15,
+                        color: Theme.of(context).textTheme.titleLarge?.color,
+                      ),
+                    )
+                  : Text(
+                      "To: ${widget.task.to}",
+                      style: TextStyle(
+                        fontWeight: FontWeight.w800,
+                        fontSize: 15,
+                        color: Theme.of(context).textTheme.titleLarge?.color,
+                      ),
+                    ),
             ],
           ),
-          title: Text("Title: ${widget.task.title}", maxLines: 1, overflow: TextOverflow.ellipsis,style: TextStyle(fontWeight: FontWeight.w800, fontSize: 18, color: Theme.of(context).textTheme.titleLarge?.color),),
+          title: Text(
+            "Title: ${widget.task.title}",
+            maxLines: 1,
+            overflow: TextOverflow.ellipsis,
+            style: TextStyle(
+              fontWeight: FontWeight.w800,
+              fontSize: 18,
+              color: Theme.of(context).textTheme.titleLarge?.color,
+            ),
+          ),
           trailing:
               widget.delAble &&
-                  widget.task.uid == FirebaseAuth.instance.currentUser!.uid
-                  && widget.task.isCompleted == true
+                  widget.task.uid == FirebaseAuth.instance.currentUser!.uid &&
+                  widget.task.isCompleted == true
               ? IconButton(
                   onPressed: () async {
                     await widget.taskService.delnote(widget.task, context);
@@ -119,7 +163,9 @@ class _HistoryUiState extends State<HistoryUi> {
               : null,
           subtitle: Text(
             widget.task.desc,
-            style: TextStyle(color: Theme.of(context).textTheme.titleLarge?.color,),
+            style: TextStyle(
+              color: Theme.of(context).textTheme.titleLarge?.color,
+            ),
             maxLines: 1,
             overflow: TextOverflow.ellipsis,
           ),
@@ -127,7 +173,6 @@ class _HistoryUiState extends State<HistoryUi> {
       ),
     );
   }
-
 
   void _showCardDialog(context, ToDoDailyTasksHistory value) {
     showDialog(
@@ -151,12 +196,12 @@ class _HistoryUiState extends State<HistoryUi> {
   }
 
   void _showEditingCardDialog(
-      BuildContext context,
-      ToDoDailyTasksHistory task,
-      TextEditingController titleController,
-      TextEditingController descriptionController,
-      String? selectedAssignee,
-      ) {
+    BuildContext context,
+    ToDoDailyTasksHistory task,
+    TextEditingController titleController,
+    TextEditingController descriptionController,
+    String? selectedAssignee,
+  ) {
     showDialog(
       context: context,
       builder: (value) {
@@ -168,4 +213,3 @@ class _HistoryUiState extends State<HistoryUi> {
     );
   }
 }
-

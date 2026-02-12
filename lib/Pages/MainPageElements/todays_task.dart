@@ -51,7 +51,6 @@ class _TodayTaskState extends State<TodayTask> {
         : ListView(
             scrollDirection: Axis.horizontal,
             children: widget.list.map((value) {
-
               return Listing(
                 value: value,
                 editing: widget.editing,
