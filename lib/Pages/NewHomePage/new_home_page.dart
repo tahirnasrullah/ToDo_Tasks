@@ -40,7 +40,7 @@ class _NewHomePageState extends State<NewHomePage> {
               child: IgnorePointer(
                 child: Hero(
                   tag: 'search',
-                  child: SearchField(searchController: searchController,),
+                  child: SearchField(searchController: searchController),
                 ),
               ),
               onTap: () {
@@ -57,17 +57,17 @@ class _NewHomePageState extends State<NewHomePage> {
                     taskStatus = TaskStatus.all;
                   });
                 }, icon: FontAwesomeIcons.fileLines),
-                taskStatusButton(Colors.deepPurpleAccent, "New", () {
+                taskStatusButton(Colors.deepPurpleAccent.shade700, "New", () {
                   setState(() {
                     taskStatus = TaskStatus.pending;
                   });
                 }, icon: FontAwesomeIcons.fileLines),
-                taskStatusButton(Colors.amber, "In-Progress", () {
+                taskStatusButton(Colors.amber.shade700, "In-Progress", () {
                   setState(() {
                     taskStatus = TaskStatus.accepted;
                   });
                 }, icon: FontAwesomeIcons.hourglass),
-                taskStatusButton(Colors.green, "Completed", () {
+                taskStatusButton(Colors.green.shade600, "Completed", () {
                   setState(() {
                     taskStatus = TaskStatus.completed;
                   });
@@ -81,7 +81,11 @@ class _NewHomePageState extends State<NewHomePage> {
               children: [
                 Text(
                   "Today's Tasks",
-                  style: TextStyle(fontSize: 22, fontWeight: FontWeight.w800,color: Theme.of(context).textTheme.titleLarge?.color),
+                  style: TextStyle(
+                    fontSize: 22,
+                    fontWeight: FontWeight.w800,
+                    color: Theme.of(context).textTheme.titleLarge?.color,
+                  ),
                 ),
                 InkWell(
                   child: Text(
@@ -135,14 +139,27 @@ void showCardDialogTasks(BuildContext context) {
       return Scaffold(
         resizeToAvoidBottomInset: false,
         appBar: AppBar(
-          leading:IconButton(onPressed: (){Navigator.pop(context);}, icon: Icon(Icons.arrow_back,color: Theme.of(context).textTheme.titleLarge?.color,)),
-          title:  Text(
+          leading: IconButton(
+            onPressed: () {
+              Navigator.pop(context);
+            },
+            icon: Icon(
+              Icons.arrow_back,
+              color: Theme.of(context).textTheme.titleLarge?.color,
+            ),
+          ),
+          title: Text(
             "All Tasks",
-            style: TextStyle(fontWeight: FontWeight.w800,color: Theme.of(context).textTheme.titleLarge?.color,),
+            style: TextStyle(
+              fontWeight: FontWeight.w800,
+              color: Theme.of(context).textTheme.titleLarge?.color,
+            ),
           ),
         ),
         body: Container(
-          decoration: BoxDecoration(color: Theme.of(context).scaffoldBackgroundColor),
+          decoration: BoxDecoration(
+            color: Theme.of(context).scaffoldBackgroundColor,
+          ),
           child: StreamBuilder<List<ToDoDailyTasksHistory>>(
             stream: taskService.taskStream(),
             builder: (context, snapshot) {

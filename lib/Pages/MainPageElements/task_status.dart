@@ -44,7 +44,7 @@ Widget acceptedButton(widget, updateStatus) {
                   updateStatus(
                     widget.value.isCompleted,
                     true,
-                    widget.value.isDeclined,
+                    false,
                   );
                 },
                 style: ElevatedButton.styleFrom(

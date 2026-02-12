@@ -70,7 +70,7 @@ class _OtherUsersPageState extends State<OtherUsersPage> {
                         showAssignTo,
                         style: TextStyle(
                           fontSize: 12,
-                          color: Colors.blue,
+                          color: Colors.grey,
                           fontStyle: FontStyle.italic,
                         ),
                       ),
@@ -128,7 +128,7 @@ class _OtherUsersPageState extends State<OtherUsersPage> {
                         showAccepted,
                         style: TextStyle(
                           fontSize: 12,
-                          color: Colors.blue,
+                          color: Colors.grey,
                           fontStyle: FontStyle.italic,
                         ),
                       ),
@@ -195,7 +195,7 @@ class _OtherUsersPageState extends State<OtherUsersPage> {
                         'Show all...',
                         style: TextStyle(
                           fontSize: 12,
-                          color: Colors.blue,
+                          color: Colors.grey,
                           fontStyle: FontStyle.italic,
                         ),
                       ),

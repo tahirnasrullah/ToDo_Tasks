@@ -43,7 +43,7 @@ class _GreegingsState extends State<Greegings> {
                   TextSpan(
                     text: '${snapshot.data} tasks',
                     style: TextStyle(
-                      color: Colors.blue,
+                      color: Colors.deepPurpleAccent.shade700,
                       fontWeight: FontWeight.w800,
                     ),
                   ),
@@ -71,7 +71,7 @@ class _SearchFieldState extends State<SearchField> {
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      height: 60,
+      height: 50,
       child: TextField(
         controller: widget.searchController,
         cursorColor: Colors.grey,

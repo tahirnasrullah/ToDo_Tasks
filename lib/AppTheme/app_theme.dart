@@ -16,7 +16,7 @@ class AppTheme {
     textTheme: const TextTheme(
       titleLarge: TextStyle(
         color: Colors.black,
-      )
+      ),
     ),
     bottomNavigationBarTheme: BottomNavigationBarThemeData(
       backgroundColor: Colors.white,
@@ -38,7 +38,7 @@ class AppTheme {
     ),
       textTheme: const TextTheme(
           titleLarge: TextStyle(
-            color: Colors.grey,
+            color: Colors.white,
           ),
 
       ),
